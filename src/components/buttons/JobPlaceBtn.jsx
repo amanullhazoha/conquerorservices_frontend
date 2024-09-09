@@ -8,7 +8,7 @@ const JobPlaceBtn = ({
     handlePrevious
 }) => {
     return (
-        <div className="flex gap-3 justify-end">
+        <div className="flex gap-3 max-md:flex-col md:justify-end">
             {previous && (
                 <button 
                     type="button" 
@@ -21,7 +21,7 @@ const JobPlaceBtn = ({
             <button 
                 type="button" 
                 onClick={handleNext}
-                className="bg-[#1278BC] text-white text-base font-semibold px-5 py-1.5 rounded-lg flex gap-2 items-center"
+                className="bg-[#1278BC] text-white text-base font-semibold px-5 py-1.5 rounded-lg flex gap-2 items-center max-md:justify-center"
             >
                 {submit ? "Submit" : "Save & Continue"}
                 {submit ? <SelectIcon /> : <ArrowRightIcon />}

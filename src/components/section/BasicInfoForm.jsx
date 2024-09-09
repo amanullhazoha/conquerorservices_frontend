@@ -1,4 +1,5 @@
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
+import DragAndDrop from "../inputs/DragAndDrop";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
 import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
 
@@ -99,7 +100,8 @@ const BasicInfoForm = ({ handleNext }) => {
 
             <div className="col-span-2">
               <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                <JobPlaceInputField label="Add photo" placeholder="Saima" name="mother_name" />
+                <DragAndDrop />
+                {/* <JobPlaceInputField label="Add photo" placeholder="Saima" name="mother_name" /> */}
               </div>
             </div>
           </div>
