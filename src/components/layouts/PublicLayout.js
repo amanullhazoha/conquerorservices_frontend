@@ -5,7 +5,7 @@ import SearchIcon from "../../assets/icons/SearchIcon";
 const PublicLayout = ({ children }) => {
     return (
         <section className="bg-[#F4F5F7]">
-            <header className="bg-white shadow py-5">
+            <header className="bg-white shadow py-5 sticky top-0 z-50">
                 <div className="container max-sm:px-2.5 flex items-center justify-between">
                     <a href="/">
                         <img src={logo} alt="logo" />
@@ -28,7 +28,7 @@ const PublicLayout = ({ children }) => {
 
                 {children}
 
-            <footer className="container flex justify-between items-center py-5">
+            <footer className="container max-sm:px-2.5 flex gap-2 flex-col md:flex-row justify-between items-center py-5">
                 <p className="text-[15px] text-[#0B4871]">
                     <span className="text-2xl font-bold text-[#0B4871]">Conqueror </span> 
                     &copy; 2024, All rights reserved
