@@ -13,8 +13,13 @@ const JobPlacePage = () => {
   return (
     <PublicLayout>
       <main className="container max-sm:px-2.5 flex flex-col md:flex-row gap-6 pt-8">
-        <div className="w-full md:w-[410px] bg-white rounded-lg">
-          <JobPlaceStep />
+        <div className="p-1.5 w-full md:w-[410px] bg-white rounded-lg">
+          <div 
+            className="rounded-lg" 
+            style={{ "backgroundImage": "linear-gradient(rgba(221, 228, 247, 1), rgba(221, 228, 247, 0))"}}
+          >
+            <JobPlaceStep />
+          </div>
         </div>
 
         {step === 1 && <BasicInfoForm handleNext={() => setStep(2)} />}

@@ -1,4 +1,5 @@
-import logo from "../../assets/images/logo.png"
+import rider from "../../assets/images/rider.gif"
+import freelancer from "../../assets/images/freeluncher.gif"
 
 const JobTypeModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -20,18 +21,18 @@ const JobTypeModal = ({ isOpen, onClose }) => {
         <div className="mt-8 grid grid-cols-2 gap-3">
           <div 
             onClick={onClose}
-            className="w-full flex flex-col items-center gap-1 p-1.5 rounded-2xl border border-[#E5E7EB]"
+            className="w-full flex flex-col items-center gap-1 p-1.5 rounded-2xl border border-[#E5E7EB] hover:border-[#1B345D] hover:bg-[#1B345D0D] cursor-pointer"
           >
-                <img src={logo} alt="image" className="w-full h-auto" />
+                <img src={freelancer} alt="image" className="w-full h-auto" />
 
                 <p className="text-2xl font-bold text-[#01913B]">Freelancer</p>
           </div>
 
           <div 
             onClick={onClose}
-            className="w-full flex flex-col items-center gap-1 p-1.5 rounded-2xl border border-[#1B345D] bg-[#1B345D0D]"
+            className="w-full flex flex-col items-center gap-1 p-1.5 rounded-2xl border border-[#E5E7EB] hover:border-[#1B345D] hover:bg-[#1B345D0D] cursor-pointer"
         >
-                <img src={logo} alt="image" className="w-full h-auto" />
+                <img src={rider} alt="image" className="w-full h-auto" />
 
                 <p className="text-2xl font-bold text-[#1B345D]">Rider</p>
           </div>

@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import CloudIcon from "../../assets/icons/CloudIcon";
 
-const DragAndDrop = () => {
+const DragAndDrop = ({
+    name,
+    label,
+    required=true,
+}) => {
   const [isDragging, setIsDragging] = useState(false);
   const [droppedFiles, setDroppedFiles] = useState(null);
 
@@ -39,44 +44,51 @@ const DragAndDrop = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div
-        className={`w-96 h-48 flex items-center justify-center border-2 ${
-          isDragging ? "border-blue-500 bg-blue-100" : "border-gray-300"
-        } border-dashed rounded-lg p-4 transition-all`}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-      >
-        {droppedFiles ? (
-          <div>
-            <p className="text-center text-gray-700">
-              {Array.from(droppedFiles).map((file) => file.name).join(", ")}
-            </p>
-            <button
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              onClick={() => setDroppedFiles(null)}
+    <div>
+        <label htmlFor={name} className="text-sm text-[#27303F] font-medium">
+            {label} {required && <span className="text-[#F04438]">*</span>}
+        </label>
+
+        <div className="flex flex-col items-center justify-center mt-0.5">
+            <div
+                className={`w-full h-[190px] flex items-center justify-center border-2 ${
+                isDragging ? "border-blue-500 bg-blue-100" : "border-[#E2E8F0]"
+                } border-dashed rounded-lg p-4 transition-all`}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
             >
-              Remove Files
-            </button>
-          </div>
-        ) : (
-          <div className="text-center">
-            <p className="text-gray-600">Drag and drop files here</p>
-            <p className="text-gray-400">or</p>
-            <label className="cursor-pointer text-blue-500 hover:underline">
-              <input
-                type="file"
-                className="hidden"
-                onChange={handleFileUpload}
-                multiple
-              />
-              Browse Files
-            </label>
-          </div>
-        )}
-      </div>
+                {droppedFiles ? (
+                <div>
+                    <p className="text-center text-gray-700">
+                    {Array.from(droppedFiles).map((file) => file.name).join(", ")}
+                    </p>
+                    <button
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    onClick={() => setDroppedFiles(null)}
+                    >
+                    Remove Files
+                    </button>
+                </div>
+                ) : (
+                <div className="flex items-center flex-col gap-4">
+                    <CloudIcon />
+
+                    <p className="text-[#718096]">Drop image here or</p>
+
+                    <label className="cursor-pointer bg-[#DCF1FE] px-1.5 py-1 text-center rounded text-[#1278BC] w-fit">
+                    <input
+                        type="file"
+                        className="hidden"
+                        onChange={handleFileUpload}
+                    />
+                        Upload file
+                    </label>
+                </div>
+                )}
+            </div>
+        </div>
     </div>
   );
 };

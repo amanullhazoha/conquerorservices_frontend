@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
+import DragAndDrop from "../inputs/DragAndDrop";
+import JobPlaceBtn from "../buttons/JobPlaceBtn";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
 import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
-import JobPlaceBtn from "../buttons/JobPlaceBtn";
 
 const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
     return (
@@ -57,8 +57,8 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
 
             <div className="col-span-2">
               <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                <JobPlaceInputField label="Driving license front" placeholder="Drop image here or" name="appli_dri_lisence_frontpart" />
-                <JobPlaceInputField label="Driving license back" placeholder="Drop image here or" name="appli_dri_lisence_backpart" />
+                <DragAndDrop label="Driving license front" name="appli_dri_lisence_frontpart" />
+                <DragAndDrop label="Driving license back" name="appli_dri_lisence_backpart" />
               </div>
             </div>
           </div>
@@ -68,8 +68,8 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
 
             <div className="col-span-2">
               <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                <JobPlaceInputField label="UAE DL front" placeholder="Drop image here or" name="UAE_DL_front" />
-                <JobPlaceInputField label="UAE DL Back" placeholder="Drop image here or" name="UAE_DL_Back" />
+                <DragAndDrop label="UAE DL front" name="UAE_DL_front" />
+                <DragAndDrop label="UAE DL Back" name="UAE_DL_Back" />
 
                 <div className="col-span-1 md:col-span-2 text-end">
                     <input type="checkbox" className="accent-[#1278BC]" name="is_agree" />

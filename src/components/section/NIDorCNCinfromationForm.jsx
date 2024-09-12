@@ -1,4 +1,5 @@
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
+import DragAndDrop from "../inputs/DragAndDrop";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
 import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
 
@@ -115,8 +116,8 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
 
             <div className="col-span-2">
               <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                <JobPlaceInputField label="Front page" placeholder="Saima" name="mother_name" />
-                <JobPlaceInputField label="Signature page (optional)" placeholder="Saima" name="mother_name" required={false} />
+                <DragAndDrop label="Front page" name="mother_name" />
+                <DragAndDrop label="Signature page (optional)" name="mother_name" required={false} />
               </div>
             </div>
           </div>
@@ -126,8 +127,8 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
 
             <div className="col-span-2">
               <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                <JobPlaceInputField label="NID / CNIC front" placeholder="Saima" name="mother_name" />
-                <JobPlaceInputField label="NID / CNIC Back" placeholder="Saima" name="mother_name" />
+                <DragAndDrop label="NID / CNIC front" name="mother_name" />
+                <DragAndDrop label="NID / CNIC Back" name="mother_name" />
               </div>
             </div>
           </div>

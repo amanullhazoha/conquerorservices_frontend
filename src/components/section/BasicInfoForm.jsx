@@ -100,8 +100,7 @@ const BasicInfoForm = ({ handleNext }) => {
 
             <div className="col-span-2">
               <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                <DragAndDrop />
-                {/* <JobPlaceInputField label="Add photo" placeholder="Saima" name="mother_name" /> */}
+                <DragAndDrop label="Add photo" name="mother_name" />
               </div>
             </div>
           </div>
