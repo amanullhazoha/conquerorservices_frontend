@@ -21,20 +21,20 @@ const JobTypeModal = ({ isOpen, onClose }) => {
         <div className="mt-8 grid grid-cols-2 gap-3">
           <div 
             onClick={onClose}
-            className="w-full flex flex-col items-center gap-1 p-1.5 rounded-2xl border border-[#E5E7EB] hover:border-[#1B345D] hover:bg-[#1B345D0D] cursor-pointer"
+            className="group w-full flex flex-col items-center gap-1 p-1.5 rounded-2xl border border-[#E5E7EB] hover:border-[#1B345D] hover:bg-[#1B345D0D] cursor-pointer"
           >
                 <img src={freelancer} alt="image" className="w-full h-auto" />
 
-                <p className="text-2xl font-bold text-[#01913B]">Freelancer</p>
+                <p className="text-2xl font-bold text-[#01913B] group-hover:text-[#1B345D]">Freelancer</p>
           </div>
 
           <div 
             onClick={onClose}
-            className="w-full flex flex-col items-center gap-1 p-1.5 rounded-2xl border border-[#E5E7EB] hover:border-[#1B345D] hover:bg-[#1B345D0D] cursor-pointer"
+            className="group w-full flex flex-col items-center gap-1 p-1.5 rounded-2xl border border-[#E5E7EB] hover:border-[#1B345D] hover:bg-[#1B345D0D] cursor-pointer"
         >
                 <img src={rider} alt="image" className="w-full h-auto" />
 
-                <p className="text-2xl font-bold text-[#1B345D]">Rider</p>
+                <p className="text-2xl font-bold text-[#01913B] group-hover:text-[#1B345D]">Rider</p>
           </div>
         </div>
       </div>

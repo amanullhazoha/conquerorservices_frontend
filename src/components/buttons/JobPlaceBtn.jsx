@@ -19,8 +19,8 @@ const JobPlaceBtn = ({
             )}
 
             <button 
-                type="button" 
-                onClick={handleNext}
+                type="submit" 
+                // onClick={handleNext}
                 className="bg-[#1278BC] text-white text-base font-semibold px-5 py-1.5 rounded-lg flex gap-2 items-center max-md:justify-center"
             >
                 {submit ? "Submit" : "Save & Continue"}

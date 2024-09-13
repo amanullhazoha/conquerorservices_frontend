@@ -1,6 +1,10 @@
+import { Field, ErrorMessage } from "formik";
+
 const JobPlaceInputField = ({
     name,
     label,
+    errors,
+    touched,
     placeholder,
     type="text",
     required=true,
@@ -11,12 +15,19 @@ const JobPlaceInputField = ({
                 {label} {required && <span className="text-[#F04438]">*</span>}
             </label>
 
-            <input 
+            <Field 
                 id={name} 
                 type={type} 
+                name={name}
                 placeholder={placeholder} 
-                className="border border-[#D0D5DD] rounded-lg w-full px-2 py-1.5 text-sm text-[#27303F] outline-none mt-0.5" 
+                error={touched[name] && errors[name]}
+                className={
+                    `border border-[#D0D5DD] rounded-lg w-full px-2 py-1.5 text-sm text-[#27303F] outline-none mt-0.5
+                    ${touched[name] && errors[name] ? "border-red-500" : ""}`
+                } 
             />
+
+            <ErrorMessage name={name} component="div" className="text-red-500 text-xs mt-1" />
         </div>
     );
 }
