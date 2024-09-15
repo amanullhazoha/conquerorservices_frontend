@@ -8,6 +8,7 @@ const DragAndDrop = ({
     name,
     label,
     required=true,
+    handleSelectFile,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [droppedFiles, setDroppedFiles] = useState(null);
@@ -38,12 +39,14 @@ const DragAndDrop = ({
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
       setDroppedFiles(files);
+      handleSelectFile(files)
     }
   };
 
   const handleFileUpload = (e) => {
     const files = e.target.files;
     setDroppedFiles(files);
+    handleSelectFile(files);
   };
 
   return (

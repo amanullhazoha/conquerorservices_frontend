@@ -1,22 +1,34 @@
 import { Form, Formik } from "formik";
 import DragAndDrop from "../inputs/DragAndDrop";
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
+import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
 import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
-import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
+import { religion } from "../../assets/staticData/countryInfo";
+import JobPlaceSelectInputField from "../inputs/JobPlaceSelectInputField";
+import { jobApplyNidOrCnicSchema } from "../../schema/jobPlaceSchema";
+import { getStatesByCountry, getCitiesByState, getPoliceStationsByCity, getPostOfficeByPoliceStations } from "../../lib/addressFind";
 
 const initialValues = {
+  zip: "",
+  city: "",
+  religion: "",
+  province: "",
   passportno: "",
-  date_of_expiry: "",
+  emiratesid: "",
+  homeaddrss: "",
+  uaeresident: "",
   father_name: "",
-  nidofcnicnumber: "",
+  policeStation: "",
   maritalstatus: "",
-  uaeresidient: "",
-  email: "",
-  phone_number: "",
-  whatsapp_number: "",
-  job_position: "",
-  applicant_photo: null
+  date_of_expiry: "",
+  nidofcnicnumber: "",
+  emirates_expiry: "",
+  applicant_resume: "",
+  reference: "",
+  applicant_passport: "",
+  nid_cnic_back: "",
+  nid_cnic_front: "",
 };
 
 const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
@@ -29,11 +41,11 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
 
           <Formik
             initialValues={initialValues}
-            // validationSchema={jobApplyBasicSchema}
+            // validationSchema={jobApplyNidOrCnicSchema}
             // onSubmit={(values) => console.log(values)}
             onSubmit={(values) => handleNext()}
           >
-            {({ handleSubmit, touched, errors, setFieldValue }) => (
+            {({ handleSubmit, values, touched, errors, setFieldValue }) => (
               <Form onSubmit={handleSubmit}>
                 <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
                   <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Passport & Expiry Date</h4>
@@ -100,6 +112,8 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
                       <JobPlaceRadioInput 
                         name="maritalstatus" 
                         label="Marital status" 
+                        value={values.maritalstatus}
+                        handleSelect={(value) => setFieldValue("maritalstatus", value)}
                         items={[
                           {id: "1", name: "single", value: "single", label: "Single"},
                           {id: "2", name: "married", value: "married", label: "Married"},
@@ -113,34 +127,43 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
                 <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
                   <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Residency</h4>
 
+                  {console.log(errors)}
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                       <JobPlaceRadioInput 
                         name="uaeresidient" 
                         label="UAE resident" 
+                        value={values.uaeresidient}
+                        handleSelect={(value) => setFieldValue("uaeresidient", value)}
                         items={[
                           {id: "1", name: "yes", value: "yes", label: "Yes"},
                           {id: "2", name: "no", value: "no", label: "No"}
                         ]} 
                       />
+
                       <div></div>
 
-                      <JobPlaceInputField 
-                        errors={errors}
-                        touched={touched}
-                        name="email" 
-                        label="Emirates ID" 
-                        placeholder="e.g 789-908-999" 
-                      />
+                      {values.uaeresidient === "yes" && (
+                        <>
+                          <JobPlaceInputField 
+                            errors={errors}
+                            touched={touched}
+                            name="emiratesid" 
+                            label="Emirates ID" 
+                            placeholder="e.g 789-908-999" 
+                          />
+                        
+                          <JobPlaceDateField 
+                            errors={errors}
+                            pervDate={false}
+                            touched={touched}
+                            label="Expiry date" 
+                            name="emirates_expiry" 
+                            handleSelect={(date) => setFieldValue("emirates_expiry", date)}
+                          />
+                        </>
+                      )}
 
-                      <JobPlaceDateField 
-                        name="email" 
-                        errors={errors}
-                        pervDate={false}
-                        touched={touched}
-                        label="Expiry date" 
-                        handleSelect={(date) => setFieldValue("date_of_birth", date)}
-                      />
                   </div>
                   </div>
                 </div>
@@ -150,12 +173,16 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-1">
-                      <JobPlaceInputField 
+                      <JobPlaceSelectInputField 
                         errors={errors}
+                        name="religion" 
+                        keyValue="name"
                         touched={touched}
-                        name="mother_name" 
-                        label="Religion" 
+                        value={values.religion}
                         placeholder="Select" 
+                        label="Religion"
+                        items={religion}
+                        handleSelect={(item) => setFieldValue("religion", item.name)}
                       />
                     </div>
                   </div>
@@ -170,42 +197,58 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
                         <JobPlaceInputField 
                           errors={errors}
                           touched={touched}
+                          name="homeaddrss" 
                           label="Permanent address" 
                           placeholder="Enter address" 
-                          name="mother_name" 
                         />
                       </div>
 
-                      <JobPlaceInputField 
+                      <JobPlaceSelectInputField 
                         errors={errors}
+                        name="province" 
+                        keyValue="name"
                         touched={touched}
+                        value={values.province}
+                        placeholder="Select" 
                         label="State / Province" 
-                        placeholder="Select" 
-                        name="mother_name" 
+                        items={getStatesByCountry("bangladesh")}
+                        handleSelect={(item) => setFieldValue("province", item.name)}
                       />
 
-                      <JobPlaceInputField 
+                      <JobPlaceSelectInputField 
                         errors={errors}
+                        name="city" 
+                        keyValue="name"
                         touched={touched}
-                        name="mother_name" 
+                        value={values.city}
                         placeholder="Select" 
-                        label="City / District" 
+                        label="City / District"
+                        items={getCitiesByState(values.province)}
+                        handleSelect={(item) => setFieldValue("city", item.name)}
                       />
 
-                      <JobPlaceInputField 
+                      <JobPlaceSelectInputField 
                         errors={errors}
+                        keyValue="name"
                         touched={touched}
-                        name="mother_name" 
+                        name="policeStation" 
                         placeholder="Select" 
                         label="Police station" 
+                        value={values.policeStation}
+                        items={getPoliceStationsByCity(values.city)}
+                        handleSelect={(item) => setFieldValue("policeStation", item.name)}
                       />
 
-                      <JobPlaceInputField 
+                      <JobPlaceSelectInputField 
                         errors={errors}
+                        keyValue="name"
                         touched={touched}
-                        name="mother_name" 
-                        label="Post office" 
+                        name="zip" 
                         placeholder="Select" 
+                        label="Post office"
+                        value={values.zip}
+                        handleSelect={(item) => setFieldValue("zip", item.name)}
+                        items={getPostOfficeByPoliceStations(values.policeStation)}
                       />
 
                       <div className="col-span-1 md:col-span-2">
@@ -213,8 +256,8 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
                           errors={errors}
                           touched={touched}
                           required={false} 
-                          name="mother_name" 
-                          placeholder="Select" 
+                          name="reference" 
+                          placeholder="Reference" 
                           label="Reference number (optional)" 
                         />
                       </div>
@@ -227,8 +270,22 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                      <DragAndDrop label="Front page" name="mother_name" />
-                      <DragAndDrop label="Signature page (optional)" name="mother_name" required={false} />
+                      <DragAndDrop 
+                        errors={errors} 
+                        touched={touched} 
+                        label="Front page" 
+                        name="applicant_passport" 
+                        handleSelectFile={(file) => setFieldValue("applicant_passport", file)} 
+                      />
+
+                      <DragAndDrop 
+                        errors={errors} 
+                        required={false} 
+                        touched={touched} 
+                        name="applicant_resume" 
+                        label="Signature page (optional)" 
+                        handleSelectFile={(file) => setFieldValue("applicant_resume", file)} 
+                      />
                     </div>
                   </div>
                 </div>
@@ -238,8 +295,21 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                      <DragAndDrop label="NID / CNIC front" name="mother_name" />
-                      <DragAndDrop label="NID / CNIC Back" name="mother_name" />
+                      <DragAndDrop 
+                        errors={errors} 
+                        touched={touched}  
+                        name="nid_cnic_front" 
+                        label="NID / CNIC front" 
+                        handleSelectFile={(file) => setFieldValue("nid_cnic_front", file)} 
+                      />
+
+                      <DragAndDrop 
+                        errors={errors} 
+                        touched={touched} 
+                        name="nid_cnic_back" 
+                        label="NID / CNIC Back" 
+                        handleSelectFile={(file) => setFieldValue("nid_cnic_back", file)} 
+                      />
                     </div>
                   </div>
                 </div>

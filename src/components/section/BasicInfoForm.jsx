@@ -36,7 +36,7 @@ const BasicInfoForm = ({ handleNext }) => {
 
           <Formik
             initialValues={initialValues}
-            validationSchema={jobApplyBasicSchema}
+            // validationSchema={jobApplyBasicSchema}
             // onSubmit={(values) => console.log(values)}
             onSubmit={(values) => handleNext()}
           >
@@ -200,6 +200,7 @@ const BasicInfoForm = ({ handleNext }) => {
                         touched={touched}
                         label="Add photo" 
                         name="applicant_image" 
+                        handleSelectFile={(file) => setFieldValue("applicant_image", file)}
                       />
                     </div>
                   </div>
