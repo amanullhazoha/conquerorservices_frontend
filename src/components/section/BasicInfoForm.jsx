@@ -36,7 +36,7 @@ const BasicInfoForm = ({ handleNext }) => {
 
           <Formik
             initialValues={initialValues}
-            // validationSchema={jobApplyBasicSchema}
+            validationSchema={jobApplyBasicSchema}
             // onSubmit={(values) => console.log(values)}
             onSubmit={(values) => handleNext()}
           >

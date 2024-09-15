@@ -41,7 +41,7 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
 
           <Formik
             initialValues={initialValues}
-            // validationSchema={jobApplyNidOrCnicSchema}
+            validationSchema={jobApplyNidOrCnicSchema}
             // onSubmit={(values) => console.log(values)}
             onSubmit={(values) => handleNext()}
           >

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "../../assets/images/logo.png"
+import logo from "../../assets/images/conqueror_logo.png"
 import SearchIcon from "../../assets/icons/SearchIcon";
 
 const PublicLayout = ({ children }) => {
@@ -8,7 +8,7 @@ const PublicLayout = ({ children }) => {
             <header className="bg-white shadow py-5 sticky top-0 z-50">
                 <div className="container max-sm:px-2.5 flex items-center justify-between">
                     <a href="/">
-                        <img src={logo} alt="logo" />
+                        <img src={logo} alt="logo" className="w-[150px] h-auto" />
                     </a>
 
                     <div className="relative flex items-center">
