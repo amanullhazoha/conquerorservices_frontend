@@ -3,6 +3,21 @@ import DragAndDrop from "../inputs/DragAndDrop";
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
 import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
+import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
+
+const initialValues = {
+  passportno: "",
+  date_of_expiry: "",
+  father_name: "",
+  nidofcnicnumber: "",
+  maritalstatus: "",
+  uaeresidient: "",
+  email: "",
+  phone_number: "",
+  whatsapp_number: "",
+  job_position: "",
+  applicant_photo: null
+};
 
 const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
     return (
@@ -13,19 +28,25 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
           </div>
 
           <Formik
-            initialValues={{}}
+            initialValues={initialValues}
             // validationSchema={jobApplyBasicSchema}
             // onSubmit={(values) => console.log(values)}
             onSubmit={(values) => handleNext()}
           >
-            {({ handleSubmit }) => (
+            {({ handleSubmit, errors, touched, setFieldValue }) => (
               <Form onSubmit={handleSubmit}>
                 <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
                   <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Submission ID</h4>
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                      <JobPlaceInputField label="Submission ID" placeholder="890-8764" name="submissionid" />
+                      <JobPlaceInputField 
+                        errors={errors}
+                        touched={touched}
+                        name="submissionid" 
+                        label="Submission ID" 
+                        placeholder="890-8764" 
+                      />
                     </div>
                   </div>
                 </div>
@@ -35,8 +56,22 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                      <JobPlaceInputField label="License number" placeholder="e.g 789-908-999" name="appli_dir_number" />
-                      <JobPlaceInputField label="Expiry date" placeholder="DD-MM-YYYY" name="appli_dir_expiry" />
+                      <JobPlaceInputField 
+                        errors={errors}
+                        touched={touched}
+                        label="License number" 
+                        name="appli_dir_number" 
+                        placeholder="e.g 789-908-999" 
+                      />
+
+                      <JobPlaceDateField 
+                        errors={errors}
+                        pervDate={false}
+                        touched={touched}
+                        label="Expiry date" 
+                        name="appli_dir_expiry"
+                        handleSelect={(date) => setFieldValue("appli_dir_expiry", date)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -54,9 +89,31 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
                               {id: "2", name: "no", value: "no", label: "No"}
                           ]}
                       />
-                      <JobPlaceInputField label="UAE license number" placeholder="E.g. 670-9876" name="uae_license_No" />
-                      <JobPlaceInputField label="UAE resident visa number" placeholder="Select" name="UAE_Resident_visa_No" />
-                      <JobPlaceInputField label="Sim number (optional)" placeholder="Select" name="SIM_No" required={false} />
+
+                      <JobPlaceInputField 
+                        errors={errors}
+                        touched={touched}
+                        name="uae_license_No" 
+                        label="UAE license number" 
+                        placeholder="E.g. 670-9876" 
+                      />
+
+                      <JobPlaceInputField 
+                        errors={errors}
+                        touched={touched}
+                        placeholder="Select" 
+                        name="UAE_Resident_visa_No" 
+                        label="UAE resident visa number" 
+                      />
+
+                      <JobPlaceInputField 
+                        errors={errors}
+                        touched={touched}
+                        name="SIM_No" 
+                        required={false} 
+                        placeholder="Select" 
+                        label="Sim number (optional)" 
+                      />
                     </div>
                   </div>
                 </div>

@@ -17,8 +17,7 @@ export const jobApplyBasicSchema = object().shape({
         .required("This  field must not be empty."),
     contact_number: string()
         .required("This  field must not be empty."),
-    whatsapp_number: string()
-        .required("This  field must not be empty."),
+    whatsapp_number: string(),
     position_id: string()
         .required("This  field must not be empty."),
     applicant_image: string()

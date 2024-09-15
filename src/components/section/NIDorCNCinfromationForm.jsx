@@ -3,6 +3,21 @@ import DragAndDrop from "../inputs/DragAndDrop";
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
 import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
+import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
+
+const initialValues = {
+  passportno: "",
+  date_of_expiry: "",
+  father_name: "",
+  nidofcnicnumber: "",
+  maritalstatus: "",
+  uaeresidient: "",
+  email: "",
+  phone_number: "",
+  whatsapp_number: "",
+  job_position: "",
+  applicant_photo: null
+};
 
 const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
     return (
@@ -13,20 +28,34 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
           </div>
 
           <Formik
-            initialValues={{}}
+            initialValues={initialValues}
             // validationSchema={jobApplyBasicSchema}
             // onSubmit={(values) => console.log(values)}
             onSubmit={(values) => handleNext()}
           >
-            {({ handleSubmit }) => (
+            {({ handleSubmit, touched, errors, setFieldValue }) => (
               <Form onSubmit={handleSubmit}>
                 <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
                   <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Passport & Expiry Date</h4>
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                      <JobPlaceInputField label="Passport number" placeholder="e.g 789-908-999" name="passportno" />
-                      <JobPlaceInputField label="Expiry date" placeholder="Abdullah" name="date_of_expiry" />
+                      <JobPlaceInputField 
+                        errors={errors} 
+                        touched={touched}  
+                        name="passportno" 
+                        label="Passport number" 
+                        placeholder="e.g 789-908-999" 
+                      />
+
+                      <JobPlaceDateField  
+                        errors={errors} 
+                        pervDate={false}
+                        touched={touched}  
+                        label="Expiry date" 
+                        name="date_of_expiry" 
+                        handleSelect={(date) => setFieldValue("date_of_expiry", date)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -36,7 +65,13 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                      <JobPlaceInputField label="Full name" placeholder="Abdul Rehman" name="father_name" />
+                      <JobPlaceInputField 
+                        errors={errors} 
+                        touched={touched}
+                        label="Full name" 
+                        name="father_name" 
+                        placeholder="Abdul Rehman" 
+                      />
                     </div>
                   </div>
                 </div>
@@ -46,7 +81,13 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                      <JobPlaceInputField label="NID / CNIC" placeholder="e.g 789-908-999" name="nidofcnicnumber" />
+                      <JobPlaceInputField 
+                        errors={errors} 
+                        touched={touched}
+                        label="NID / CNIC" 
+                        name="nidofcnicnumber" 
+                        placeholder="e.g 789-908-999" 
+                      />
                     </div>
                   </div>
                 </div>
@@ -84,8 +125,22 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
                       />
                       <div></div>
 
-                      <JobPlaceInputField label="Emirates ID" placeholder="e.g 789-908-999" name="email" />
-                      <JobPlaceInputField label="Expiry date" placeholder="Email" name="email" />
+                      <JobPlaceInputField 
+                        errors={errors}
+                        touched={touched}
+                        name="email" 
+                        label="Emirates ID" 
+                        placeholder="e.g 789-908-999" 
+                      />
+
+                      <JobPlaceDateField 
+                        name="email" 
+                        errors={errors}
+                        pervDate={false}
+                        touched={touched}
+                        label="Expiry date" 
+                        handleSelect={(date) => setFieldValue("date_of_birth", date)}
+                      />
                   </div>
                   </div>
                 </div>
@@ -95,7 +150,13 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-1">
-                      <JobPlaceInputField label="Job position" placeholder="Select" name="mother_name" />
+                      <JobPlaceInputField 
+                        errors={errors}
+                        touched={touched}
+                        name="mother_name" 
+                        label="Religion" 
+                        placeholder="Select" 
+                      />
                     </div>
                   </div>
                 </div>
@@ -106,15 +167,56 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                       <div className="col-span-1 md:col-span-2">
-                        <JobPlaceInputField label="Permanent address" placeholder="Enter address" name="mother_name" />
+                        <JobPlaceInputField 
+                          errors={errors}
+                          touched={touched}
+                          label="Permanent address" 
+                          placeholder="Enter address" 
+                          name="mother_name" 
+                        />
                       </div>
-                      <JobPlaceInputField label="State / Province" placeholder="Select" name="mother_name" />
-                      <JobPlaceInputField label="City / District" placeholder="Select" name="mother_name" />
-                      <JobPlaceInputField label="Police station" placeholder="Select" name="mother_name" />
-                      <JobPlaceInputField label="Post office" placeholder="Select" name="mother_name" />
+
+                      <JobPlaceInputField 
+                        errors={errors}
+                        touched={touched}
+                        label="State / Province" 
+                        placeholder="Select" 
+                        name="mother_name" 
+                      />
+
+                      <JobPlaceInputField 
+                        errors={errors}
+                        touched={touched}
+                        name="mother_name" 
+                        placeholder="Select" 
+                        label="City / District" 
+                      />
+
+                      <JobPlaceInputField 
+                        errors={errors}
+                        touched={touched}
+                        name="mother_name" 
+                        placeholder="Select" 
+                        label="Police station" 
+                      />
+
+                      <JobPlaceInputField 
+                        errors={errors}
+                        touched={touched}
+                        name="mother_name" 
+                        label="Post office" 
+                        placeholder="Select" 
+                      />
 
                       <div className="col-span-1 md:col-span-2">
-                        <JobPlaceInputField label="Reference number (optional)" placeholder="Select" name="mother_name" required={false} />
+                        <JobPlaceInputField 
+                          errors={errors}
+                          touched={touched}
+                          required={false} 
+                          name="mother_name" 
+                          placeholder="Select" 
+                          label="Reference number (optional)" 
+                        />
                       </div>
                     </div>
                   </div>

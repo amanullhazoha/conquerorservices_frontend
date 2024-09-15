@@ -1,7 +1,10 @@
+import { ErrorMessage } from "formik";
 import React, { useState } from "react";
 import CloudIcon from "../../assets/icons/CloudIcon";
 
 const DragAndDrop = ({
+    touched,
+    errors,
     name,
     label,
     required=true,
@@ -53,7 +56,7 @@ const DragAndDrop = ({
             <div
                 className={`w-full h-[190px] flex items-center justify-center border-2 ${
                 isDragging ? "border-blue-500 bg-blue-100" : "border-[#E2E8F0]"
-                } border-dashed rounded-lg p-4 transition-all`}
+                } border-dashed rounded-lg p-4 transition-all ${touched[name] && errors[name] ? "border-red-500" : ""}`}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
                 onDragOver={handleDragOver}
@@ -89,6 +92,8 @@ const DragAndDrop = ({
                 )}
             </div>
         </div>
+
+        <ErrorMessage name={name} component="div" className="text-red-500 text-xs mt-1" />
     </div>
   );
 };

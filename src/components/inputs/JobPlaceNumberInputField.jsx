@@ -1,18 +1,20 @@
-import { ErrorMessage } from "formik";
+import { Field, ErrorMessage } from "formik";
 import { useState, useRef, useEffect } from 'react';
 import DropdownArrow from "../../assets/icons/DropdownArrow";
 
-const JobPlaceSelectInputField = ({
+const JobPlaceNumberInputField = ({
     name,
     label,
     items,
-    value,
     errors,
     touched,
     keyValue,
+    changeDisable,
     placeholder,
+    type="text",
     handleSelect,
     required=true,
+    selectCountryCode,
 }) => {
     const selectRef = useRef(null);
     const dropdownRef = useRef(null);
@@ -53,27 +55,37 @@ const JobPlaceSelectInputField = ({
                 {label} {required && <span className="text-[#F04438]">*</span>}
             </label>
 
-            <div className="relative">
+            <div 
+                ref={selectRef}
+                className="relative" 
+            >
+                <Field 
+                    id={name} 
+                    type={type} 
+                    name={name}
+                    placeholder={placeholder} 
+                    error={touched[name] && errors[name]}
+                    className={
+                        `border border-[#D0D5DD] rounded-lg w-full pl-12 pr-2 py-1.5 text-sm text-[#27303F] outline-none mt-0.5
+                        ${touched[name] && errors[name] ? "border-red-500" : ""}`
+                    } 
+                />
+
                 <div 
-                    ref={selectRef}
                     onClick={toggleDropdown}
-                    className={`border border-[#D0D5DD] rounded-lg w-full px-2 
-                    py-1.5 text-sm text-[#27303F] outline-none mt-0.5 flex
-                    justify-between items-center cursor-pointer group ${touched[name] && errors[name] ? "border-red-500" : ""}`}
+                    className="flex gap-0.5 items-center absolute top-0 left-0 px-1.5 py-1.5 w-fit mt-0.5 cursor-pointer"
                 >
                     <span>
-                        <span className={value ? "text-[#27303F]" : "text-[#718096]"}>{value ? value : placeholder}</span>
+                        <span className="text-[#101828]">{selectCountryCode ? selectCountryCode : "BD"}</span>
                     </span>
 
-                    <DropdownArrow />
+                    <DropdownArrow className="w-4 h-4 mt-0.5" />
                 </div>
 
-                <ErrorMessage name={name} component="div" className="text-red-500 text-xs mt-1" />
-
-                {isOpen && (
+                {isOpen && !changeDisable && (
                     <ul
                         ref={dropdownRef}
-                        className={`absolute bg-white border border-[#D0D5DD] rounded-lg w-full px-2 
+                        className={`absolute bg-white border border-[#D0D5DD] rounded-lg w-fit px-2 
                         py-1.5 text-sm text-[#27303F] outline-none mt-0.5 transition-transform z-50 max-h-[250px] overflow-y-auto
                         duration-300 ease-in-out ${position === 'top' ? 'bottom-full' : 'top-full'} 
                         ${position === 'top' ? 'transform -translate-y-full' : 'transform translate-y-0'}`}
@@ -93,8 +105,10 @@ const JobPlaceSelectInputField = ({
                     </ul>
                 )}
             </div>
+
+            <ErrorMessage name={name} component="div" className="text-red-500 text-xs mt-1" />
         </div>
     );
-};
-
-export default JobPlaceSelectInputField;
+}
+ 
+export default JobPlaceNumberInputField;
