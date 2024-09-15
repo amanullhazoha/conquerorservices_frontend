@@ -5,6 +5,8 @@ import JobPlaceInputField from "../inputs/JobPlaceInputField";
 import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
 import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
 import { jobApplyLicenseSchema } from "../../schema/jobPlaceSchema";
+import AcceptTermsModal from "../modals/AcceptTermsModal";
+import { useState } from "react";
 
 const initialValues = {
   is_agree: false,
@@ -22,6 +24,8 @@ const initialValues = {
 };
 
 const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
     return (
         <div className="flex-1 bg-white rounded-lg px-6 py-6">
           <div className="pb-5 border-b border-[#EAECF0]">
@@ -169,7 +173,14 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
 
                       <div className="col-span-1 md:col-span-2 text-end">
                           <div>
-                            <input type="checkbox" className="accent-[#1278BC]" name="is_agree" value={values.is_agree} onChange={() => setFieldValue("is_agree", !values.is_agree)} />
+                            <input 
+                              type="checkbox" 
+                              name="is_agree" 
+                              value={values.is_agree} 
+                              checked={values.is_agree} 
+                              className="accent-[#1278BC]" 
+                              onChange={() => setIsOpen(true)} 
+                            />
 
                             <label className="ml-2 text-base text-[#667085]">I Accept the <a href="/" className="text-[#1278BC]">Terms and Condition</a> of the Company</label>
                           </div>
@@ -179,6 +190,15 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
                     </div>
                   </div>
                 </div>
+
+                <AcceptTermsModal 
+                  isOpen={isOpen} 
+                  onClose={() => setIsOpen(false)} 
+                  handleAccept={() => {
+                    setFieldValue("is_agree", true);
+                    setIsOpen(false);
+                  }}
+                />
 
                 <div className="pt-5">
                   <JobPlaceBtn submit={true} handlePrevious={handlePrevious} />

@@ -7,9 +7,9 @@ const PublicLayout = ({ children }) => {
         <section className="bg-[#F4F5F7]">
             <header className="bg-white shadow py-5 sticky top-0 z-50">
                 <div className="container max-sm:px-2.5 flex items-center justify-between">
-                    <a href="/">
+                    <Link to="/">
                         <img src={logo} alt="logo" className="w-[150px] h-auto" />
-                    </a>
+                    </Link>
 
                     <div className="relative flex items-center">
                         <input 

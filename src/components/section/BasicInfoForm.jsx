@@ -25,7 +25,15 @@ const initialValues = {
 };
 
 const BasicInfoForm = ({ handleNext }) => {
-  const [wp_code, setWpCode] = useState("BD");
+    const [wp_code, setWpCode] = useState("BD");
+
+    const handleSubmit = async (values) => {
+      try {
+        
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
     return (
         <div className="flex-1 bg-white rounded-lg px-6 py-6">
@@ -38,7 +46,7 @@ const BasicInfoForm = ({ handleNext }) => {
             initialValues={initialValues}
             validationSchema={jobApplyBasicSchema}
             // onSubmit={(values) => console.log(values)}
-            onSubmit={(values) => handleNext()}
+            onSubmit={(values) => handleSubmit(values)}
           >
             {({ handleSubmit, values, touched, errors, setFieldValue }) => (
               <Form onSubmit={handleSubmit}>

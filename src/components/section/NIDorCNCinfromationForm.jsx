@@ -41,7 +41,7 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
 
           <Formik
             initialValues={initialValues}
-            validationSchema={jobApplyNidOrCnicSchema}
+            // validationSchema={jobApplyNidOrCnicSchema}
             // onSubmit={(values) => console.log(values)}
             onSubmit={(values) => handleNext()}
           >
@@ -127,7 +127,6 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
                 <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
                   <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Residency</h4>
 
-                  {console.log(errors)}
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                       <JobPlaceRadioInput 
