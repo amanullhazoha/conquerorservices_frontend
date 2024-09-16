@@ -81,7 +81,9 @@ const BasicInfoForm = ({
     }
 
     useEffect(() => {
-      setPosition(data?.position_id);
+      if(data?.position_id) {
+        setPosition(data?.position_id);
+      }
 
       setInitialValues({
         first_name: data?.first_name ? data?.first_name : "",
@@ -93,11 +95,11 @@ const BasicInfoForm = ({
         email: data?.email ? data?.email : "",
         contact_number: data?.contact_number ? data?.contact_number : "",
         whatsapp_number: data?.whatsapp_number ? data?.whatsapp_number : "",
-        position_id: position_id ? position_id : data?.position_id ? data?.position_id : "",
+        position_id: position_id ? position_id : "",
         applicant_image: data?.applicant_image ? data?.applicant_image : "",
         hiring_position: data?.hiring_position ? data?.hiring_position : ""
       })
-    }, [data])
+    }, [data, position_id])
 
     return (
         <div className="flex-1 bg-white rounded-lg px-6 py-6">
@@ -260,7 +262,7 @@ const BasicInfoForm = ({
                         placeholder="Select position" 
                         handleSelect={(item) => setFieldValue("position_id", item.id)}
                         items={[{id: 50, name: "Rider"}, {id: 52, name: "Freelancer"}]} 
-                        value={[{id: 50, name: "Rider"}, {id: 52, name: "Freelancer"}].find(item => item.id === values.position_id)?.name}
+                        value={[{id: 50, name: "Rider"}, {id: 52, name: "Freelancer"}].find(item => item.id == values.position_id)?.name}
                       />
 
                       {values?.position_id === 52 && (
