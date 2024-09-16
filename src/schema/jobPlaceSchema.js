@@ -33,7 +33,7 @@ export const jobApplyBasicSchema = Yup.object().shape({
           return schema;
       }
     }),
-  whatsapp_number: Yup.string(),
+  whatsapp_number: Yup.string().required('Whatsapp number is required'),
   position_id: Yup.string().required('Position ID is required'),
   hiring_position: Yup.string().when('position_id', (position_id, schema) => {
     if (position_id === '52' || position_id === 52) {

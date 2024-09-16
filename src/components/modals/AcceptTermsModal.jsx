@@ -1,7 +1,9 @@
 import logo from "../../assets/images/conqueror_logo.png";
 import { useState, useEffect, useRef } from "react";
+import AcceptTermsEn from "../section/AcceptTermsEn";
+import AcceptTermsAb from "../section/AcceptTermsAb";
 
-const AcceptTermsModal = ({ isOpen, onClose, handleAccept }) => {
+const AcceptTermsModal = ({ isOpen, onClose, handleAccept, position }) => {
   const scrollElement = useRef(null);
   const [language, setLanguage] = useState("en");
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
@@ -48,7 +50,7 @@ const AcceptTermsModal = ({ isOpen, onClose, handleAccept }) => {
                     className={`${language === "en" ? "bg-[#1B345E] text-white" : "text-[#111928]"} px-3 py-2 rounded-[30px]`} 
                     onClick={() => setLanguage("en")}
                 >
-                        English
+                    English
                 </button>
 
                 <button 
@@ -56,33 +58,34 @@ const AcceptTermsModal = ({ isOpen, onClose, handleAccept }) => {
                     className={`${language === "ab" ? "bg-[#1B345E] text-white" : "text-[#111928]"} px-3 py-2 rounded-[30px]`}
                     onClick={() => setLanguage("ab")}
                 >
-                    عربي
+                    عربية
                 </button>
             </div>
         </div>
 
-        <div className="h-[200px] overflow-y-auto" ref={scrollElement}>
+        {/* <div className="h-[200px] overflow-y-auto" ref={scrollElement}>
             <p className="mb-4 text-[#111928] font-semibold text-sm md:text-base">Our Commitment to the Community</p>
             <h4 className="mb-6 text-[#111928] font-semibold text-lg md:text-2xl">At Conqueror Services, we strive to create a welcoming environment</h4>
             <p className="text-[#4B5563] font-normal text-base mb-6">To help us maintain this, we kindly ask you to commit to the following:</p>
 
             <p 
                 className="text-[#4B5563] font-normal text-base mb-6"
+                dir="auto"
             >
-                These Terms Of Service Constitute An Agreement (This “Agreement”) By And 
-                Between Conqueror Services LLC , Whose Principal Place Of Business Is City 
-                Pharmacy Building, M02, Port Saeed, Dubai, U.A.E (“Conqueror”) And The Corporation, 
-                Llc, Partnership, Sole Proprietorship, Or Any Other Business Entity Executing This 
-                Agreement Or Any Order (“Customer”). This Agreement Is Effective As Of The Date 
-                Customer Starts Using The System (The “Effective Date”). 
+                تحدد هذه الاتفاقية شروط التوظيف المتفق عليها بين صاحب العمل والموظف. سواء تم النص صراحة في الاتفاقية أم لا، فإن على كل من الموظف وصاحب العمل واجب الثقة المتبادلة، وتقديم مطالب قانونية ومعقولة فقط لبعضهما البعض. تم إبرام هذه الاتفاقية وإبرامها في التاريخ والشهر والسنة الحاليين بين:
             </p>
+        </div> */}
+
+         <div className="h-[200px] overflow-y-auto" ref={scrollElement}>
+            {language === "en" && <AcceptTermsEn position={position} />}
+            {language === "ab" && <AcceptTermsAb position={position} />}
         </div>
 
         <div className="flex flex-col gap-2 mt-6">
             <button 
                 type="button" 
                 onClick={() => handleAccept()}
-                className={`w-full px-1.5 py-2.5 bg-[#9CA3AF] text-white rounded-full text-sm font-medium border border-[#E5E7EB] ${isButtonEnabled ? 'enabled' : 'disabled'}`}
+                className={`w-full px-1.5 py-2.5 text-white rounded-full text-sm font-medium border border-[#E5E7EB] ${isButtonEnabled ? 'bg-[#1B345E]' : 'bg-[#9CA3AF]'}`}
                 disabled={!isButtonEnabled}
             >
                 Agree and continue

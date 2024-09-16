@@ -267,6 +267,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
 
                 <AcceptTermsModal 
                   isOpen={isOpen} 
+                  position={data?.position_id}
                   onClose={() => setIsOpen(false)} 
                   handleAccept={() => {
                     setFieldValue("is_agree", true);
