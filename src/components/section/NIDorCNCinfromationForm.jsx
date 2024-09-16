@@ -10,6 +10,7 @@ import JobPlaceSelectInputField from "../inputs/JobPlaceSelectInputField";
 import { jobApplyNidOrCnicSchema } from "../../schema/jobPlaceSchema";
 import { useUpdateApplicantNIDorCNICinfoMutation } from "../../slice/jobPlacePage.slice";
 import { getStatesByCountry, getCitiesByState, getPoliceStationsByCity, getPostOfficeByPoliceStations } from "../../lib/addressFind";
+import JobPlaceInputNID from "../inputs/JobPlaceInputNID";
 
 const INITIALVALUES = {
   zip: "",
@@ -31,6 +32,7 @@ const INITIALVALUES = {
   applicant_passport: "",
   nid_cnic_back: "",
   nid_cnic_front: "",
+  nationality: "",
 };
 
 const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
@@ -95,6 +97,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
         applicant_passport: data?.applicant_passport ? data?.applicant_passport : "",
         nid_cnic_back: data?.nid_cnic_back ? data?.nid_cnic_back : "",
         nid_cnic_front: data?.nid_cnic_front ? data?.nid_cnic_front : "",
+        nationality: data?.nationality ? data?.nationality : "",
       })
     }, [data])
 
@@ -113,6 +116,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
           >
             {({ handleSubmit, values, touched, errors, setFieldValue }) => (
               <Form onSubmit={handleSubmit}>
+                {console.log(errors)}
                 <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
                   <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Passport & Expiry Date</h4>
 
@@ -160,11 +164,21 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                      <JobPlaceInputField 
+                      <JobPlaceInputNID 
                         errors={errors} 
                         touched={touched}
                         label="NID / CNIC" 
                         name="nidorcnicnumber" 
+                        handleChange={(e) => {
+                            let value = e.target.value;
+
+                            if(data?.nationality === "Pakistan" && value.length > 5 && value[5] !== "-") {
+                              value = value.slice(0, 5)+ "-" + value.slice(5)
+                            }
+
+                            setFieldValue("nidorcnicnumber", value);
+                        }}
+                        value={values?.nidorcnicnumber}
                         placeholder="e.g 789-908-999" 
                       />
                     </div>

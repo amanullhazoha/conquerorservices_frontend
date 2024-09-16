@@ -76,7 +76,7 @@ const JobPlaceNumberInputField = ({
                     className="flex gap-0.5 items-center absolute top-0 left-0 px-1.5 py-1.5 w-fit mt-0.5 cursor-pointer"
                 >
                     <span>
-                        <span className="text-[#101828]">{selectCountryCode ? selectCountryCode : "BD"}</span>
+                        <span className="text-[#101828]">{selectCountryCode}</span>
                     </span>
 
                     <DropdownArrow className="w-4 h-4 mt-0.5" />

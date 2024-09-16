@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import JobTypeModal from "../components/modals/JobTypeModal";
+import JobPlaceStep from "../components/section/JobPlaceStep";
 import PublicLayout from "../components/layouts/PublicLayout";
 import BasicInfoForm from "../components/section/BasicInfoForm";
 import LicenseInfoForm from "../components/section/LicenseInfoForm";
-import NIDorCNCinfromationForm from "../components/section/NIDorCNCinfromationForm";
-import JobPlaceStep from "../components/section/JobPlaceStep";
-import JobTypeModal from "../components/modals/JobTypeModal";
 import { useGetApplicationByIDQuery } from "../slice/jobPlacePage.slice";
+import NIDorCNCinfromationForm from "../components/section/NIDorCNCinfromationForm";
 
 const JobPlacePage = () => {
   const [step, setStep] = useState(1);
@@ -51,7 +51,10 @@ const JobPlacePage = () => {
             <LicenseInfoForm 
                 data={data}
                 id={searchParams.get("id")}
-                handleNext={() => setStep(1)}
+                handleNext={() => {
+                  setSearchParams();
+                  setStep(1);
+                }}
                 handlePrevious={() => setStep(2)}
             />
         )}

@@ -20,6 +20,7 @@ const INITIALVALUES = {
   UAE_Resident_Visa_No: "",
   UAE_License_No: "",
   SIM_No: "",
+  position_id: "",
   appli_dri_lisence_frontpart: "",
   appli_dri_lisence_backpart: "",
 };
@@ -68,6 +69,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
 
     useEffect(() => {
       setInitialValues({
+        position_id: data?.position_id ? data?.position_id : "",
         is_agree: data?.is_agree ? data?.is_agree : false,
         submissionid: data?.submissionid ? data?.submissionid : "",
         UAE_DL_Front: data?.UAE_DL_Front ? data?.UAE_DL_Front : "",

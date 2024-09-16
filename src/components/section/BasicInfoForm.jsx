@@ -8,7 +8,7 @@ import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
 import { jobApplyBasicSchema } from "../../schema/jobPlaceSchema";
 import JobPlaceNumberInputField from "../inputs/JobPlaceNumberInputField";
 import JobPlaceSelectInputField from "../inputs/JobPlaceSelectInputField";
-import { countries, countryCode } from "../../assets/staticData/countryInfo";
+import { countries, countryCode, hiringPositions } from "../../assets/staticData/countryInfo";
 import { useCreateApplicantBasicInfoMutation, useUpdateApplicantBasicInfoMutation } from "../../slice/jobPlacePage.slice";
 
 const INITIALVALUES = {
@@ -22,7 +22,8 @@ const INITIALVALUES = {
   contact_number: "",
   whatsapp_number: "",
   position_id: "",
-  applicant_image: ""
+  applicant_image: "",
+  hiring_position: "",
 };
 
 const BasicInfoForm = ({ 
@@ -32,7 +33,7 @@ const BasicInfoForm = ({
   setPosition,
   position_id,
 }) => {
-    const [wp_code, setWpCode] = useState("BD");
+    const [wp_code, setWpCode] = useState(null);
     const [initialValues, setInitialValues] = useState(INITIALVALUES);
     const [createApplicantBasicInfo, { isLoading, isError }] = useCreateApplicantBasicInfoMutation()
     const [updateApplicantBasicInfo] = useUpdateApplicantBasicInfoMutation();
@@ -44,10 +45,8 @@ const BasicInfoForm = ({
         if(id) {
           Object.entries(values).forEach(([key, value]) => {
             if (key === 'applicant_image' && value instanceof File) {
-              // Append file
               formData.append(key, value);
             } else {
-              // Append other fields
               formData.append(key, value);
             }
           });
@@ -95,7 +94,8 @@ const BasicInfoForm = ({
         contact_number: data?.contact_number ? data?.contact_number : "",
         whatsapp_number: data?.whatsapp_number ? data?.whatsapp_number : "",
         position_id: position_id ? position_id : data?.position_id ? data?.position_id : "",
-        applicant_image: data?.applicant_image ? data?.applicant_image : ""
+        applicant_image: data?.applicant_image ? data?.applicant_image : "",
+        hiring_position: data?.hiring_position ? data?.hiring_position : ""
       })
     }, [data])
 
@@ -118,7 +118,6 @@ const BasicInfoForm = ({
                   <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Name</h4>
 
                   <div className="col-span-2">
-                    {console.log(initialValues)}
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                       <JobPlaceInputField 
                         errors={errors} 
@@ -224,7 +223,9 @@ const BasicInfoForm = ({
                         changeDisable={true}
                         placeholder="+1 (555) 000-0000" 
                         items={countryCode}
-                        selectCountryCode={countryCode?.find(item => item?.name === values?.nationality)?.shortName}
+                        selectCountryCode={
+                          values?.nationality ? countryCode?.find(item => item?.name === values?.nationality)?.shortName : countryCode?.find(item => item?.name === "Pakistan")?.shortName
+                        }
                       />
 
                       <JobPlaceNumberInputField 
@@ -237,7 +238,9 @@ const BasicInfoForm = ({
                         placeholder="+1 (555) 000-0000" 
                         label="WhatsApp number (optional)" 
                         handleSelect={(item) => setWpCode(item.shortName)}
-                        selectCountryCode={countryCode?.find(item => item?.shortName === wp_code)?.shortName}
+                        selectCountryCode={
+                          wp_code ? countryCode?.find(item => item?.shortName === wp_code)?.shortName : countryCode?.find(item => item?.name === "Pakistan")?.shortName
+                        }
                       />
                     </div>
                   </div>
@@ -248,7 +251,6 @@ const BasicInfoForm = ({
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-
                       <JobPlaceSelectInputField 
                         errors={errors} 
                         touched={touched}
@@ -260,6 +262,20 @@ const BasicInfoForm = ({
                         items={[{id: 50, name: "Rider"}, {id: 52, name: "Freelancer"}]} 
                         value={[{id: 50, name: "Rider"}, {id: 52, name: "Freelancer"}].find(item => item.id === values.position_id)?.name}
                       />
+
+                      {values?.position_id === 52 && (
+                        <JobPlaceSelectInputField 
+                          errors={errors} 
+                          touched={touched}
+                          keyValue="name"
+                          name="hiring_position" 
+                          label="Hiring position" 
+                          placeholder="Select position" 
+                          items={hiringPositions} 
+                          handleSelect={(item) => setFieldValue("hiring_position", item.name)}
+                          value={hiringPositions.find(item => item.name === values.hiring_position)?.name}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

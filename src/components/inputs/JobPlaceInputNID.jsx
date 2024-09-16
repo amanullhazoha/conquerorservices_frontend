@@ -1,10 +1,12 @@
 import { Field, ErrorMessage } from "formik";
 
-const JobPlaceInputField = ({
+const JobPlaceInputNID = ({
     name,
     label,
+    value,
     errors,
     touched,
+    handleChange,
     placeholder,
     type="text",
     required=true,
@@ -15,12 +17,13 @@ const JobPlaceInputField = ({
                 {label} {required && <span className="text-[#F04438]">*</span>}
             </label>
 
-            <Field 
+            <input 
                 id={name} 
                 type={type} 
                 name={name}
+                value={value}
+                onChange={handleChange}
                 placeholder={placeholder} 
-                error={touched[name] && errors[name]}
                 className={
                     `border border-[#D0D5DD] rounded-lg w-full px-2 py-1.5 text-sm text-[#27303F] outline-none mt-0.5
                     ${touched[name] && errors[name] ? "border-red-500" : ""}`
@@ -32,4 +35,4 @@ const JobPlaceInputField = ({
     );
 }
  
-export default JobPlaceInputField;
+export default JobPlaceInputNID;
