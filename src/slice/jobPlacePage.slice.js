@@ -1,5 +1,3 @@
-// import { MetaData } from "@/types/global.type";
-// import { User } from "@/types/user.type";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const jobApplicationApi = createApi({
@@ -11,23 +9,26 @@ export const jobApplicationApi = createApi({
   tagTypes: ["job-application"],
   endpoints: (builder) => ({
     getApplicationByID: builder.query({
-      query: (data) => ({
-        url: "/public/search/hotel-info",
+      query: (id) => ({
+        url: `/public/career/jobs/${id}`,
       }),
       providesTags: ["job-application"],
     }),
     createApplicantBasicInfo: builder.mutation({
       query: (data) => ({
-        url: "/public/search/hotel-hash-id",
+        url: "/public/career/jobs/apply/basic",
         method: "POST",
         body: data,
+        headers: {
+          "Content-Type": data instanceof FormData ? undefined : "application/json",
+        },
       }),
       invalidatesTags: ["job-application"],
     }),
     updateApplicantBasicInfo: builder.mutation({
       query: (data) => ({
-        url: "/public/prebook-hash",
-        method: "POST",
+        url: "/public/career/jobs/apply/basic",
+        method: "PUT",
         body: data,
       }),
       invalidatesTags: ["job-application"],

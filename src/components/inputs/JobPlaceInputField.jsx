@@ -3,6 +3,7 @@ import { Field, ErrorMessage } from "formik";
 const JobPlaceInputField = ({
     name,
     label,
+    value,
     errors,
     touched,
     placeholder,

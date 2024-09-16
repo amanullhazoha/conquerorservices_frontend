@@ -7,6 +7,7 @@ import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
 import { religion } from "../../assets/staticData/countryInfo";
 import JobPlaceSelectInputField from "../inputs/JobPlaceSelectInputField";
 import { jobApplyNidOrCnicSchema } from "../../schema/jobPlaceSchema";
+import { useUpdateApplicantNIDorCNICinfoMutation } from "../../slice/jobPlacePage.slice";
 import { getStatesByCountry, getCitiesByState, getPoliceStationsByCity, getPostOfficeByPoliceStations } from "../../lib/addressFind";
 
 const initialValues = {
@@ -31,7 +32,40 @@ const initialValues = {
   nid_cnic_front: "",
 };
 
-const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
+const NIDorCNCinfromationForm = ({ id, handleNext, handlePrevious }) => {
+    const [updateApplicantNIDorCnicInfo, { isLoading, isError }] = useUpdateApplicantNIDorCNICinfoMutation(id)
+
+    const handleSubmit = async (values, { resetForm }) => {
+      try {
+        const formData = new FormData();
+
+        if (values.nid_cnic_front && values.nid_cnic_back && values.applicant_passport) {
+          formData.append('nid_cnic_front', values.nid_cnic_front[0]);
+          formData.append('nid_cnic_back', values.nid_cnic_back[0]);
+          formData.append('applicant_passport', values.applicant_passport[0]);
+        }
+
+        if(values.applicant_resume) {
+          formData.append('applicant_resume', values.applicant_resume[0]);
+        }
+
+        Object.entries(values).forEach(([key, value]) => {
+          if (key !== "nid_cnic_front" && key !== "nid_cnic_back" && key !== "applicant_passport" && key !== "applicant_resume") {
+            formData.append(key, value);
+          }
+        });
+
+        const data = await updateApplicantNIDorCnicInfo(formData);
+
+        if(data?.data) {
+          resetForm();
+          handleNext(data?.data?.id);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     return (
         <div className="flex-1 bg-white rounded-lg px-6 py-6">
           <div className="pb-5 border-b border-[#EAECF0]">
@@ -41,9 +75,8 @@ const NIDorCNCinfromationForm = ({ handleNext, handlePrevious }) => {
 
           <Formik
             initialValues={initialValues}
-            // validationSchema={jobApplyNidOrCnicSchema}
-            // onSubmit={(values) => console.log(values)}
-            onSubmit={(values) => handleNext()}
+            validationSchema={jobApplyNidOrCnicSchema}
+            onSubmit={handleSubmit}
           >
             {({ handleSubmit, values, touched, errors, setFieldValue }) => (
               <Form onSubmit={handleSubmit}>

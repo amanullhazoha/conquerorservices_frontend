@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Formik } from "formik";
 import DragAndDrop from "../inputs/DragAndDrop";
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
@@ -9,8 +9,9 @@ import { jobApplyBasicSchema } from "../../schema/jobPlaceSchema";
 import JobPlaceNumberInputField from "../inputs/JobPlaceNumberInputField";
 import JobPlaceSelectInputField from "../inputs/JobPlaceSelectInputField";
 import { countries, countryCode } from "../../assets/staticData/countryInfo";
+import { useCreateApplicantBasicInfoMutation, useUpdateApplicantBasicInfoMutation } from "../../slice/jobPlacePage.slice";
 
-const initialValues = {
+const INITIALVALUES = {
   first_name: "",
   last_name: "",
   mother_name: "",
@@ -24,16 +25,56 @@ const initialValues = {
   applicant_image: ""
 };
 
-const BasicInfoForm = ({ handleNext }) => {
+const BasicInfoForm = ({ id, data, handleNext }) => {
     const [wp_code, setWpCode] = useState("BD");
+    const [initialValues, setInitialValues] = useState(INITIALVALUES);
+    const [createApplicantBasicInfo, { isLoading, isError }] = useCreateApplicantBasicInfoMutation()
+    const [updateApplicantBasicInfo] = useUpdateApplicantBasicInfoMutation();
 
-    const handleSubmit = async (values) => {
+    const handleSubmit = async (values, { resetForm }) => {
       try {
-        
+        const formData = new FormData();
+
+        if(id) {
+          handleNext(id);
+        } else {
+          if (values.applicant_image) {
+            formData.append('applicant_image', values.applicant_image[0]);
+          }
+  
+          Object.entries(values).forEach(([key, value]) => {
+            if (key !== 'applicant_image') {
+              formData.append(key, value);
+            }
+          });
+  
+          const data = await createApplicantBasicInfo(formData);
+  
+          if(data?.data) {
+            resetForm();
+            handleNext(data?.data?.id);
+          }
+        }
       } catch (error) {
         console.log(error);
       }
     }
+
+    useEffect(() => {
+      setInitialValues({
+        first_name: data?.first_name ? data?.first_name : "",
+        last_name: data?.last_name ? data?.last_name : "",
+        mother_name: data?.mother_name ? data?.mother_name : "",
+        gender: data?.gender ? data?.gender : "",
+        date_of_birth: data?.date_of_birth ? data?.date_of_birth : "",
+        nationality: data?.nationality ? data?.nationality : "",
+        email: data?.email ? data?.email : "",
+        contact_number: data?.contact_number ? data?.contact_number : "",
+        whatsapp_number: data?.whatsapp_number ? data?.whatsapp_number : "",
+        position_id: data?.position_id ? data?.position_id : "",
+        applicant_image: data?.applicant_image ? data?.applicant_image : ""
+      })
+    }, [data])
 
     return (
         <div className="flex-1 bg-white rounded-lg px-6 py-6">
@@ -43,10 +84,10 @@ const BasicInfoForm = ({ handleNext }) => {
           </div>
 
           <Formik
+            enableReinitialize={true}
             initialValues={initialValues}
             validationSchema={jobApplyBasicSchema}
-            // onSubmit={(values) => console.log(values)}
-            onSubmit={(values) => handleSubmit(values)}
+            onSubmit={handleSubmit}
           >
             {({ handleSubmit, values, touched, errors, setFieldValue }) => (
               <Form onSubmit={handleSubmit}>
@@ -54,6 +95,7 @@ const BasicInfoForm = ({ handleNext }) => {
                   <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Name</h4>
 
                   <div className="col-span-2">
+                    {console.log(initialValues)}
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                       <JobPlaceInputField 
                         errors={errors} 

@@ -1,10 +1,15 @@
 import JobPlacePage from "./JobPlacePage";
 import { createBrowserRouter } from "react-router-dom";
+import NotFound from "./NotFoundPage";
 
 const router = createBrowserRouter([
     {
-        path: "/",
+        path: "/jobs/dubai",
         element: <JobPlacePage />,
+    },
+    {
+        path: "*",
+        element: <NotFound />
     }
 ])
 
