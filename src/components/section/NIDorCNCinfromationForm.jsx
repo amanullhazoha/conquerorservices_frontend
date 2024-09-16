@@ -42,19 +42,24 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
       try {
         const formData = new FormData();
 
-        if (values.nid_cnic_front && values.nid_cnic_back && values.applicant_passport) {
+        if (values.nid_cnic_front && values.nid_cnic_front[0] instanceof File) {
           formData.append('nid_cnic_front', values.nid_cnic_front[0]);
+        }
+        if (values.nid_cnic_back && values.nid_cnic_back[0] instanceof File) {
           formData.append('nid_cnic_back', values.nid_cnic_back[0]);
+        }
+        if (values.applicant_passport && values.applicant_passport[0] instanceof File) {
           formData.append('applicant_passport', values.applicant_passport[0]);
         }
-
-        if(values.applicant_resume) {
+        if (values.applicant_resume && values.applicant_resume[0] instanceof File) {
           formData.append('applicant_resume', values.applicant_resume[0]);
         }
-
+    
         Object.entries(values).forEach(([key, value]) => {
-          if (key !== "nid_cnic_front" && key !== "nid_cnic_back" && key !== "applicant_passport" && key !== "applicant_resume") {
-            formData.append(key, value);
+          if (key !== 'nid_cnic_front' && key !== 'nid_cnic_back' && key !== 'applicant_passport' && key !== 'applicant_resume') {
+            if (typeof value === 'string' || typeof value === 'number') {
+              formData.append(key, value);
+            }
           }
         });
 
@@ -93,8 +98,6 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
       })
     }, [data])
 
-    console.log(data)
-
     return (
         <div className="flex-1 bg-white rounded-lg px-6 py-6">
           <div className="pb-5 border-b border-[#EAECF0]">
@@ -129,6 +132,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                         touched={touched}  
                         label="Expiry date" 
                         name="date_of_expiry" 
+                        value={values?.date_of_expiry}
                         handleSelect={(date) => setFieldValue("date_of_expiry", date)}
                       />
                     </div>
@@ -221,6 +225,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                             touched={touched}
                             label="Expiry date" 
                             name="emirates_expiry" 
+                            value={values?.emirates_expiry}
                             handleSelect={(date) => setFieldValue("emirates_expiry", date)}
                           />
                         </>
@@ -339,6 +344,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                         touched={touched} 
                         label="Front page" 
                         name="applicant_passport" 
+                        value={values.applicant_passport}
                         handleSelectFile={(file) => setFieldValue("applicant_passport", file)} 
                       />
 
@@ -347,7 +353,8 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                         required={false} 
                         touched={touched} 
                         name="applicant_resume" 
-                        label="Signature page (optional)" 
+                        label="Signature page (optional)"
+                        value={values.applicant_resume} 
                         handleSelectFile={(file) => setFieldValue("applicant_resume", file)} 
                       />
                     </div>
@@ -364,6 +371,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                         touched={touched}  
                         name="nid_cnic_front" 
                         label="NID / CNIC front" 
+                        value={values.nid_cnic_front}
                         handleSelectFile={(file) => setFieldValue("nid_cnic_front", file)} 
                       />
 
@@ -372,6 +380,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                         touched={touched} 
                         name="nid_cnic_back" 
                         label="NID / CNIC Back" 
+                        value={values.nid_cnic_back}
                         handleSelectFile={(file) => setFieldValue("nid_cnic_back", file)} 
                       />
                     </div>

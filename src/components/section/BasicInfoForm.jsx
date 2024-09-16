@@ -25,7 +25,13 @@ const INITIALVALUES = {
   applicant_image: ""
 };
 
-const BasicInfoForm = ({ id, data, handleNext }) => {
+const BasicInfoForm = ({ 
+  id, 
+  data, 
+  handleNext,
+  setPosition,
+  position_id,
+}) => {
     const [wp_code, setWpCode] = useState("BD");
     const [initialValues, setInitialValues] = useState(INITIALVALUES);
     const [createApplicantBasicInfo, { isLoading, isError }] = useCreateApplicantBasicInfoMutation()
@@ -76,6 +82,8 @@ const BasicInfoForm = ({ id, data, handleNext }) => {
     }
 
     useEffect(() => {
+      setPosition(data?.position_id);
+
       setInitialValues({
         first_name: data?.first_name ? data?.first_name : "",
         last_name: data?.last_name ? data?.last_name : "",
@@ -86,7 +94,7 @@ const BasicInfoForm = ({ id, data, handleNext }) => {
         email: data?.email ? data?.email : "",
         contact_number: data?.contact_number ? data?.contact_number : "",
         whatsapp_number: data?.whatsapp_number ? data?.whatsapp_number : "",
-        position_id: data?.position_id ? data?.position_id : "",
+        position_id: position_id ? position_id : data?.position_id ? data?.position_id : "",
         applicant_image: data?.applicant_image ? data?.applicant_image : ""
       })
     }, [data])
@@ -165,6 +173,7 @@ const BasicInfoForm = ({ id, data, handleNext }) => {
                         touched={touched} 
                         name="date_of_birth" 
                         label="Date of birth" 
+                        value={values?.date_of_birth}
                         handleSelect={(date) => setFieldValue("date_of_birth", date)}
                       />
                     </div>
@@ -248,8 +257,8 @@ const BasicInfoForm = ({ id, data, handleNext }) => {
                         label="Job position" 
                         placeholder="Select position" 
                         handleSelect={(item) => setFieldValue("position_id", item.id)}
-                        items={[{id: "1", name: "Rider"}, {id: "3", name: "Freelancer"}]} 
-                        value={[{id: "1", name: "Rider"}, {id: "3", name: "Freelancer"}].find(item => item.id === values.position_id)?.name}
+                        items={[{id: 50, name: "Rider"}, {id: 52, name: "Freelancer"}]} 
+                        value={[{id: 50, name: "Rider"}, {id: 52, name: "Freelancer"}].find(item => item.id === values.position_id)?.name}
                       />
                     </div>
                   </div>
@@ -265,6 +274,7 @@ const BasicInfoForm = ({ id, data, handleNext }) => {
                         touched={touched}
                         label="Add photo" 
                         name="applicant_image" 
+                        value={values.applicant_image}
                         handleSelectFile={(file) => setFieldValue("applicant_image", file)}
                       />
                     </div>

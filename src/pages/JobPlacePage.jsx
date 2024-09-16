@@ -11,6 +11,7 @@ import { useGetApplicationByIDQuery } from "../slice/jobPlacePage.slice";
 const JobPlacePage = () => {
   const [step, setStep] = useState(1);
   const [isOpen, setIsOpen] = useState(true);
+  const [position, setPosition] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const { data, isLoading, isError } = useGetApplicationByIDQuery(searchParams.get("id"))
 
@@ -29,6 +30,8 @@ const JobPlacePage = () => {
         {step === 1 && (
           <BasicInfoForm 
               data={data}
+              position_id={position}
+              setPosition={setPosition}
               id={searchParams.get("id")}
               handleNext={(id ) => {
                 setStep(2);
@@ -53,7 +56,11 @@ const JobPlacePage = () => {
             />
         )}
 
-        <JobTypeModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        <JobTypeModal 
+          isOpen={isOpen && !position} 
+          onClose={() => setIsOpen(false)} 
+          handlePosition={(id) => setPosition(id)} 
+        />
       </main>
     </PublicLayout>
   )

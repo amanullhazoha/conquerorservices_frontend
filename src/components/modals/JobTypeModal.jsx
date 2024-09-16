@@ -1,7 +1,7 @@
 import rider from "../../assets/images/rider.gif"
 import freelancer from "../../assets/images/freeluncher.gif"
 
-const JobTypeModal = ({ isOpen, onClose }) => {
+const JobTypeModal = ({ isOpen, onClose, handlePosition }) => {
   if (!isOpen) return null;
 
   return (
@@ -20,7 +20,10 @@ const JobTypeModal = ({ isOpen, onClose }) => {
 
         <div className="mt-8 grid grid-cols-2 gap-3">
           <div 
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+              handlePosition(52);
+            }}
             className="group w-full flex flex-col items-center gap-1 p-1.5 rounded-2xl border border-[#E5E7EB] hover:border-[#1B345D] hover:bg-[#1B345D0D] cursor-pointer"
           >
                 <img src={freelancer} alt="image" className="w-full h-auto" />
@@ -29,7 +32,10 @@ const JobTypeModal = ({ isOpen, onClose }) => {
           </div>
 
           <div 
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+              handlePosition(50);
+            }}
             className="group w-full flex flex-col items-center gap-1 p-1.5 rounded-2xl border border-[#E5E7EB] hover:border-[#1B345D] hover:bg-[#1B345D0D] cursor-pointer"
         >
                 <img src={rider} alt="image" className="w-full h-auto" />
