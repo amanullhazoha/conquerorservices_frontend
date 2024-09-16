@@ -1,30 +1,89 @@
-import { ErrorMessage, Form, Formik } from "formik";
+import { useState, useEffect } from "react";
 import DragAndDrop from "../inputs/DragAndDrop";
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
+import { ErrorMessage, Form, Formik } from "formik";
+import AcceptTermsModal from "../modals/AcceptTermsModal";
+import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
 import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
-import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
 import { jobApplyLicenseSchema } from "../../schema/jobPlaceSchema";
-import AcceptTermsModal from "../modals/AcceptTermsModal";
-import { useState } from "react";
+import { useUpdateApplicantLicenseInfoMutation } from "../../slice/jobPlacePage.slice";
 
-const initialValues = {
+const INITIALVALUES = {
   is_agree: false,
   submissionid: "",
   UAE_DL_front: "",
   UAE_DL_Back: "",
-  appli_dir_number: "",
-  appli_dir_expiry: "",
+  appli_dri_number: "",
+  appli_dri_expiry: "",
   have_uae_licence: "",
   UAE_Resident_Visa_No: "",
-  uae_license_No: "",
+  UAE_License_No: "",
   SIM_No: "",
   appli_dri_lisence_frontpart: "",
   appli_dri_lisence_backpart: "",
 };
 
-const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [initialValues, setInitialValues] = useState(INITIALVALUES);
+    
+    const [updateApplicantLicenseInfo, { isLoading, isError }] = useUpdateApplicantLicenseInfoMutation();
+
+    const handleSubmit = async (values, { resetForm }) => {
+      try {
+        const formData = new FormData();
+
+        if (
+          values.UAE_DL_front && 
+          values.UAE_DL_Back && 
+          values.appli_dri_lisence_frontpart && 
+          values.appli_dri_lisence_backpart
+        ) {
+          formData.append('UAE_DL_front', values.UAE_DL_front[0]);
+          formData.append('UAE_DL_Back', values.UAE_DL_Back[0]);
+          formData.append('appli_dri_lisence_frontpart', values.appli_dri_lisence_frontpart[0]);
+          formData.append('appli_dri_lisence_backpart', values.appli_dri_lisence_backpart[0]);
+        }
+
+        Object.entries(values).forEach(([key, value]) => {
+          if (
+            key !== 'UAE_DL_front' && 
+            key !== "UAE_DL_Back" && 
+            key !== "appli_dri_lisence_frontpart" && 
+            key !== "appli_dri_lisence_backpart"
+          ) {
+            formData.append(key, value);
+          }
+        });
+
+        const data = await updateApplicantLicenseInfo({ data: formData, id });
+
+        if(data?.data) {
+          resetForm();
+          handleNext();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    useEffect(() => {
+      setInitialValues({
+        is_agree: data?.is_agree ? data?.is_agree : false,
+        submissionid: data?.submissionid ? data?.submissionid : "",
+        UAE_DL_Front: data?.UAE_DL_Front ? data?.UAE_DL_Front : "",
+        UAE_DL_Back: data?.UAE_DL_Back ? data?.UAE_DL_Back : "",
+        appli_dri_number: data?.appli_dri_number ? data?.appli_dri_number : "",
+        appli_dri_expiry: data?.appli_dri_expiry ? data?.appli_dri_expiry : "",
+        have_uae_licence: data?.have_uae_licence ? data?.have_uae_licence : "",
+        UAE_Resident_Visa_No: data?.UAE_Resident_Visa_No ? data?.UAE_Resident_Visa_No : "",
+        UAE_License_No: data?.UAE_License_No ? data?.UAE_License_No : "",
+        SIM_No: data?.SIM_No ? data?.SIM_No : "",
+        appli_dri_lisence_frontpart: data?.appli_dri_lisence_frontpart ? data?.appli_dri_lisence_frontpart : "",
+        appli_dri_lisence_backpart: data?.appli_dri_lisence_backpart ? data?.appli_dri_lisence_backpart : ""
+      })
+    }, [data])
 
     return (
         <div className="flex-1 bg-white rounded-lg px-6 py-6">
@@ -34,10 +93,10 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
           </div>
 
           <Formik
+            enableReinitialize={true}
             initialValues={initialValues}
             validationSchema={jobApplyLicenseSchema}
-            // onSubmit={(values) => console.log(values)}
-            onSubmit={(values) => handleNext()}
+            onSubmit={handleSubmit}
           >
             {({ handleSubmit, values, errors, touched, setFieldValue }) => (
               <Form onSubmit={handleSubmit}>
@@ -66,7 +125,7 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
                         errors={errors}
                         touched={touched}
                         label="License number" 
-                        name="appli_dir_number" 
+                        name="appli_dri_number" 
                         placeholder="e.g 789-908-999" 
                       />
 
@@ -75,8 +134,8 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
                         pervDate={false}
                         touched={touched}
                         label="Expiry date" 
-                        name="appli_dir_expiry"
-                        handleSelect={(date) => setFieldValue("appli_dir_expiry", date)}
+                        name="appli_dri_expiry"
+                        handleSelect={(date) => setFieldValue("appli_dri_expiry", date)}
                       />
                     </div>
                   </div>
@@ -101,7 +160,7 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
                       <JobPlaceInputField 
                         errors={errors}
                         touched={touched}
-                        name="uae_license_No" 
+                        name="UAE_License_No" 
                         label="UAE license number" 
                         placeholder="E.g. 670-9876" 
                       />
@@ -110,7 +169,7 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
                         errors={errors}
                         touched={touched}
                         placeholder="Select" 
-                        name="UAE_Resident_visa_No" 
+                        name="UAE_Resident_Visa_No" 
                         label="UAE resident visa number" 
                       />
 
@@ -158,9 +217,9 @@ const LicenseInfoForm = ({ handleNext, handlePrevious }) => {
                       <DragAndDrop 
                         errors={errors} 
                         touched={touched}  
-                        name="UAE_DL_front" 
+                        name="UAE_DL_Front" 
                         label="UAE DL front"
-                        handleSelectFile={(file) => setFieldValue("UAE_DL_front", file)} 
+                        handleSelectFile={(file) => setFieldValue("UAE_DL_Front", file)} 
                       />
 
                       <DragAndDrop 

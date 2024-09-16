@@ -1,4 +1,5 @@
 import { Form, Formik } from "formik";
+import { useState, useEffect } from "react";
 import DragAndDrop from "../inputs/DragAndDrop";
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
 import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
@@ -10,7 +11,7 @@ import { jobApplyNidOrCnicSchema } from "../../schema/jobPlaceSchema";
 import { useUpdateApplicantNIDorCNICinfoMutation } from "../../slice/jobPlacePage.slice";
 import { getStatesByCountry, getCitiesByState, getPoliceStationsByCity, getPostOfficeByPoliceStations } from "../../lib/addressFind";
 
-const initialValues = {
+const INITIALVALUES = {
   zip: "",
   city: "",
   religion: "",
@@ -21,9 +22,9 @@ const initialValues = {
   uaeresident: "",
   father_name: "",
   policeStation: "",
-  maritalstatus: "",
+  martialstatus: "",
   date_of_expiry: "",
-  nidofcnicnumber: "",
+  nidorcnicnumber: "",
   emirates_expiry: "",
   applicant_resume: "",
   reference: "",
@@ -32,8 +33,10 @@ const initialValues = {
   nid_cnic_front: "",
 };
 
-const NIDorCNCinfromationForm = ({ id, handleNext, handlePrevious }) => {
-    const [updateApplicantNIDorCnicInfo, { isLoading, isError }] = useUpdateApplicantNIDorCNICinfoMutation(id)
+const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
+    const [initialValues, setInitialValues] = useState(INITIALVALUES);
+
+    const [updateApplicantNIDorCnicInfo, { isLoading, isError }] = useUpdateApplicantNIDorCNICinfoMutation()
 
     const handleSubmit = async (values, { resetForm }) => {
       try {
@@ -55,7 +58,7 @@ const NIDorCNCinfromationForm = ({ id, handleNext, handlePrevious }) => {
           }
         });
 
-        const data = await updateApplicantNIDorCnicInfo(formData);
+        const data = await updateApplicantNIDorCnicInfo({ data: formData, id });
 
         if(data?.data) {
           resetForm();
@@ -66,6 +69,32 @@ const NIDorCNCinfromationForm = ({ id, handleNext, handlePrevious }) => {
       }
     }
 
+    useEffect(() => {
+      setInitialValues({
+        zip: data?.zip ? data?.zip : "",
+        city: data?.city ? data?.city : "",
+        religion: data?.religion ? data?.religion : "",
+        province: data?.province ? data?.province : "",
+        passportno: data?.passportno ? data?.passportno : "",
+        emiratesid: data?.emiratesid ? data?.emiratesid : "",
+        homeaddrss: data?.homeaddrss ? data?.homeaddrss : "",
+        uaeresident: data?.uaeresident ? data?.uaeresident : "",
+        father_name: data?.father_name ? data?.father_name : "",
+        policeStation: data?.policeStation ? data?.policeStation : "",
+        martialstatus: data?.martialstatus ? data?.martialstatus : "",
+        date_of_expiry: data?.date_of_expiry ? data?.date_of_expiry : "",
+        nidorcnicnumber: data?.nidorcnicnumber ? data?.nidorcnicnumber : "",
+        emirates_expiry: data?.emirates_expiry ? data?.emirates_expiry : "",
+        applicant_resume: data?.applicant_resume ? data?.applicant_resume : "",
+        reference: data?.reference ? data?.reference : "",
+        applicant_passport: data?.applicant_passport ? data?.applicant_passport : "",
+        nid_cnic_back: data?.nid_cnic_back ? data?.nid_cnic_back : "",
+        nid_cnic_front: data?.nid_cnic_front ? data?.nid_cnic_front : "",
+      })
+    }, [data])
+
+    console.log(data)
+
     return (
         <div className="flex-1 bg-white rounded-lg px-6 py-6">
           <div className="pb-5 border-b border-[#EAECF0]">
@@ -74,6 +103,7 @@ const NIDorCNCinfromationForm = ({ id, handleNext, handlePrevious }) => {
           </div>
 
           <Formik
+            enableReinitialize={true}
             initialValues={initialValues}
             validationSchema={jobApplyNidOrCnicSchema}
             onSubmit={handleSubmit}
@@ -130,7 +160,7 @@ const NIDorCNCinfromationForm = ({ id, handleNext, handlePrevious }) => {
                         errors={errors} 
                         touched={touched}
                         label="NID / CNIC" 
-                        name="nidofcnicnumber" 
+                        name="nidorcnicnumber" 
                         placeholder="e.g 789-908-999" 
                       />
                     </div>
@@ -143,10 +173,10 @@ const NIDorCNCinfromationForm = ({ id, handleNext, handlePrevious }) => {
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                       <JobPlaceRadioInput 
-                        name="maritalstatus" 
+                        name="martialstatus" 
                         label="Marital status" 
-                        value={values.maritalstatus}
-                        handleSelect={(value) => setFieldValue("maritalstatus", value)}
+                        value={values.martialstatus}
+                        handleSelect={(value) => setFieldValue("martialstatus", value)}
                         items={[
                           {id: "1", name: "single", value: "single", label: "Single"},
                           {id: "2", name: "married", value: "married", label: "Married"},
@@ -163,10 +193,10 @@ const NIDorCNCinfromationForm = ({ id, handleNext, handlePrevious }) => {
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                       <JobPlaceRadioInput 
-                        name="uaeresidient" 
+                        name="uaeresident" 
                         label="UAE resident" 
-                        value={values.uaeresidient}
-                        handleSelect={(value) => setFieldValue("uaeresidient", value)}
+                        value={values.uaeresident}
+                        handleSelect={(value) => setFieldValue("uaeresident", value)}
                         items={[
                           {id: "1", name: "yes", value: "yes", label: "Yes"},
                           {id: "2", name: "no", value: "no", label: "No"}
@@ -175,7 +205,7 @@ const NIDorCNCinfromationForm = ({ id, handleNext, handlePrevious }) => {
 
                       <div></div>
 
-                      {values.uaeresidient === "yes" && (
+                      {values.uaeresident === "yes" && (
                         <>
                           <JobPlaceInputField 
                             errors={errors}
@@ -235,6 +265,8 @@ const NIDorCNCinfromationForm = ({ id, handleNext, handlePrevious }) => {
                         />
                       </div>
 
+                      {console.log(data)}
+
                       <JobPlaceSelectInputField 
                         errors={errors}
                         name="province" 
@@ -243,7 +275,7 @@ const NIDorCNCinfromationForm = ({ id, handleNext, handlePrevious }) => {
                         value={values.province}
                         placeholder="Select" 
                         label="State / Province" 
-                        items={getStatesByCountry("bangladesh")}
+                        items={getStatesByCountry(data?.nationality)}
                         handleSelect={(item) => setFieldValue("province", item.name)}
                       />
 

@@ -14,8 +14,6 @@ const JobPlacePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { data, isLoading, isError } = useGetApplicationByIDQuery(searchParams.get("id"))
 
-  console.log(data)
-
   return (
     <PublicLayout>
       <main className="container max-sm:px-2.5 flex flex-col md:flex-row gap-6 pt-8">
@@ -40,6 +38,7 @@ const JobPlacePage = () => {
         )}
         {step === 2 && (
             <NIDorCNCinfromationForm 
+                data={data}
                 id={searchParams.get("id")}
                 handleNext={() => setStep(3)}
                 handlePrevious={() => setStep(1)} 

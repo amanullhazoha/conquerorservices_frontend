@@ -26,26 +26,35 @@ export const jobApplicationApi = createApi({
       invalidatesTags: ["job-application"],
     }),
     updateApplicantBasicInfo: builder.mutation({
-      query: (data) => ({
-        url: "/public/career/jobs/apply/basic",
+      query: ({ data, id }) => ({
+        url: `/public/career/jobs/apply/basic/${id}`,
         method: "PUT",
         body: data,
+        headers: {
+          "Content-Type": data instanceof FormData ? undefined : "application/json",
+        },
       }),
       invalidatesTags: ["job-application"],
     }),
     updateApplicantNIDorCNICinfo: builder.mutation({
-      query: (data) => ({
-        url: "/secured/order/create",
-        method: "POST",
+      query: ({ data, id }) => ({
+        url: `/public/career/jobs/apply/nid-or-cnic/${id}`,
+        method: "PUT",
         body: data,
+        headers: {
+          "Content-Type": data instanceof FormData ? undefined : "application/json",
+        },
       }),
       invalidatesTags: ["job-application"],
     }),
     updateApplicantLicenseInfo: builder.mutation({
-      query: (data) => ({
-        url: "/secured/order/finish",
-        method: "POST",
+      query: ({ data, id }) => ({
+        url: `/public/career/jobs/apply/license/${id}`,
+        method: "PUT",
         body: data,
+        headers: {
+          "Content-Type": data instanceof FormData ? undefined : "application/json",
+        },
       }),
       invalidatesTags: ["job-application"],
     })

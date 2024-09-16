@@ -1,7 +1,7 @@
 import { state, countries, cities, police_stations, post_offices } from "../assets/staticData/countryInfo";
 
 export const getStatesByCountry = (country_name) => {
-    const country_id = countries.find(item => item.name.toLowerCase() === country_name.toLowerCase())?.id
+    const country_id = countries.find(item => item.name.toLowerCase() === country_name?.toLowerCase())?.id
 
     return state.filter(s => s.country_id === country_id);
 };

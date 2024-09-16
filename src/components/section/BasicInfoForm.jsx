@@ -36,7 +36,22 @@ const BasicInfoForm = ({ id, data, handleNext }) => {
         const formData = new FormData();
 
         if(id) {
-          handleNext(id);
+          Object.entries(values).forEach(([key, value]) => {
+            if (key === 'applicant_image' && value instanceof File) {
+              // Append file
+              formData.append(key, value);
+            } else {
+              // Append other fields
+              formData.append(key, value);
+            }
+          });
+
+          const data = await updateApplicantBasicInfo({ data: formData, id });
+  
+          if(data?.data) {
+            resetForm();
+            handleNext(data?.data?.id);
+          }
         } else {
           if (values.applicant_image) {
             formData.append('applicant_image', values.applicant_image[0]);
