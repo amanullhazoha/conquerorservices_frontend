@@ -50,7 +50,9 @@ export const jobApplyNidOrCnicSchema = Yup.object().shape({
   city: Yup.string().required('City is required'),
   religion: Yup.string().required('Religion is required'),
   province: Yup.string().required('Province is required'),
-  passportno: Yup.string().required('Passport number is required'),
+  passportno: Yup.string()
+   .max(10, "Passport number max 10 digits.")
+  .required('Passport number is required'),
   homeaddrss: Yup.string().required('Home address is required'),
   uaeresident: Yup.string().required('UAE resident is required')
     .matches(/^(yes|no)$/i, 'UAE resident must be "yes" or "no"'),
@@ -71,7 +73,7 @@ export const jobApplyNidOrCnicSchema = Yup.object().shape({
   martialstatus: Yup.string().required('Marital status is required'),
   date_of_expiry: Yup.string().required('Date of expiry is required'),
   nidorcnicnumber: Yup.string().required('NID/CNIC number is required'),
-  applicant_resume: Yup.mixed().required('Applicant resume is required'),
+  applicant_resume: Yup.mixed(),
   reference: Yup.string(),
   applicant_passport: Yup.mixed().required('Applicant passport is required'),
   nid_cnic_back: Yup.mixed().required('NID/CNIC back is required'),

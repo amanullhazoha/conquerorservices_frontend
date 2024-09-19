@@ -29,7 +29,6 @@ const DragAndDrop = ({
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // You can customize to allow different types of drops.
   };
 
   const handleDrop = (e) => {
@@ -97,6 +96,7 @@ const DragAndDrop = ({
                     <label className="cursor-pointer bg-[#DCF1FE] px-1.5 py-1 text-center rounded text-[#1278BC] w-fit">
                     <input
                         type="file"
+                        accept="image/*"
                         className="hidden"
                         onChange={handleFileUpload}
                     />

@@ -147,11 +147,21 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                   <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Father Name</h4>
 
                   <div className="col-span-2">
-                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 hidden md:block">
                       <JobPlaceInputField 
                         errors={errors} 
                         touched={touched}
                         label="Full name" 
+                        name="father_name" 
+                        placeholder="Abdul Rehman" 
+                      />
+                    </div>
+
+                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 hidden max-md:block">
+                      <JobPlaceInputField 
+                        errors={errors} 
+                        touched={touched}
+                        label="Father Name" 
                         name="father_name" 
                         placeholder="Abdul Rehman" 
                       />
@@ -173,7 +183,11 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                             let value = e.target.value;
 
                             if(data?.nationality === "Pakistan" && value.length > 5 && value[5] !== "-") {
-                              value = value.slice(0, 5)+ "-" + value.slice(5)
+                              value = value.slice(0, 5)+ "-" + value.slice(5);
+                            }
+
+                            if(data?.nationality === "Pakistan" && value.length > 13 && value[14] !== "-") {
+                              value = value.slice(0, 13)+ "-" + value.slice(14);
                             }
 
                             setFieldValue("nidorcnicnumber", value);
@@ -283,8 +297,6 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                           placeholder="Enter address" 
                         />
                       </div>
-
-                      {console.log(data)}
 
                       <JobPlaceSelectInputField 
                         errors={errors}

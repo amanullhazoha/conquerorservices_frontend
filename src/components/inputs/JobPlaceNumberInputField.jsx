@@ -14,12 +14,25 @@ const JobPlaceNumberInputField = ({
     type="text",
     handleSelect,
     required=true,
+    searchField =true,
     selectCountryCode,
 }) => {
     const selectRef = useRef(null);
     const dropdownRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
+    const [inputValue, setInputValue] = useState("");
     const [position, setPosition] = useState('bottom');
+    const [filterCountry, setFilterCountry] = useState(items);
+
+    const handleFilter = (event) => {
+        const value = event.target.value;
+
+        setInputValue(value);
+
+        const filtered = items.filter((item) => item[keyValue].toLowerCase().startsWith(value.toLowerCase()));
+
+        setFilterCountry(filtered);
+    }
 
     useEffect(() => {
         if (selectRef.current) {
@@ -71,7 +84,7 @@ const JobPlaceNumberInputField = ({
                     } 
                 />
 
-                <div 
+                <button type="button" 
                     onClick={toggleDropdown}
                     className="flex gap-0.5 items-center absolute top-0 left-0 px-1.5 py-1.5 w-fit mt-0.5 cursor-pointer"
                 >
@@ -80,7 +93,7 @@ const JobPlaceNumberInputField = ({
                     </span>
 
                     <DropdownArrow className="w-4 h-4 mt-0.5" />
-                </div>
+                </button>
 
                 {isOpen && !changeDisable && (
                     <ul
@@ -90,17 +103,30 @@ const JobPlaceNumberInputField = ({
                         duration-300 ease-in-out ${position === 'top' ? 'bottom-full' : 'top-full'} 
                         ${position === 'top' ? 'transform -translate-y-full' : 'transform translate-y-0'}`}
                     >
-                        {items.map((item, index) => (
-                            <li 
+                        {searchField && (
+                            <input 
+                                type="text" 
+                                value={inputValue}
+                                onChange={handleFilter}
+                                placeholder="Search country"
+                                className="border border-[#D0D5DD] rounded-lg w-full px-1.5 py-1.5 text-sm text-[#27303F] outline-none mt-0.5 mb-0.5" 
+                            />
+                        )}
+
+                        {filterCountry.map((item, index) => (
+                            <button type="button" 
                                 key={index}
-                                className="px-0.5 py-0.5 hover:bg-[#D0D5DD] cursor-pointer rounded" 
+                                className="px-0.5 py-0.5 hover:bg-[#D0D5DD] cursor-pointer rounded w-full text-left
+                                " 
                                 onClick={() => {
                                     handleSelect(item);
                                     setIsOpen(false);
+                                    setInputValue("");
+                                    setFilterCountry(items);
                                 }}
                             >
                                 {item[keyValue]}
-                            </li>
+                            </button>
                         ))}
                     </ul>
                 )}

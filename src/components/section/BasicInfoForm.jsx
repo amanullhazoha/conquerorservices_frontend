@@ -138,8 +138,12 @@ const BasicInfoForm = ({
                   <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Mother Name</h4>
 
                   <div className="col-span-2">
-                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 hidden md:block">
                       <JobPlaceInputField errors={errors} touched={touched} label="Full name" placeholder="Saima" name="mother_name" />
+                    </div>
+
+                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 max-md:block">
+                      <JobPlaceInputField errors={errors} touched={touched} label="Mother Name" placeholder="Saima" name="mother_name" />
                     </div>
                   </div>
                 </div>
@@ -223,7 +227,7 @@ const BasicInfoForm = ({
                         name="contact_number" 
                         label="Phone number" 
                         changeDisable={true}
-                        placeholder="+1 (555) 000-0000" 
+                        placeholder="+0 (000) 000-0000" 
                         items={countryCode}
                         selectCountryCode={
                           values?.nationality ? countryCode?.find(item => item?.name === values?.nationality)?.shortName : countryCode?.find(item => item?.name === "Pakistan")?.shortName
@@ -237,8 +241,8 @@ const BasicInfoForm = ({
                         touched={touched} 
                         items={countryCode}
                         name="whatsapp_number" 
-                        placeholder="+1 (555) 000-0000" 
-                        label="WhatsApp number (optional)" 
+                        placeholder="+0 (000) 000-0000" 
+                        label="WhatsApp number" 
                         handleSelect={(item) => setWpCode(item.shortName)}
                         selectCountryCode={
                           wp_code ? countryCode?.find(item => item?.shortName === wp_code)?.shortName : countryCode?.find(item => item?.name === "Pakistan")?.shortName
