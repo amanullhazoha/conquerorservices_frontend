@@ -147,7 +147,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                   <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Father Name</h4>
 
                   <div className="col-span-2">
-                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 hidden md:block">
+                    <div className="hidden gap-4 grid-cols-1 md:grid-cols-2 md:grid">
                       <JobPlaceInputField 
                         errors={errors} 
                         touched={touched}
@@ -157,7 +157,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                       />
                     </div>
 
-                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 hidden max-md:block">
+                    <div className="hidden gap-4 grid-cols-1 md:grid-cols-2 max-md:grid">
                       <JobPlaceInputField 
                         errors={errors} 
                         touched={touched}

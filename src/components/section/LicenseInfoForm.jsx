@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import DragAndDrop from "../inputs/DragAndDrop";
+import { generateSubmissionId } from "../../lib";
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
 import { ErrorMessage, Form, Formik } from "formik";
+import JobSubmissionID from "../inputs/JobSubmissonID";
 import AcceptTermsModal from "../modals/AcceptTermsModal";
 import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
@@ -71,7 +73,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
       setInitialValues({
         position_id: data?.position_id ? data?.position_id : "",
         is_agree: data?.is_agree ? data?.is_agree : false,
-        submissionid: data?.submissionid ? data?.submissionid : "",
+        submissionid: data?.submissionid ? data?.submissionid : generateSubmissionId(data?.date_of_birth),
         UAE_DL_Front: data?.UAE_DL_Front ? data?.UAE_DL_Front : "",
         UAE_DL_Back: data?.UAE_DL_Back ? data?.UAE_DL_Back : "",
         appli_dri_number: data?.appli_dri_number ? data?.appli_dri_number : "",
@@ -105,12 +107,13 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                      <JobPlaceInputField 
+                      <JobSubmissionID 
                         errors={errors}
                         touched={touched}
                         name="submissionid" 
                         label="Submission ID" 
                         placeholder="890-8764" 
+                        value={values?.submissionid}
                       />
                     </div>
                   </div>
@@ -124,7 +127,9 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
                       <div className="col-span-2">
                         <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                           <JobPlaceInputField 
+                            type="number"
                             errors={errors}
+                            required={false}
                             touched={touched}
                             label="License number" 
                             name="appli_dri_number" 
@@ -133,6 +138,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
 
                           <JobPlaceDateField 
                             errors={errors}
+                            required={false}
                             pervDate={false}
                             touched={touched}
                             label="Expiry date" 
@@ -150,6 +156,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
                       <div className="col-span-2">
                         <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                           <JobPlaceRadioInput 
+                              required={false}
                               label="UAE license" 
                               name="have_uae_licence" 
                               value={values.have_uae_licence}
@@ -160,30 +167,37 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
                               ]}
                           />
 
-                          <JobPlaceInputField 
-                            errors={errors}
-                            touched={touched}
-                            name="UAE_License_No" 
-                            label="UAE license number" 
-                            placeholder="E.g. 670-9876" 
-                          />
-
-                          <JobPlaceInputField 
-                            errors={errors}
-                            touched={touched}
-                            placeholder="Select" 
-                            name="UAE_Resident_Visa_No" 
-                            label="UAE resident visa number" 
-                          />
-
-                          <JobPlaceInputField 
-                            errors={errors}
-                            touched={touched}
-                            name="SIM_No" 
-                            required={false} 
-                            placeholder="Select" 
-                            label="Sim number (optional)" 
-                          />
+                          {values.have_uae_licence === "yes" && (
+                            <>
+                              <JobPlaceInputField 
+                                type="number"
+                                errors={errors}
+                                touched={touched}
+                                name="UAE_License_No" 
+                                label="UAE license number" 
+                                placeholder="E.g. 670-9876" 
+                              />
+    
+                              <JobPlaceInputField 
+                                type="number"
+                                errors={errors}
+                                touched={touched}
+                                placeholder="Select" 
+                                name="UAE_Resident_Visa_No" 
+                                label="UAE resident visa number" 
+                              />
+    
+                              <JobPlaceInputField 
+                                type="number"
+                                errors={errors}
+                                touched={touched}
+                                name="SIM_No" 
+                                required={false} 
+                                placeholder="Select" 
+                                label="Sim number (optional)" 
+                              />
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>

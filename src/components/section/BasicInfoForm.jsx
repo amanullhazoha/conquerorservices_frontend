@@ -43,11 +43,15 @@ const BasicInfoForm = ({
         const formData = new FormData();
 
         if(id) {
+          if (values.applicant_image && values.applicant_image[0] instanceof File) {
+            formData.append('applicant_image', values.applicant_image[0]);
+          }
+
           Object.entries(values).forEach(([key, value]) => {
-            if (key === 'applicant_image' && value instanceof File) {
-              formData.append(key, value);
-            } else {
-              formData.append(key, value);
+            if (key !== 'applicant_image') {
+              if (typeof value === 'string' || typeof value === 'number') {
+                formData.append(key, value);
+              }
             }
           });
 
@@ -58,7 +62,7 @@ const BasicInfoForm = ({
             handleNext(data?.data?.id);
           }
         } else {
-          if (values.applicant_image) {
+          if (values.applicant_image && values.applicant_image[0] instanceof File) {
             formData.append('applicant_image', values.applicant_image[0]);
           }
   
@@ -138,11 +142,11 @@ const BasicInfoForm = ({
                   <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Mother Name</h4>
 
                   <div className="col-span-2">
-                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 hidden md:block">
+                    <div className="hidden gap-4 grid-cols-1 md:grid-cols-2 md:grid">
                       <JobPlaceInputField errors={errors} touched={touched} label="Full name" placeholder="Saima" name="mother_name" />
                     </div>
 
-                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 max-md:block">
+                    <div className="hidden gap-4 grid-cols-1 md:grid-cols-2 max-md:grid">
                       <JobPlaceInputField errors={errors} touched={touched} label="Mother Name" placeholder="Saima" name="mother_name" />
                     </div>
                   </div>
@@ -221,6 +225,7 @@ const BasicInfoForm = ({
                       <div></div>
 
                       <JobPlaceNumberInputField 
+                        type="number"
                         errors={errors} 
                         keyValue="shortName"
                         touched={touched} 
@@ -235,6 +240,7 @@ const BasicInfoForm = ({
                       />
 
                       <JobPlaceNumberInputField 
+                        type="number"
                         errors={errors} 
                         required={false} 
                         keyValue="name"

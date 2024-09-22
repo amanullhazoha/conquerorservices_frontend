@@ -33,7 +33,10 @@ export const jobApplyBasicSchema = Yup.object().shape({
           return schema;
       }
     }),
-  whatsapp_number: Yup.string().required('Whatsapp number is required'),
+  whatsapp_number: Yup.string()
+    .min(8, "Number minimum 10 digits")
+    .max(15, "Number maximum 15 digits")
+    .required('Whatsapp number is required'),
   position_id: Yup.string().required('Position ID is required'),
   hiring_position: Yup.string().when('position_id', (position_id, schema) => {
     if (position_id === '52' || position_id === 52) {
@@ -82,65 +85,75 @@ export const jobApplyNidOrCnicSchema = Yup.object().shape({
 
 export const jobApplyLicenseSchema = Yup.object().shape({
   is_agree: Yup.boolean().required('Agreement is required').isTrue('You must agree to the terms'),
-  submissionid: Yup.string().required('Submission ID is required'),
-  UAE_DL_Front: Yup.string().when('position_id', ([position_id], schema) => {
-    if (position_id === '50' || position_id === 50) {
-      return schema.required('UAE license front is required');
-    }
-    return schema.nullable();
-  }),
-  UAE_DL_Back: Yup.string().when('position_id', ([position_id], schema) => {
-    if (position_id === '50' || position_id === 50) {
-      return schema.required('UAE license back is required');
-    }
-    return schema.nullable();
-  }),
-  appli_dri_number: Yup.string().when('position_id', ([position_id], schema) => {
-    if (position_id === '50' || position_id === 50) {
-      return schema.required('Driving license is required');
-    }
-    return schema.nullable();
-  }),
-  appli_dri_expiry: Yup.string().when('position_id', ([position_id], schema) => {
-    if (position_id === '50' || position_id === 50) {
-      return schema.required('License expiry date is required');
-    }
-    return schema.nullable();
-  }),
-  have_uae_licence: Yup.string().when('position_id', ([position_id], schema) => {
-    if (position_id === '50' || position_id === 50) {
-      return schema.required('UAE license is required');
-    }
-    return schema.nullable();
-  }),
-  UAE_License_No: Yup.string().when('position_id', ([position_id], schema) => {
-    if (position_id === '50' || position_id === 50) {
-      return schema.required('UAE license No is required');
-    }
-    return schema.nullable();
-  }),
-  UAE_Resident_Visa_No: Yup.string().when('position_id', ([position_id], schema) => {
-    if (position_id === '50' || position_id === 50) {
-      return schema.required('UAE resident visa No is required');
-    }
-    return schema.nullable();
-  }),
-  SIM_No: Yup.string().when('position_id', ([position_id], schema) => {
-    if (position_id === '50' || position_id === 50) {
-      return schema.required('SIM No is required');
-    }
-    return schema.nullable();
-  }),
-  appli_dri_lisence_frontpart: Yup.string().when('position_id', ([position_id], schema) => {
-    if (position_id === '50' || position_id === 50) {
-      return schema.required('License front part is required');
-    }
-    return schema.nullable();
-  }),
-  appli_dri_lisence_backpart: Yup.string().when('position_id', ([position_id], schema) => {
-    if (position_id === '50' || position_id === 50) {
-      return schema.required('License back part is required');
-    }
-    return schema.nullable();
-  }),
+  submissionid: Yup.string(),
+  UAE_DL_Front: Yup.string(),
+  // .when('position_id', ([position_id], schema) => {
+  //   if (position_id === '50' || position_id === 50) {
+  //     return schema.required('UAE license front is required');
+  //   }
+  //   return schema.nullable();
+  // }),
+  UAE_DL_Back: Yup.string(),
+  // .when('position_id', ([position_id], schema) => {
+  //   if (position_id === '50' || position_id === 50) {
+  //     return schema.required('UAE license back is required');
+  //   }
+  //   return schema.nullable();
+  // }),
+  appli_dri_number: Yup.string(),
+  // .when('position_id', ([position_id], schema) => {
+  //   if (position_id === '50' || position_id === 50) {
+  //     return schema.required('Driving license is required');
+  //   }
+  //   return schema.nullable();
+  // }),
+  appli_dri_expiry: Yup.string(),
+  // .when('position_id', ([position_id], schema) => {
+  //   if (position_id === '50' || position_id === 50) {
+  //     return schema.required('License expiry date is required');
+  //   }
+  //   return schema.nullable();
+  // }),
+  have_uae_licence: Yup.string(),
+  // .when('position_id', ([position_id], schema) => {
+  //   if (position_id === '50' || position_id === 50) {
+  //     return schema.required('UAE license is required');
+  //   }
+  //   return schema.nullable();
+  // }),
+  UAE_License_No: Yup.string()
+    .when('have_uae_licence', ([have_uae_licence], schema) => {
+      if (have_uae_licence === 'yes') {
+        return schema.required('UAE license No is required');
+      }
+      return schema.nullable();
+    }),
+  UAE_Resident_Visa_No: Yup.string()
+    .when('have_uae_licence', ([have_uae_licence], schema) => {
+      if (have_uae_licence === 'yes') {
+        return schema.required('UAE resident visa No is required');
+      }
+      return schema.nullable();
+    }),
+  SIM_No: Yup.string(),
+  // .when('position_id', ([position_id], schema) => {
+  //   if (position_id === '50' || position_id === 50) {
+  //     return schema.required('SIM No is required');
+  //   }
+  //   return schema.nullable();
+  // }),
+  appli_dri_lisence_frontpart: Yup.string(),
+  // .when('position_id', ([position_id], schema) => {
+  //   if (position_id === '50' || position_id === 50) {
+  //     return schema.required('License front part is required');
+  //   }
+  //   return schema.nullable();
+  // }),
+  appli_dri_lisence_backpart: Yup.string(),
+  // .when('position_id', ([position_id], schema) => {
+  //   if (position_id === '50' || position_id === 50) {
+  //     return schema.required('License back part is required');
+  //   }
+  //   return schema.nullable();
+  // }),
 });

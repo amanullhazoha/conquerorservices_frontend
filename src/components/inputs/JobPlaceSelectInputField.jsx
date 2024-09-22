@@ -54,7 +54,8 @@ const JobPlaceSelectInputField = ({
             </label>
 
             <div className="relative">
-                <div 
+                <button 
+                    type="button" 
                     ref={selectRef}
                     onClick={toggleDropdown}
                     className={`border border-[#D0D5DD] rounded-lg w-full px-2 
@@ -66,7 +67,7 @@ const JobPlaceSelectInputField = ({
                     </span>
 
                     <DropdownArrow />
-                </div>
+                </button>
 
                 <ErrorMessage name={name} component="div" className="text-red-500 text-xs mt-1" />
 
@@ -79,16 +80,17 @@ const JobPlaceSelectInputField = ({
                         ${position === 'top' ? 'transform -translate-y-full' : 'transform translate-y-0'}`}
                     >
                         {items.map((item, index) => (
-                            <li 
+                            <button
+                                type="button" 
                                 key={index}
-                                className="px-0.5 py-0.5 hover:bg-[#D0D5DD] cursor-pointer rounded" 
+                                className="px-0.5 py-0.5 hover:bg-[#D0D5DD] cursor-pointer rounded w-full text-left" 
                                 onClick={() => {
                                     handleSelect(item);
                                     setIsOpen(false);
                                 }}
                             >
                                 {item[keyValue]}
-                            </li>
+                            </button>
                         ))}
                     </ul>
                 )}
