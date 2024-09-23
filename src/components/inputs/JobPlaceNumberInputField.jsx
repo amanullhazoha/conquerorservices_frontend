@@ -1,6 +1,7 @@
 import { Field, ErrorMessage } from "formik";
 import { useState, useRef, useEffect } from 'react';
 import DropdownArrow from "../../assets/icons/DropdownArrow";
+import { countryCode } from "../../assets/staticData/countryInfo";
 
 const JobPlaceNumberInputField = ({
     name,
@@ -14,6 +15,8 @@ const JobPlaceNumberInputField = ({
     type="text",
     handleSelect,
     required=true,
+    value,
+    setFieldValue,
     searchField =true,
     selectCountryCode,
 }) => {
@@ -21,6 +24,7 @@ const JobPlaceNumberInputField = ({
     const dropdownRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("")
     const [position, setPosition] = useState('bottom');
     const [filterCountry, setFilterCountry] = useState(items);
 
@@ -32,6 +36,12 @@ const JobPlaceNumberInputField = ({
         const filtered = items.filter((item) => item[keyValue].toLowerCase().startsWith(value.toLowerCase()));
 
         setFilterCountry(filtered);
+    }
+
+    const handlePhoneNumber = (event) => {
+        setPhoneNumber(event.target.value);
+
+        setFieldValue(name, `${items.find((item) => item?.shortName?.toLowerCase().startsWith(selectCountryCode.toLowerCase()))?.code}${event.target.value}`)
     }
 
     useEffect(() => {
@@ -58,6 +68,28 @@ const JobPlaceNumberInputField = ({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    useEffect(() => {
+        if(changeDisable) {
+            const matched = items.find((item) => item?.shortName?.toLowerCase().startsWith(selectCountryCode.toLowerCase()));
+    
+            if(matched) {
+                setFieldValue(name, `${matched.code}${value.slice(items.find((item) => item?.shortName?.toLowerCase().startsWith(selectCountryCode.toLowerCase()))?.code?.length, value.length)}`)
+                setPhoneNumber(`${value.slice(items.find((item) => item?.shortName?.toLowerCase().startsWith(selectCountryCode.toLowerCase()))?.code?.length, value.length)}`)
+            }
+        } {
+            if(value) {
+                const matched = items.find((item) => value?.startsWith(item?.code));
+
+                handleSelect && handleSelect(matched);
+                
+                if(matched) {
+                    setFieldValue(name, `${matched.code}${value.slice(matched?.code?.length, value.length)}`)
+                    setPhoneNumber(`${value.slice(items.find((item) => item?.shortName?.toLowerCase().startsWith(selectCountryCode.toLowerCase()))?.code?.length, value.length)}`)
+                }
+            }
+        }
+    }, [selectCountryCode, value])
+
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
@@ -72,12 +104,15 @@ const JobPlaceNumberInputField = ({
                 ref={selectRef}
                 className="relative" 
             >
-                <Field 
+                <input 
                     id={name} 
                     type={type} 
                     name={name}
+                    value={phoneNumber}
                     placeholder={placeholder} 
-                    error={touched[name] && errors[name]}
+                    // onChange={(event) => {setFieldValue(name, event.target.value)}
+                    onChange={handlePhoneNumber}
+                    // error={touched[name] && errors[name]}
                     className={
                         `border border-[#D0D5DD] rounded-lg w-full pl-12 pr-2 py-1.5 text-sm text-[#27303F] outline-none mt-0.5
                         ${touched[name] && errors[name] ? "border-red-500" : ""}`
@@ -89,6 +124,7 @@ const JobPlaceNumberInputField = ({
                     className="flex gap-0.5 items-center absolute top-0 left-0 px-1.5 py-1.5 w-fit mt-0.5 cursor-pointer"
                 >
                     <span>
+                        {/* <span className="text-[#101828]">{selectCountryCode}</span> */}
                         <span className="text-[#101828]">{selectCountryCode}</span>
                     </span>
 
@@ -116,13 +152,13 @@ const JobPlaceNumberInputField = ({
                         {filterCountry.map((item, index) => (
                             <button type="button" 
                                 key={index}
-                                className="px-0.5 py-0.5 hover:bg-[#D0D5DD] cursor-pointer rounded w-full text-left
-                                " 
+                                className="px-0.5 py-0.5 hover:bg-[#D0D5DD] cursor-pointer rounded w-full text-left" 
                                 onClick={() => {
                                     handleSelect(item);
                                     setIsOpen(false);
                                     setInputValue("");
                                     setFilterCountry(items);
+                                    setFieldValue(name, item?.code);
                                 }}
                             >
                                 {item[keyValue]}
@@ -138,3 +174,4 @@ const JobPlaceNumberInputField = ({
 }
  
 export default JobPlaceNumberInputField;
+

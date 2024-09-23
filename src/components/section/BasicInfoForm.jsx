@@ -261,9 +261,11 @@ const BasicInfoForm = ({
                           touched={touched} 
                           name="contact_number" 
                           label="Phone number" 
+                          items={countryCode}
                           changeDisable={true}
                           placeholder="+0 (000) 000-0000" 
-                          items={countryCode}
+                          value={values?.contact_number}
+                          setFieldValue={setFieldValue}
                           selectCountryCode={
                             values?.nationality ? countryCode?.find(item => item?.name === values?.nationality)?.shortName : countryCode?.find(item => item?.name === "Pakistan")?.shortName
                           }
@@ -279,6 +281,8 @@ const BasicInfoForm = ({
                           name="whatsapp_number" 
                           placeholder="+0 (000) 000-0000" 
                           label="WhatsApp number" 
+                          value={values?.whatsapp_number}
+                          setFieldValue={setFieldValue}
                           handleSelect={(item) => setWpCode(item.shortName)}
                           selectCountryCode={
                             wp_code ? countryCode?.find(item => item?.shortName === wp_code)?.shortName : countryCode?.find(item => item?.name === "Pakistan")?.shortName

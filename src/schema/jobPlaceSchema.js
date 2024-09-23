@@ -21,20 +21,24 @@ export const jobApplyBasicSchema = Yup.object().shape({
     .when('nationality', ([nationality], schema) => {
       switch (nationality) {
         case 'Nepal':
+          return schema.length(14, 'Contact number must be 10 digits');
         case 'Pakistan':
+          return schema.length(13, 'Contact number must be 10 digits');
         case 'India':
+          return schema.length(13, 'Contact number must be 10 digits');
         case 'Philippine':
+          return schema.length(13, 'Contact number must be 10 digits');
         case 'Bangladesh':
-          return schema.length(10, 'Contact number must be 10 digits');
+          return schema.length(14, 'Contact number must be 10 digits');
         case 'Sri Lanka':
-          return schema.length(9, 'Contact number must be 9 digits');
+          return schema.length(12, 'Contact number must be 9 digits');
         default:
           return schema;
       }
     }),
   whatsapp_number: Yup.string()
-    .min(8, "Number minimum 10 digits")
-    .max(15, "Number maximum 15 digits")
+    .min(9, "Number minimum 8 digits")
+    .max(19, "Number maximum 15 digits")
     .required('Whatsapp number is required'),
   position_id: Yup.string().required('Position ID is required'),
   hiring_position: Yup.string().when('position_id', (position_id, schema) => {
