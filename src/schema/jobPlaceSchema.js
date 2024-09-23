@@ -74,6 +74,13 @@ export const jobApplyNidOrCnicSchema = Yup.object().shape({
   father_name: Yup.string().required('Father\'s name is required'),
   policeStation: Yup.string().required('Police station is required'),
   martialstatus: Yup.string().required('Marital status is required'),
+  spouse: Yup.string()
+    .when('martialstatus', ([martialstatus], schema) => {
+      if (martialstatus === 'married') {
+        return schema.required('Spouse name is required');
+      }
+      return schema.nullable();
+    }),
   date_of_expiry: Yup.string().required('Date of expiry is required'),
   nidorcnicnumber: Yup.string().required('NID/CNIC number is required'),
   applicant_resume: Yup.mixed(),

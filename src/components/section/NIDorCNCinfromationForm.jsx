@@ -2,37 +2,42 @@ import { Form, Formik } from "formik";
 import { useState, useEffect } from "react";
 import DragAndDrop from "../inputs/DragAndDrop";
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
+import JobPlaceInputNID from "../inputs/JobPlaceInputNID";
 import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
 import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
 import { religion } from "../../assets/staticData/countryInfo";
-import JobPlaceSelectInputField from "../inputs/JobPlaceSelectInputField";
 import { jobApplyNidOrCnicSchema } from "../../schema/jobPlaceSchema";
+import JobPlaceSelectInputField from "../inputs/JobPlaceSelectInputField";
 import { useUpdateApplicantNIDorCNICinfoMutation } from "../../slice/jobPlacePage.slice";
-import { getStatesByCountry, getCitiesByState, getPoliceStationsByCity, getPostOfficeByPoliceStations } from "../../lib/addressFind";
-import JobPlaceInputNID from "../inputs/JobPlaceInputNID";
+import { 
+  getCitiesByState, 
+  getStatesByCountry, 
+  getPoliceStationsByCity, 
+  getPostOfficeByPoliceStations 
+} from "../../lib/addressFind";
 
 const INITIALVALUES = {
   zip: "",
   city: "",
   religion: "",
   province: "",
+  reference: "",
   passportno: "",
   emiratesid: "",
   homeaddrss: "",
   uaeresident: "",
+  nationality: "",
   father_name: "",
   policeStation: "",
+  nid_cnic_back: "",
   martialstatus: "",
   date_of_expiry: "",
+  nid_cnic_front: "",
   nidorcnicnumber: "",
   emirates_expiry: "",
   applicant_resume: "",
-  reference: "",
   applicant_passport: "",
-  nid_cnic_back: "",
-  nid_cnic_front: "",
-  nationality: "",
 };
 
 const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
@@ -47,14 +52,19 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
         if (values.nid_cnic_front && values.nid_cnic_front[0] instanceof File) {
           formData.append('nid_cnic_front', values.nid_cnic_front[0]);
         }
+
         if (values.nid_cnic_back && values.nid_cnic_back[0] instanceof File) {
           formData.append('nid_cnic_back', values.nid_cnic_back[0]);
         }
+
         if (values.applicant_passport && values.applicant_passport[0] instanceof File) {
           formData.append('applicant_passport', values.applicant_passport[0]);
         }
+
         if (values.applicant_resume && values.applicant_resume[0] instanceof File) {
           formData.append('applicant_resume', values.applicant_resume[0]);
+        } else {
+          formData.append('applicant_resume', values.applicant_resume);
         }
     
         Object.entries(values).forEach(([key, value]) => {
@@ -80,24 +90,25 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
       setInitialValues({
         zip: data?.zip ? data?.zip : "",
         city: data?.city ? data?.city : "",
+        spouse: data?.spouse ? data?.spouse : "",
         religion: data?.religion ? data?.religion : "",
         province: data?.province ? data?.province : "",
+        reference: data?.reference ? data?.reference : "",
         passportno: data?.passportno ? data?.passportno : "",
         emiratesid: data?.emiratesid ? data?.emiratesid : "",
         homeaddrss: data?.homeaddrss ? data?.homeaddrss : "",
         uaeresident: data?.uaeresident ? data?.uaeresident : "",
         father_name: data?.father_name ? data?.father_name : "",
+        nationality: data?.nationality ? data?.nationality : "",
+        nid_cnic_back: data?.nid_cnic_back ? data?.nid_cnic_back : "",
         policeStation: data?.policeStation ? data?.policeStation : "",
         martialstatus: data?.martialstatus ? data?.martialstatus : "",
         date_of_expiry: data?.date_of_expiry ? data?.date_of_expiry : "",
+        nid_cnic_front: data?.nid_cnic_front ? data?.nid_cnic_front : "",
         nidorcnicnumber: data?.nidorcnicnumber ? data?.nidorcnicnumber : "",
         emirates_expiry: data?.emirates_expiry ? data?.emirates_expiry : "",
         applicant_resume: data?.applicant_resume ? data?.applicant_resume : "",
-        reference: data?.reference ? data?.reference : "",
         applicant_passport: data?.applicant_passport ? data?.applicant_passport : "",
-        nid_cnic_back: data?.nid_cnic_back ? data?.nid_cnic_back : "",
-        nid_cnic_front: data?.nid_cnic_front ? data?.nid_cnic_front : "",
-        nationality: data?.nationality ? data?.nationality : "",
       })
     }, [data])
 
@@ -204,17 +215,29 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
 
                   <div className="col-span-2">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                      <JobPlaceRadioInput 
-                        name="martialstatus" 
-                        label="Marital status" 
-                        value={values.martialstatus}
-                        handleSelect={(value) => setFieldValue("martialstatus", value)}
-                        items={[
-                          {id: "1", name: "single", value: "single", label: "Single"},
-                          {id: "2", name: "married", value: "married", label: "Married"},
-                          {id: "3", name: "divorced", value: "divorced", label: "Divorced"}
-                        ]} 
-                      />
+                      <div className="col-span-2">
+                        <JobPlaceRadioInput 
+                          name="martialstatus" 
+                          label="Marital status" 
+                          value={values.martialstatus}
+                          handleSelect={(value) => setFieldValue("martialstatus", value)}
+                          items={[
+                            {id: "1", name: "single", value: "single", label: "Single"},
+                            {id: "2", name: "married", value: "married", label: "Married"},
+                            {id: "3", name: "divorced", value: "divorced", label: "Divorced"}
+                          ]} 
+                        />
+                      </div>
+
+                      {values.martialstatus === "married" && (
+                        <JobPlaceInputField 
+                          name="spouse" 
+                          errors={errors}
+                          touched={touched}
+                          label="Spouse Name" 
+                          placeholder="Spouse name" 
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

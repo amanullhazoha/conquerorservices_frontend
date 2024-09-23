@@ -109,11 +109,13 @@ const JobPlaceDateField = ({
                     {isOpenDay && (
                         <ul
                             ref={dropdownRef}
-                            className={`absolute bg-white border border-[#D0D5DD] rounded-lg w-full px-2 z-50
+                            className={`absolute bg-white border border-[#D0D5DD] rounded-lg w-[250px] px-2 z-50
                             py-1.5 text-sm text-[#27303F] outline-none mt-0.5 transition-transform max-h-[250px] overflow-y-auto
                             duration-300 ease-in-out ${position === 'top' ? 'bottom-full' : 'top-full'}
-                            ${position === 'top' ? 'transform -translate-y-full' : 'transform translate-y-0'}`}
+                            ${position === 'top' ? 'transform -translate-y-full' : 'transform translate-y-0'} grid grid-cols-6 gap-2`}
                         >
+                            <p className="col-span-6 text-[#D0D5DD]">Day</p>
+
                             {days.map((day) => (
                                 <button
                                     type="button"
@@ -159,8 +161,10 @@ const JobPlaceDateField = ({
                             className={`absolute bg-white border border-[#D0D5DD] rounded-lg w-full px-2 z-50
                             py-1.5 text-sm text-[#27303F] outline-none mt-0.5 transition-transform max-h-[250px] overflow-y-auto
                             duration-300 ease-in-out ${position === 'top' ? 'bottom-full' : 'top-full'}
-                            ${position === 'top' ? 'transform -translate-y-full' : 'transform translate-y-0'}`}
+                            ${position === 'top' ? 'transform -translate-y-full' : 'transform translate-y-0'} scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100`}
                         >
+                            <p className="col-span-6 text-[#D0D5DD]">Month</p>
+
                             {monthNames.map((month, index) => (
                                 <button
                                     type="button"
@@ -206,8 +210,10 @@ const JobPlaceDateField = ({
                             className={`absolute bg-white border border-[#D0D5DD] rounded-lg w-full max-h-[250px] overflow-y-auto px-2 z-50
                             py-1.5 text-sm text-[#27303F] outline-none mt-0.5 transition-transform
                             duration-300 ease-in-out ${position === 'top' ? 'bottom-full' : 'top-full'}
-                            ${position === 'top' ? 'transform -translate-y-full' : 'transform translate-y-0'}`}
+                            ${position === 'top' ? 'transform -translate-y-full' : 'transform translate-y-0'} scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100`}
                         >
+                            <p className="col-span-6 text-[#D0D5DD]">Year</p>
+
                             {years.map((year) => (
                                 <button
                                     type="button"

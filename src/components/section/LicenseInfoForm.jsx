@@ -39,20 +39,31 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
 
         if (values.UAE_DL_Front && values.UAE_DL_Front[0] instanceof File) {
           formData.append('UAE_DL_Front', values.UAE_DL_Front[0]);
+        } else {
+          formData.append('UAE_DL_Front', values.UAE_DL_Front);
         }
+
         if (values.UAE_DL_Back && values.UAE_DL_Back[0] instanceof File) {
           formData.append('UAE_DL_Back', values.UAE_DL_Back[0]);
+        } else {
+          formData.append('UAE_DL_Back', values.UAE_DL_Back);
         }
+
         if (values.appli_dri_lisence_frontpart && values.appli_dri_lisence_frontpart[0] instanceof File) {
           formData.append('appli_dri_lisence_frontpart', values.appli_dri_lisence_frontpart[0]);
+        } else {
+          formData.append('appli_dri_lisence_frontpart', values.appli_dri_lisence_frontpart);
         }
+
         if (values.appli_dri_lisence_backpart && values.appli_dri_lisence_backpart[0] instanceof File) {
           formData.append('appli_dri_lisence_backpart', values.appli_dri_lisence_backpart[0]);
+        } else {
+          formData.append('appli_dri_lisence_backpart', values.appli_dri_lisence_backpart);
         }
     
         Object.entries(values).forEach(([key, value]) => {
-          if (key !== 'UAE_DL_front' && key !== 'UAE_DL_Back' && key !== 'appli_dri_lisence_frontpart' && key !== 'appli_dri_lisence_backpart') {
-            if (typeof value === 'string' || typeof value === 'number') {
+          if (key !== 'UAE_DL_Front' && key !== 'UAE_DL_Back' && key !== 'appli_dri_lisence_frontpart' && key !== 'appli_dri_lisence_backpart') {
+            if (typeof value === 'string' || typeof value === 'number' || typeof value === "boolean") {
               formData.append(key, value);
             }
           }
@@ -209,6 +220,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
                         <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                           <DragAndDrop 
                             errors={errors} 
+                            required={false}
                             touched={touched}  
                             label="Driving license front" 
                             name="appli_dri_lisence_frontpart" 
@@ -218,6 +230,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
 
                           <DragAndDrop 
                             errors={errors} 
+                            required={false}
                             touched={touched}  
                             label="Driving license back" 
                             name="appli_dri_lisence_backpart" 
@@ -235,6 +248,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
                         <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                           <DragAndDrop 
                             errors={errors} 
+                            required={false}
                             touched={touched}  
                             name="UAE_DL_Front" 
                             label="UAE DL front"
@@ -244,6 +258,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
 
                           <DragAndDrop 
                             errors={errors} 
+                            required={false}
                             touched={touched} 
                             label="UAE DL Back" 
                             name="UAE_DL_Back" 
