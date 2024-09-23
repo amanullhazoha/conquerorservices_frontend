@@ -19,7 +19,6 @@ export const jobApplyBasicSchema = Yup.object().shape({
   contact_number: Yup.string()
     .required('Contact number is required')
     .when('nationality', ([nationality], schema) => {
-      console.log(nationality)
       switch (nationality) {
         case 'Nepal':
         case 'Pakistan':

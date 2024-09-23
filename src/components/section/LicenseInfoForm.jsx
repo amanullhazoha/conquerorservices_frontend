@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
 import DragAndDrop from "../inputs/DragAndDrop";
 import { generateSubmissionId } from "../../lib";
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
 import { ErrorMessage, Form, Formik } from "formik";
 import JobSubmissionID from "../inputs/JobSubmissonID";
+import { useState, useEffect, useCallback } from "react";
 import AcceptTermsModal from "../modals/AcceptTermsModal";
 import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
@@ -28,10 +28,19 @@ const INITIALVALUES = {
 };
 
 const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
+    let count = 0;
     const [isOpen, setIsOpen] = useState(false);
     const [initialValues, setInitialValues] = useState(INITIALVALUES);
     
     const [updateApplicantLicenseInfo, { isLoading, isError }] = useUpdateApplicantLicenseInfoMutation();
+
+    const handleSetLocalStorageValue = useCallback((values) => {
+      count = count + 1;
+
+      if(count > 2) {
+        localStorage.setItem("applicantLicenseInfo", JSON.stringify(values));
+      }
+    }, [initialValues])
 
     const handleSubmit = async (values, { resetForm }) => {
       try {
@@ -81,21 +90,37 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
     }
 
     useEffect(() => {
-      setInitialValues({
-        position_id: data?.position_id ? data?.position_id : "",
-        is_agree: data?.is_agree ? data?.is_agree : false,
-        submissionid: data?.submissionid ? data?.submissionid : generateSubmissionId(data?.date_of_birth),
-        UAE_DL_Front: data?.UAE_DL_Front ? data?.UAE_DL_Front : "",
-        UAE_DL_Back: data?.UAE_DL_Back ? data?.UAE_DL_Back : "",
-        appli_dri_number: data?.appli_dri_number ? data?.appli_dri_number : "",
-        appli_dri_expiry: data?.appli_dri_expiry ? data?.appli_dri_expiry : "",
-        have_uae_licence: data?.have_uae_licence ? data?.have_uae_licence : "",
-        UAE_Resident_Visa_No: data?.UAE_Resident_Visa_No ? data?.UAE_Resident_Visa_No : "",
-        UAE_License_No: data?.UAE_License_No ? data?.UAE_License_No : "",
-        SIM_No: data?.SIM_No ? data?.SIM_No : "",
-        appli_dri_lisence_frontpart: data?.appli_dri_lisence_frontpart ? data?.appli_dri_lisence_frontpart : "",
-        appli_dri_lisence_backpart: data?.appli_dri_lisence_backpart ? data?.appli_dri_lisence_backpart : ""
-      })
+      localStorage.removeItem("applicantNidCnicInfo");
+
+      const storedValues = localStorage.getItem("applicantLicenseInfo");
+
+      if(storedValues) {
+        const parseValues = JSON.parse(storedValues);
+
+        setInitialValues({
+          ...parseValues,
+          UAE_DL_Back: data?.UAE_DL_Back ? data?.UAE_DL_Back : "",
+          UAE_DL_Front: data?.UAE_DL_Front ? data?.UAE_DL_Front : "",
+          appli_dri_lisence_frontpart: data?.appli_dri_lisence_frontpart ? data?.appli_dri_lisence_frontpart : "",
+          appli_dri_lisence_backpart: data?.appli_dri_lisence_backpart ? data?.appli_dri_lisence_backpart : "",
+        });
+      } else {
+        setInitialValues({
+          position_id: data?.position_id ? data?.position_id : "",
+          is_agree: data?.is_agree ? data?.is_agree : false,
+          submissionid: data?.submissionid ? data?.submissionid : generateSubmissionId(data?.date_of_birth),
+          UAE_DL_Front: data?.UAE_DL_Front ? data?.UAE_DL_Front : "",
+          UAE_DL_Back: data?.UAE_DL_Back ? data?.UAE_DL_Back : "",
+          appli_dri_number: data?.appli_dri_number ? data?.appli_dri_number : "",
+          appli_dri_expiry: data?.appli_dri_expiry ? data?.appli_dri_expiry : "",
+          have_uae_licence: data?.have_uae_licence ? data?.have_uae_licence : "",
+          UAE_Resident_Visa_No: data?.UAE_Resident_Visa_No ? data?.UAE_Resident_Visa_No : "",
+          UAE_License_No: data?.UAE_License_No ? data?.UAE_License_No : "",
+          SIM_No: data?.SIM_No ? data?.SIM_No : "",
+          appli_dri_lisence_frontpart: data?.appli_dri_lisence_frontpart ? data?.appli_dri_lisence_frontpart : "",
+          appli_dri_lisence_backpart: data?.appli_dri_lisence_backpart ? data?.appli_dri_lisence_backpart : ""
+        })
+      }
     }, [data])
 
     return (
@@ -111,204 +136,211 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
             validationSchema={jobApplyLicenseSchema}
             onSubmit={handleSubmit}
           >
-            {({ handleSubmit, values, errors, touched, setFieldValue }) => (
-              <Form onSubmit={handleSubmit}>
-                <div className={`py-5 ${data?.position_id !== 50 ? "border-none pb-0" : "border-b border-[#EAECF0]"} grid gap-6 grid-cols-1 md:grid-cols-3`}>
-                  <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Submission ID</h4>
+            {({ handleSubmit, values, errors, touched, setFieldValue }) => {
+              handleSetLocalStorageValue(values);
 
-                  <div className="col-span-2">
-                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                      <JobSubmissionID 
-                        errors={errors}
-                        touched={touched}
-                        name="submissionid" 
-                        label="Submission ID" 
-                        placeholder="890-8764" 
-                        value={values?.submissionid}
-                      />
-                    </div>
-                  </div>
-                </div>
+              return (
+                <Form onSubmit={handleSubmit}>
+                  <div className={`py-5 ${data?.position_id !== 50 ? "border-none pb-0" : "border-b border-[#EAECF0]"} grid gap-6 grid-cols-1 md:grid-cols-3`}>
+                    <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Submission ID</h4>
 
-                {data?.position_id === 50 && (
-                  <>
-                    <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
-                      <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Driving license (home country)</h4>
-
-                      <div className="col-span-2">
-                        <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                          <JobPlaceInputField 
-                            type="number"
-                            errors={errors}
-                            required={false}
-                            touched={touched}
-                            label="License number" 
-                            name="appli_dri_number" 
-                            placeholder="e.g 789-908-999" 
-                          />
-
-                          <JobPlaceDateField 
-                            errors={errors}
-                            required={false}
-                            pervDate={false}
-                            touched={touched}
-                            label="Expiry date" 
-                            name="appli_dri_expiry"
-                            value={values?.appli_dri_expiry}
-                            handleSelect={(date) => setFieldValue("appli_dri_expiry", date)}
-                          />
-                        </div>
+                    <div className="col-span-2">
+                      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                        <JobSubmissionID 
+                          errors={errors}
+                          touched={touched}
+                          name="submissionid" 
+                          label="Submission ID" 
+                          placeholder="890-8764" 
+                          value={values?.submissionid}
+                        />
                       </div>
                     </div>
+                  </div>
 
-                    <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
-                      <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Do you have UAE license</h4>
+                  {data?.position_id === 50 && (
+                    <>
+                      <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
+                        <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Driving license (home country)</h4>
 
-                      <div className="col-span-2">
-                        <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                          <JobPlaceRadioInput 
+                        <div className="col-span-2">
+                          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                            <JobPlaceInputField 
+                              type="number"
+                              errors={errors}
                               required={false}
-                              label="UAE license" 
-                              name="have_uae_licence" 
-                              value={values.have_uae_licence}
-                              handleSelect={(value) => setFieldValue("have_uae_licence", value)}
-                              items={[
-                                  {id: "1", name: "yes", value: "yes", label: "Yes"},
-                                  {id: "2", name: "no", value: "no", label: "No"}
-                              ]}
-                          />
+                              touched={touched}
+                              label="License number" 
+                              name="appli_dri_number" 
+                              placeholder="e.g 789-908-999" 
+                            />
 
-                          {values.have_uae_licence === "yes" && (
-                            <>
-                              <JobPlaceInputField 
-                                type="number"
-                                errors={errors}
-                                touched={touched}
-                                name="UAE_License_No" 
-                                label="UAE license number" 
-                                placeholder="E.g. 670-9876" 
-                              />
-    
-                              <JobPlaceInputField 
-                                type="number"
-                                errors={errors}
-                                touched={touched}
-                                placeholder="Select" 
-                                name="UAE_Resident_Visa_No" 
-                                label="UAE resident visa number" 
-                              />
-    
-                              <JobPlaceInputField 
-                                type="number"
-                                errors={errors}
-                                touched={touched}
-                                name="SIM_No" 
-                                required={false} 
-                                placeholder="Select" 
-                                label="Sim number (optional)" 
-                              />
-                            </>
-                          )}
+                            <JobPlaceDateField 
+                              errors={errors}
+                              required={false}
+                              pervDate={false}
+                              touched={touched}
+                              label="Expiry date" 
+                              name="appli_dri_expiry"
+                              value={values?.appli_dri_expiry}
+                              handleSelect={(date) => setFieldValue("appli_dri_expiry", date)}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
-                      <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Driving license images</h4>
+                      <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
+                        <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Do you have UAE license</h4>
 
-                      <div className="col-span-2">
-                        <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                          <DragAndDrop 
-                            errors={errors} 
-                            required={false}
-                            touched={touched}  
-                            label="Driving license front" 
-                            name="appli_dri_lisence_frontpart" 
-                            value={values.appli_dri_lisence_frontpart}
-                            handleSelectFile={(file) => setFieldValue("appli_dri_lisence_frontpart", file)}
-                          />
+                        <div className="col-span-2">
+                          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                            <JobPlaceRadioInput 
+                                required={false}
+                                label="UAE license" 
+                                name="have_uae_licence" 
+                                value={values.have_uae_licence}
+                                handleSelect={(value) => setFieldValue("have_uae_licence", value)}
+                                items={[
+                                    {id: "1", name: "yes", value: "yes", label: "Yes"},
+                                    {id: "2", name: "no", value: "no", label: "No"}
+                                ]}
+                            />
 
-                          <DragAndDrop 
-                            errors={errors} 
-                            required={false}
-                            touched={touched}  
-                            label="Driving license back" 
-                            name="appli_dri_lisence_backpart" 
-                            value={values.appli_dri_lisence_backpart}
-                            handleSelectFile={(file) => setFieldValue("appli_dri_lisence_backpart", file)}
-                          />
+                            {values.have_uae_licence === "yes" && (
+                              <>
+                                <JobPlaceInputField 
+                                  type="number"
+                                  errors={errors}
+                                  touched={touched}
+                                  name="UAE_License_No" 
+                                  label="UAE license number" 
+                                  placeholder="E.g. 670-9876" 
+                                />
+      
+                                <JobPlaceInputField 
+                                  type="number"
+                                  errors={errors}
+                                  touched={touched}
+                                  placeholder="Select" 
+                                  name="UAE_Resident_Visa_No" 
+                                  label="UAE resident visa number" 
+                                />
+      
+                                <JobPlaceInputField 
+                                  type="number"
+                                  errors={errors}
+                                  touched={touched}
+                                  name="SIM_No" 
+                                  required={false} 
+                                  placeholder="Select" 
+                                  label="Sim number (optional)" 
+                                />
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
-                      <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">UAE DL (optional)</h4>
+                      <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
+                        <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Driving license images</h4>
 
-                      <div className="col-span-2">
-                        <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                          <DragAndDrop 
-                            errors={errors} 
-                            required={false}
-                            touched={touched}  
-                            name="UAE_DL_Front" 
-                            label="UAE DL front"
-                            value={values.UAE_DL_Front}
-                            handleSelectFile={(file) => setFieldValue("UAE_DL_Front", file)} 
-                          />
+                        <div className="col-span-2">
+                          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                            <DragAndDrop 
+                              errors={errors} 
+                              required={false}
+                              touched={touched}  
+                              label="Driving license front" 
+                              name="appli_dri_lisence_frontpart" 
+                              value={values.appli_dri_lisence_frontpart}
+                              handleSelectFile={(file) => setFieldValue("appli_dri_lisence_frontpart", file)}
+                            />
 
-                          <DragAndDrop 
-                            errors={errors} 
-                            required={false}
-                            touched={touched} 
-                            label="UAE DL Back" 
-                            name="UAE_DL_Back" 
-                            value={values.UAE_DL_Back}
-                            handleSelectFile={(file) => setFieldValue("UAE_DL_Back", file)}
-                          />
+                            <DragAndDrop 
+                              errors={errors} 
+                              required={false}
+                              touched={touched}  
+                              label="Driving license back" 
+                              name="appli_dri_lisence_backpart" 
+                              value={values.appli_dri_lisence_backpart}
+                              handleSelectFile={(file) => setFieldValue("appli_dri_lisence_backpart", file)}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </>
-                )}
 
-                <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
+                      <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
+                        <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">UAE DL (optional)</h4>
 
-                  <div className="col-span-3">
-                    <div className="col-span-1 md:col-span-2 text-end">
-                        <div>
-                          <input 
-                            type="checkbox" 
-                            name="is_agree" 
-                            value={values.is_agree} 
-                            checked={values.is_agree} 
-                            className="accent-[#1278BC]" 
-                            onChange={() => setIsOpen(true)} 
-                          />
+                        <div className="col-span-2">
+                          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                            <DragAndDrop 
+                              errors={errors} 
+                              required={false}
+                              touched={touched}  
+                              name="UAE_DL_Front" 
+                              label="UAE DL front"
+                              value={values.UAE_DL_Front}
+                              handleSelectFile={(file) => setFieldValue("UAE_DL_Front", file)} 
+                            />
 
-                          <label className="ml-2 text-base text-[#667085]">I Accept the <a href="/" className="text-[#1278BC]">Terms and Condition</a> of the Company</label>
+                            <DragAndDrop 
+                              errors={errors} 
+                              required={false}
+                              touched={touched} 
+                              label="UAE DL Back" 
+                              name="UAE_DL_Back" 
+                              value={values.UAE_DL_Back}
+                              handleSelectFile={(file) => setFieldValue("UAE_DL_Back", file)}
+                            />
+                          </div>
                         </div>
+                      </div>
+                    </>
+                  )}
 
-                        <ErrorMessage name="is_agree" component="div" className="text-red-500 text-xs mt-1" />
+                  <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
+
+                    <div className="col-span-3">
+                      <div className="col-span-1 md:col-span-2 text-end">
+                          <div>
+                            <input 
+                              type="checkbox" 
+                              name="is_agree" 
+                              value={values.is_agree} 
+                              checked={values.is_agree} 
+                              className="accent-[#1278BC]" 
+                              onChange={() => setIsOpen(true)} 
+                            />
+
+                            <label className="ml-2 text-base text-[#667085]">I Accept the <a href="/" className="text-[#1278BC]">Terms and Condition</a> of the Company</label>
+                          </div>
+
+                          <ErrorMessage name="is_agree" component="div" className="text-red-500 text-xs mt-1" />
+                      </div>
                     </div>
                   </div>
-                </div>
 
 
-                <AcceptTermsModal 
-                  isOpen={isOpen} 
-                  position={data?.position_id}
-                  onClose={() => setIsOpen(false)} 
-                  handleAccept={() => {
-                    setFieldValue("is_agree", true);
-                    setIsOpen(false);
-                  }}
-                />
+                  <AcceptTermsModal 
+                    isOpen={isOpen} 
+                    position={data?.position_id}
+                    onClose={() => {
+                      setIsOpen(false);
+                      setFieldValue("is_agree", false);
+                    }} 
+                    handleAccept={() => {
+                      setFieldValue("is_agree", true);
+                      setIsOpen(false);
+                    }}
+                  />
 
-                <div className="pt-5">
-                  <JobPlaceBtn submit={true} handlePrevious={handlePrevious} />
-                </div>
-              </Form>
-            )}
+                  <div className="pt-5">
+                    <JobPlaceBtn submit={true} handlePrevious={handlePrevious} />
+                  </div>
+                </Form>
+              )
+            }}
           </Formik>
         </div>
     );

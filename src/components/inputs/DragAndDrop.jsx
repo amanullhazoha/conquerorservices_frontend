@@ -194,8 +194,6 @@ const DragAndDrop = ({
     setPreviewURL(URL.createObjectURL(files[0])); // Create a preview URL for the uploaded file
   };
 
-  console.log(value)
-
   return (
     <div>
       <label htmlFor={name} className="text-sm text-[#27303F] font-medium">
