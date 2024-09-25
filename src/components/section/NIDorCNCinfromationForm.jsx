@@ -220,6 +220,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                           touched={touched}
                           label="NID / CNIC" 
                           name="nidorcnicnumber" 
+                          country={data?.nationality}
                           handleChange={(e) => {
                               let value = e.target.value;
 

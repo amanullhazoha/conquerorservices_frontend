@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Field, ErrorMessage } from "formik";
 
 const JobPlaceInputNID = ({
@@ -6,11 +7,33 @@ const JobPlaceInputNID = ({
     value,
     errors,
     touched,
+    country,
     handleChange,
     placeholder,
     type="text",
     required=true,
 }) => {
+    const [inputError, setInputError] = useState("");
+
+    const handleInput = (event) => {
+        const value = event.target.value;
+
+        if (country === "Pakistan") {
+            const validValue = value.replace(/[^0-9-]/g, "");
+
+            if (validValue !== value) {
+                event.target.value = validValue;
+                setInputError("Only input number");
+            } else {
+                setInputError("");
+            }
+
+            if(value?.length > 15) {
+                setInputError("NID or CNIC number max 15")
+            }
+        }
+    };
+
     return (
         <div>
             <label htmlFor={name} className="text-sm text-[#27303F] font-medium">
@@ -22,6 +45,7 @@ const JobPlaceInputNID = ({
                 type={type} 
                 name={name}
                 value={value}
+                onInput={handleInput}
                 onChange={handleChange}
                 placeholder={placeholder} 
                 className={
@@ -30,7 +54,9 @@ const JobPlaceInputNID = ({
                 } 
             />
 
-            <ErrorMessage name={name} component="div" className="text-red-500 text-xs mt-1" />
+            {inputError && <div className="text-red-500 text-xs mt-1">{inputError}</div>}
+
+            {!inputError && <ErrorMessage name={name} component="div" className="text-red-500 text-xs mt-1" />}
         </div>
     );
 }

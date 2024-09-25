@@ -62,12 +62,13 @@ export const jobApplyNidOrCnicSchema = Yup.object().shape({
   homeaddrss: Yup.string().required('Home address is required'),
   uaeresident: Yup.string().required('UAE resident is required')
     .matches(/^(yes|no)$/i, 'UAE resident must be "yes" or "no"'),
-  emiratesid: Yup.string().when('uaeresident', ([uaeresident], schema) => {
-    if (uaeresident === 'yes') {
-      return schema.required('Emirates ID is required');
-    }
-    return schema.nullable();
-  }),
+  emiratesid: Yup.string()
+    .when('uaeresident', ([uaeresident], schema) => {
+      if (uaeresident === 'yes') {
+        return schema.required('Emirates ID is required');
+      }
+      return schema.nullable();
+    }),
   emirates_expiry: Yup.string().when('uaeresident', ([uaeresident], schema) => {
     if (uaeresident === 'yes') {
       return schema.required('Emirates expiry is required');
