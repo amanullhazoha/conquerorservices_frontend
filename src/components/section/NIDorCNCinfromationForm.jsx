@@ -373,7 +373,23 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                           handleSelect={(item) => setFieldValue("city", item.name)}
                         />
 
-                        <JobPlaceSelectInputField 
+                          <JobPlaceInputField 
+                            errors={errors}
+                            touched={touched}
+                            name="policeStation" 
+                            label="Police station" 
+                            placeholder="Enter police station" 
+                          />
+
+                          <JobPlaceInputField 
+                            errors={errors}
+                            touched={touched}
+                            name="zip" 
+                            label="Post office" 
+                            placeholder="Enter post office" 
+                          />
+
+                        {/* <JobPlaceSelectInputField 
                           errors={errors}
                           keyValue="name"
                           touched={touched}
@@ -395,7 +411,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                           value={values.zip}
                           handleSelect={(item) => setFieldValue("zip", item.name)}
                           items={getPostOfficeByPoliceStations(values.policeStation)}
-                        />
+                        /> */}
 
                         <div className="col-span-1 md:col-span-2">
                           <JobPlaceInputField 
