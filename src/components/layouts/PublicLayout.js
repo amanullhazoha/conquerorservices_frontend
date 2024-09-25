@@ -8,7 +8,7 @@ const PublicLayout = ({ children }) => {
             <header className="bg-white shadow py-5 sticky top-0 z-50">
                 <div className="container max-sm:px-2.5 flex items-center justify-between">
                     <Link to="/">
-                        <img src={logo} alt="logo" className="xs:w-[120px] sm:w-[150px] h-auto" />
+                        <img src={logo} alt="logo" className="w-[120px] sm:w-[150px] h-auto" />
                     </Link>
 
                     <div className="relative flex items-center">
@@ -16,7 +16,7 @@ const PublicLayout = ({ children }) => {
                             type="text" 
                             placeholder="Search" 
                             className="bg-[#F7FAFC] rounded-xl pl-3 pr-7 py-2 text-sm text-[#A1A1AA] 
-                            xs:w-[170px] sm:w-[215px] border border-[#E2E8F0] outline-none" 
+                            w-[170px] sm:w-[215px] border border-[#E2E8F0] outline-none" 
                         />
 
                         <div className="absolute right-2">
