@@ -158,12 +158,20 @@ const BasicInfoForm = ({
                         <JobPlaceInputField 
                           errors={errors} 
                           name="first_name" 
+                          onlyLetter={true}
                           touched={touched} 
                           label="First name" 
                           placeholder="Muhammad" 
                         />
 
-                        <JobPlaceInputField errors={errors} touched={touched} label="Last name" placeholder="Abdullah" name="last_name" />
+                        <JobPlaceInputField 
+                          errors={errors} 
+                          name="last_name" 
+                          onlyLetter={true}
+                          touched={touched} 
+                          label="Last name" 
+                          placeholder="Abdullah" 
+                        />
                       </div>
                     </div>
                   </div>
@@ -173,11 +181,25 @@ const BasicInfoForm = ({
 
                     <div className="col-span-2">
                       <div className="hidden gap-4 grid-cols-1 md:grid-cols-2 md:grid">
-                        <JobPlaceInputField errors={errors} touched={touched} label="Full name" placeholder="Saima" name="mother_name" />
+                        <JobPlaceInputField 
+                          errors={errors} 
+                          touched={touched} 
+                          onlyLetter={true}
+                          label="Full name" 
+                          placeholder="Saima" 
+                          name="mother_name" 
+                        />
                       </div>
 
                       <div className="hidden gap-4 grid-cols-1 md:grid-cols-2 max-md:grid">
-                        <JobPlaceInputField errors={errors} touched={touched} label="Mother Name" placeholder="Saima" name="mother_name" />
+                        <JobPlaceInputField 
+                          errors={errors} 
+                          onlyLetter={true}
+                          touched={touched} 
+                          name="mother_name" 
+                          label="Mother Name" 
+                          placeholder="Saima" 
+                        />
                       </div>
                     </div>
                   </div>

@@ -189,6 +189,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                       <div className="hidden gap-4 grid-cols-1 md:grid-cols-2 md:grid">
                         <JobPlaceInputField 
                           errors={errors} 
+                          onlyLetter={true}
                           touched={touched}
                           label="Full name" 
                           name="father_name" 
@@ -199,6 +200,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                       <div className="hidden gap-4 grid-cols-1 md:grid-cols-2 max-md:grid">
                         <JobPlaceInputField 
                           errors={errors} 
+                          onlyLetter={true}
                           touched={touched}
                           label="Father Name" 
                           name="father_name" 
@@ -261,6 +263,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                           <JobPlaceInputField 
                             name="spouse" 
                             errors={errors}
+                            onlyLetter={true}
                             touched={touched}
                             label="Spouse Name" 
                             placeholder="Spouse name" 

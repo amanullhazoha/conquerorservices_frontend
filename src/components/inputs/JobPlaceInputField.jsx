@@ -8,7 +8,14 @@ const JobPlaceInputField = ({
     placeholder,
     type="text",
     required=true,
+    onlyLetter=false,
 }) => {
+    const handleInput = (event) => {
+        if (onlyLetter) {
+            event.target.value = event.target.value.replace(/[^a-zA-Z\s]/g, "");
+        }
+    };
+
     return (
         <div>
             <label htmlFor={name} className="text-sm text-[#27303F] font-medium">
@@ -19,6 +26,7 @@ const JobPlaceInputField = ({
                 id={name} 
                 type={type} 
                 name={name}
+                onInput={handleInput}
                 placeholder={placeholder} 
                 error={touched[name] && errors[name]}
                 className={
