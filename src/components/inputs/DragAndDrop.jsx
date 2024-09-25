@@ -89,7 +89,7 @@ const DragAndDrop = ({
                 <img
                   src={previewURL ? previewURL : `${process.env.REACT_APP_BACKEND_BASE_URL}/uploads/${value}`}
                   alt="Preview"
-                  className="w-full h-[150px] rounded-lg object-cover"
+                  className="w-full h-[150px] rounded-lg object-contain"
                 />
               </div>
 

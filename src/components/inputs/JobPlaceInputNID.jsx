@@ -18,6 +18,7 @@ const JobPlaceInputNID = ({
     const handleInput = (event) => {
         const value = event.target.value;
 
+
         if (country === "Pakistan") {
             const validValue = value.replace(/[^0-9-]/g, "");
 
@@ -30,6 +31,15 @@ const JobPlaceInputNID = ({
 
             if(value?.length > 15) {
                 setInputError("NID or CNIC number max 15")
+            }
+        } else {
+            const validValue = value.replace(/[^0-9]/g, "");
+
+            if (validValue !== value) {
+                event.target.value = validValue;
+                setInputError("Only input number");
+            } else {
+                setInputError("");
             }
         }
     };
