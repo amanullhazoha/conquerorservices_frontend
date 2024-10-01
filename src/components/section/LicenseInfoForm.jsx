@@ -1,4 +1,5 @@
 import DragAndDrop from "../inputs/DragAndDrop";
+import { useNavigate } from "react-router-dom";
 import { generateSubmissionId } from "../../lib";
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
 import { ErrorMessage, Form, Formik } from "formik";
@@ -8,7 +9,10 @@ import AcceptTermsModal from "../modals/AcceptTermsModal";
 import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
 import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
+import JobPlaceInputUaeNo from "../inputs/JobPlaceInputUaeNo";
+import { countryCode } from "../../assets/staticData/countryInfo";
 import { jobApplyLicenseSchema } from "../../schema/jobPlaceSchema";
+import JobPlaceNumberInputField from "../inputs/JobPlaceNumberInputField";
 import { useUpdateApplicantLicenseInfoMutation } from "../../slice/jobPlacePage.slice";
 
 const INITIALVALUES = {
@@ -25,11 +29,24 @@ const INITIALVALUES = {
   position_id: "",
   appli_dri_lisence_frontpart: "",
   appli_dri_lisence_backpart: "",
+  ref1_name: "",
+  ref1_email: "",
+  ref1_phone: "",
+  ref1_country: "",
+  ref1_address: "",
+  ref2_name: "",
+  ref2_email: "",
+  ref2_phone: "",
+  ref2_country: "",
+  ref2_address: "",
 };
 
 const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
     let count = 0;
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
+    const [ref1Code, setRef1Code] = useState(null);
+    const [ref2Code, setRef2Code] = useState(null);
     const [initialValues, setInitialValues] = useState(INITIALVALUES);
     
     const [updateApplicantLicenseInfo, { isLoading, isError }] = useUpdateApplicantLicenseInfoMutation();
@@ -83,6 +100,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
         if(data?.data) {
           resetForm();
           handleNext();
+          navigate("/career");
         }
       } catch (error) {
         console.log(error);
@@ -118,7 +136,17 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
           UAE_License_No: data?.UAE_License_No ? data?.UAE_License_No : "",
           SIM_No: data?.SIM_No ? data?.SIM_No : "",
           appli_dri_lisence_frontpart: data?.appli_dri_lisence_frontpart ? data?.appli_dri_lisence_frontpart : "",
-          appli_dri_lisence_backpart: data?.appli_dri_lisence_backpart ? data?.appli_dri_lisence_backpart : ""
+          appli_dri_lisence_backpart: data?.appli_dri_lisence_backpart ? data?.appli_dri_lisence_backpart : "",
+          ref1_name: data?.ref1_name ? data?.ref1_name : "",
+          ref1_email: data?.ref1_email ? data?.ref1_email : "",
+          ref1_phone: data?.ref1_phone ? data?.ref1_phone : "",
+          ref1_country: data?.ref1_country ? data?.ref1_country : "",
+          ref1_address: data?.ref1_address ? data?.ref1_address : "",
+          ref2_name: data?.ref2_name ? data?.ref2_name : "",
+          ref2_email: data?.ref2_email ? data?.ref2_email : "",
+          ref2_phone: data?.ref2_phone ? data?.ref2_phone : "",
+          ref2_country: data?.ref2_country ? data?.ref2_country : "",
+          ref2_address: data?.ref2_address ? data?.ref2_address : "",
         })
       }
     }, [data])
@@ -126,8 +154,14 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
     return (
         <div className="flex-1 bg-white rounded-lg px-6 py-6">
           <div className="pb-5 border-b border-[#EAECF0]">
-            <h3 className="text-lg font-semibold text-[#27303F]">License Information</h3>
-            <p className="text-sm text-[#718096] max-md:hidden">Provide details of your license and residency permit</p>
+            <h3 className="text-lg font-semibold text-[#27303F]">
+              {/* License Information */}
+              {(data?.position_id === '52' || data?.position_id === 52) ? "Other Information" : "License Information"}
+            </h3>
+            <p className="text-sm text-[#718096] max-md:hidden">
+              {/* Provide details of your license and residency permit */}
+              {(data?.position_id === '52' || data?.position_id === 52) ? "Provide details of your 2 Reference" : "Provide details of your license and residency permit"}
+            </p>
           </div>
 
           <Formik
@@ -141,8 +175,8 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
 
               return (
                 <Form onSubmit={handleSubmit}>
-                  <div className={`py-5 ${data?.position_id !== 50 ? "border-none pb-0" : "border-b border-[#EAECF0]"} grid gap-6 grid-cols-1 md:grid-cols-3`}>
-                    <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Submission ID</h4>
+                  <div className={`py-5 ${data?.position_id !== 50 ? "border-none pb-0" : "border-b border-[#EAECF0]"} grid gap-6 max-md:gap-0.5 grid-cols-1 md:grid-cols-3`}>
+                    <h4 className="text-sm font-semibold text-[#27303F] col-span-1">Submission ID</h4>
 
                     <div className="col-span-2">
                       <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
@@ -164,7 +198,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
                         <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Driving license (home country)</h4>
 
                         <div className="col-span-2">
-                          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                          <div className="grid gap-4 grid-cols-1 xl:grid-cols-2">
                             <JobPlaceInputField 
                               type="number"
                               errors={errors}
@@ -193,7 +227,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
                         <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Do you have UAE license</h4>
 
                         <div className="col-span-2">
-                          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                          <div className="grid gap-4 grid-cols-1 xl:grid-cols-2">
                             <JobPlaceRadioInput 
                                 required={false}
                                 label="UAE license" 
@@ -208,13 +242,18 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
 
                             {values.have_uae_licence === "yes" && (
                               <>
-                                <JobPlaceInputField 
-                                  type="number"
+                                <JobPlaceInputUaeNo 
                                   errors={errors}
                                   touched={touched}
                                   name="UAE_License_No" 
                                   label="UAE license number" 
                                   placeholder="E.g. 670-9876" 
+                                  value={values?.UAE_License_No}
+                                  handleChange={(e) => {
+                                    let value = e.target.value;
+      
+                                    setFieldValue("UAE_License_No", value);
+                                }}
                                 />
       
                                 <JobPlaceInputField 
@@ -293,6 +332,140 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
                               value={values.UAE_DL_Back}
                               handleSelectFile={(file) => setFieldValue("UAE_DL_Back", file)}
                             />
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {data?.position_id === 52 && (
+                    <>
+                      <div className="py-5 border-y mt-5 border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
+                        <h4 className="text-sm font-semibold text-[#27303F] col-span-1">From the relatives</h4>
+
+                        <div className="col-span-2">
+                          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                            <JobPlaceInputField 
+                              errors={errors}
+                              touched={touched}
+                              name="ref1_name" 
+                              label="Name" 
+                              required={false}
+                              placeholder="Enter name"
+                            />
+
+                            <JobPlaceInputField 
+                              errors={errors}
+                              touched={touched}
+                              type="email"
+                              name="ref1_email" 
+                              label="Email" 
+                              required={false}
+                              placeholder="Enter email"
+                            />
+
+                            <JobPlaceNumberInputField 
+                              type="number"
+                              errors={errors} 
+                              required={false} 
+                              keyValue="name"
+                              touched={touched} 
+                              items={countryCode}
+                              name="ref1_phone" 
+                              placeholder="000000000" 
+                              label="Phone number" 
+                              value={values?.ref1_phone}
+                              setFieldValue={setFieldValue}
+                              handleSelect={(item) => setRef1Code(item.shortName)}
+                              selectCountryCode={
+                                ref1Code ? countryCode?.find(item => item?.shortName === ref1Code)?.shortName : countryCode?.find(item => item?.name === "Pakistan")?.shortName
+                              }
+                            />
+
+                            <JobPlaceInputField 
+                              errors={errors}
+                              touched={touched}
+                              name="ref1_country" 
+                              label="Country" 
+                              required={false}
+                              placeholder="Enter country" 
+                            />
+
+                            <div className="col-span-1 md:col-span-2">
+                              <JobPlaceInputField 
+                                errors={errors}
+                                touched={touched}
+                                required={false} 
+                                name="ref1_address" 
+                                placeholder="Enter address" 
+                                label="Address" 
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="py-5 border-b border-[#EAECF0] grid gap-6 grid-cols-1 md:grid-cols-3">
+                        <h4 className="text-sm font-semibold text-[#27303F] col-span-1">Outside the Family</h4>
+
+                        <div className="col-span-2">
+                          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                            <JobPlaceInputField 
+                              errors={errors}
+                              touched={touched}
+                              name="ref2_name" 
+                              label="Name" 
+                              required={false}
+                              placeholder="Enter name"
+                            />
+
+                            <JobPlaceInputField 
+                              errors={errors}
+                              touched={touched}
+                              type="email"
+                              name="ref2_email" 
+                              label="Email" 
+                              required={false}
+                              placeholder="Enter email"
+                            />
+
+                            <JobPlaceNumberInputField 
+                              type="number"
+                              errors={errors} 
+                              required={false} 
+                              keyValue="name"
+                              touched={touched} 
+                              items={countryCode}
+                              name="ref2_phone" 
+                              placeholder="000000000" 
+                              label="Phone number" 
+                              value={values?.ref2_phone}
+                              setFieldValue={setFieldValue}
+                              handleSelect={(item) => setRef2Code(item.shortName)}
+                              selectCountryCode={
+                                ref2Code ? countryCode?.find(item => item?.shortName === ref2Code)?.shortName : countryCode?.find(item => item?.name === "Pakistan")?.shortName
+                              }
+                            />
+
+                            <JobPlaceInputField 
+                              errors={errors}
+                              touched={touched}
+                              name="ref2_country" 
+                              label="Country" 
+                              required={false}
+                              placeholder="Enter country" 
+                            />
+
+                            <div className="col-span-1 md:col-span-2">
+                              <JobPlaceInputField 
+                                errors={errors}
+                                touched={touched}
+                                required={false} 
+                                name="ref2_address" 
+                                placeholder="Enter address" 
+                                label="Address" 
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>

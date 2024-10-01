@@ -96,6 +96,8 @@ const BasicInfoForm = ({
     }
 
     useEffect(() => {
+      localStorage.removeItem("applicantLicenseInfo");
+
       if(data?.position_id) {
         setPosition(data?.position_id);
       }
@@ -230,6 +232,7 @@ const BasicInfoForm = ({
                     <div className="col-span-2">
                       <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                         <JobPlaceDateField 
+                          startYear={19}
                           errors={errors} 
                           touched={touched} 
                           name="date_of_birth" 
@@ -285,7 +288,7 @@ const BasicInfoForm = ({
                           label="Phone number" 
                           items={countryCode}
                           changeDisable={true}
-                          placeholder="+0 (000) 000-0000" 
+                          placeholder="000000000" 
                           value={values?.contact_number}
                           setFieldValue={setFieldValue}
                           selectCountryCode={
@@ -301,7 +304,7 @@ const BasicInfoForm = ({
                           touched={touched} 
                           items={countryCode}
                           name="whatsapp_number" 
-                          placeholder="+0 (000) 000-0000" 
+                          placeholder="000000000" 
                           label="WhatsApp number" 
                           value={values?.whatsapp_number}
                           setFieldValue={setFieldValue}

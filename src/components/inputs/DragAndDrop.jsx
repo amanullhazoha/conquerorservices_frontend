@@ -85,7 +85,7 @@ const DragAndDrop = ({
           {previewURL || value ? (
             <div className="flex flex-col justify-center items-center w-full relative">
 
-              <div className="px-20">
+              <div className="px-5 xl:px-20">
                 <img
                   src={previewURL ? previewURL : `${process.env.REACT_APP_BACKEND_BASE_URL}/uploads/${value}`}
                   alt="Preview"

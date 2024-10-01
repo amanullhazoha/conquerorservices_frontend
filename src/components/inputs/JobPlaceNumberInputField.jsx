@@ -1,7 +1,6 @@
-import { Field, ErrorMessage } from "formik";
+import { ErrorMessage } from "formik";
 import { useState, useRef, useEffect } from 'react';
 import DropdownArrow from "../../assets/icons/DropdownArrow";
-import { countryCode } from "../../assets/staticData/countryInfo";
 
 const JobPlaceNumberInputField = ({
     name,
@@ -23,6 +22,7 @@ const JobPlaceNumberInputField = ({
     const selectRef = useRef(null);
     const dropdownRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
+    const [inputError, setInputError] = useState("");
     const [inputValue, setInputValue] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("")
     const [position, setPosition] = useState('bottom');
@@ -43,6 +43,31 @@ const JobPlaceNumberInputField = ({
 
         setFieldValue(name, `${items.find((item) => item?.shortName?.toLowerCase().startsWith(selectCountryCode.toLowerCase()))?.code}${event.target.value}`)
     }
+
+    const handleInput = (event) => {
+        const value = event.target.value;
+        
+        if (type === "text") {
+            const validValue = value.replace(/[^a-zA-Z\s]/g, "");
+            
+            if (validValue !== value) {
+                event.target.value = validValue;
+                setInputError("Only input letters and space");
+            } else {
+                setInputError("");
+            }
+        } else if (type == "number") {
+            const validValue = value.replace(/[^0-9]/g, "");
+            console.log(validValue !== value)
+            
+            if (validValue !== value) {
+                event.target.value = validValue;
+                setInputError("Only input number");
+            } else {
+                setInputError("");
+            }
+        }
+    };
 
     useEffect(() => {
         if (selectRef.current) {
@@ -106,13 +131,12 @@ const JobPlaceNumberInputField = ({
             >
                 <input 
                     id={name} 
-                    type={type} 
+                    type="text"
                     name={name}
                     value={phoneNumber}
                     placeholder={placeholder} 
-                    // onChange={(event) => {setFieldValue(name, event.target.value)}
                     onChange={handlePhoneNumber}
-                    // error={touched[name] && errors[name]}
+                    onInput={handleInput}
                     className={
                         `border border-[#D0D5DD] rounded-lg w-full pl-12 pr-2 py-1.5 text-sm text-[#27303F] outline-none mt-0.5
                         ${touched[name] && errors[name] ? "border-red-500" : ""}`
@@ -124,7 +148,6 @@ const JobPlaceNumberInputField = ({
                     className="flex gap-0.5 items-center absolute top-0 left-0 px-1.5 py-1.5 w-fit mt-0.5 cursor-pointer"
                 >
                     <span>
-                        {/* <span className="text-[#101828]">{selectCountryCode}</span> */}
                         <span className="text-[#101828]">{selectCountryCode}</span>
                     </span>
 
@@ -168,7 +191,9 @@ const JobPlaceNumberInputField = ({
                 )}
             </div>
 
-            <ErrorMessage name={name} component="div" className="text-red-500 text-xs mt-1" />
+            {inputError && <div className="text-red-500 text-xs mt-1">{inputError}</div>}
+
+            {!inputError && <ErrorMessage name={name} component="div" className="text-red-500 text-xs mt-1" />}
         </div>
     );
 }

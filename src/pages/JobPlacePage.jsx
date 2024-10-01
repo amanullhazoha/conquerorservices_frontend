@@ -23,7 +23,10 @@ const JobPlacePage = () => {
             className="rounded-lg" 
             style={{ "backgroundImage": "linear-gradient(rgba(221, 228, 247, 1), rgba(221, 228, 247, 0))"}}
           >
-            <JobPlaceStep step={step} />
+            <JobPlaceStep 
+              step={step} 
+              data={data} 
+            />
           </div>
         </div>
 

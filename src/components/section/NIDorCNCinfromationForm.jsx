@@ -160,7 +160,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                     <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Passport & Expiry Date</h4>
 
                     <div className="col-span-2">
-                      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                      <div className="grid gap-4 grid-cols-1 xl:grid-cols-2">
                         <JobPlaceInputField 
                           errors={errors} 
                           touched={touched}  
@@ -186,7 +186,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                     <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Father Name</h4>
 
                     <div className="col-span-2">
-                      <div className="hidden gap-4 grid-cols-1 md:grid-cols-2 md:grid">
+                      <div className="hidden gap-4 grid-cols-1 xl:grid-cols-2 md:grid">
                         <JobPlaceInputField 
                           errors={errors} 
                           onlyLetter={true}
@@ -197,7 +197,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                         />
                       </div>
 
-                      <div className="hidden gap-4 grid-cols-1 md:grid-cols-2 max-md:grid">
+                      <div className="hidden gap-4 grid-cols-1 xl:grid-cols-2 max-md:grid">
                         <JobPlaceInputField 
                           errors={errors} 
                           onlyLetter={true}
@@ -214,7 +214,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                     <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Identity Number</h4>
 
                     <div className="col-span-2">
-                      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                      <div className="grid gap-4 grid-cols-1 xl:grid-cols-2">
                         <JobPlaceInputNID 
                           errors={errors} 
                           touched={touched}
@@ -245,7 +245,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                     <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Marital Status</h4>
 
                     <div className="col-span-2">
-                      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                      <div className="grid gap-4 grid-cols-1 xl:grid-cols-2">
                         <div className="col-span-2">
                           <JobPlaceRadioInput 
                             name="martialstatus" 
@@ -278,7 +278,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                     <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Residency</h4>
 
                     <div className="col-span-2">
-                      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                      <div className="grid gap-4 grid-cols-1 xl:grid-cols-2">
                         <JobPlaceRadioInput 
                           name="uaeresident" 
                           label="UAE resident" 
@@ -322,7 +322,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                     <h4 className="text-sm font-semibold text-[#27303F] col-span-1 max-md:hidden">Religion</h4>
 
                     <div className="col-span-2">
-                      <div className="grid gap-4 grid-cols-1 md:grid-cols-1">
+                      <div className="grid gap-4 grid-cols-1 xl:grid-cols-1">
                         <JobPlaceSelectInputField 
                           errors={errors}
                           name="religion" 

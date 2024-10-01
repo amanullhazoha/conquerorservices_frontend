@@ -2,7 +2,7 @@ import StepComplete from "../../assets/icons/StepComplete";
 import StepIncomplete from "../../assets/icons/StepIncomplete";
 import StepProcessing from "../../assets/icons/StepProcessing";
 
-const JobPlaceStep = ({ step }) => {
+const JobPlaceStep = ({ step, data }) => {
     return (
       <ul className="px-4 py-4 max-md:grid max-md:grid-cols-3 max-md:gap-2">
         <li className="relative md:h-[144px]">
@@ -36,8 +36,12 @@ const JobPlaceStep = ({ step }) => {
         <li className="relative">
             <div className="flex gap-3 max-md:items-center justify-start max-md:flex-col">
                 <div className="md:order-2">
-                    <h4 className="text-sm font-semibold text-[#27303F] max-md:w-20 max-md:text-center">License Information</h4>
-                    <p className="text-sm font-normal text-[#A0AEC0] max-md:hidden">Provide details of your license and residency permit</p>
+                    <h4 className="text-sm font-semibold text-[#27303F] max-md:w-20 max-md:text-center">
+                        {(data?.position_id === '52' || data?.position_id === 52) ? "Other Information" : "License Information"}
+                    </h4>
+                    <p className="text-sm font-normal text-[#A0AEC0] max-md:hidden">
+                        {(data?.position_id === '52' || data?.position_id === 52) ? "Provide details of your 2 Reference" : "Provide details of your license and residency permit"}
+                    </p>
                 </div>
 
                 {step === 3 ?  <StepProcessing /> : step > 3 ? <StepComplete /> : <StepIncomplete />}

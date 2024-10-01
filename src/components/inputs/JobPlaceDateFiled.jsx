@@ -8,6 +8,7 @@ const JobPlaceDateField = ({
     value,
     errors,
     touched,
+    startYear,
     handleSelect,
     required = true,
     pervDate = true,
@@ -20,7 +21,6 @@ const JobPlaceDateField = ({
     const [position, setPosition] = useState('bottom');
     const [date, setDate] = useState({ dd: "", mm: "", yyyy: "" });
 
-    // Define month names and numbers
     const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
     const monthNumbers = monthNames.map((_, i) => (i + 1).toString().padStart(2, '0'));
 
@@ -33,11 +33,19 @@ const JobPlaceDateField = ({
 
     if (pervDate) {
         for (let i = 0; i <= 100; i++) {
-            years.push(new Date().getFullYear() - i);
+            if(startYear) {
+                years.push((new Date().getFullYear() - startYear) - i);
+            } else {
+                years.push(new Date().getFullYear() - i);
+            }
         }
     } else {
         for (let i = 0; i <= 50; i++) {
-            years.push(new Date().getFullYear() + i);
+            if(startYear) {
+                years.push((new Date().getFullYear() - startYear) - i);
+            } else {
+                years.push(new Date().getFullYear() - i);
+            }
         }
     }
 

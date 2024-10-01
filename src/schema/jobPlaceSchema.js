@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+const allowedDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com'];
 
 export const jobApplyBasicSchema = Yup.object().shape({
   first_name: Yup.string().required('First name is required'),
@@ -15,7 +16,20 @@ export const jobApplyBasicSchema = Yup.object().shape({
       return !isNaN(Date.parse(value));
     }),
   nationality: Yup.string().required('Nationality is required'),
-  email: Yup.string().email('Invalid email').required('Email is required'),
+  email: Yup.string()
+    .email('Invalid email')
+    .test(
+      'is-valid-domain',
+      'Email domain must be one of gmail.com, yahoo.com, hotmail.com, outlook.com, or icloud.com',
+      (value) => {
+        if (value) {
+          const domain = value.split('@')[1];
+          return allowedDomains.includes(domain);
+        }
+        return false;
+      }
+    )
+    .required('Email is required'),
   contact_number: Yup.string()
     .required('Contact number is required')
     .when('nationality', ([nationality], schema) => {
@@ -132,13 +146,23 @@ export const jobApplyLicenseSchema = Yup.object().shape({
   //   }
   //   return schema.nullable();
   // }),
-  UAE_License_No: Yup.string()
-    .when('have_uae_licence', ([have_uae_licence], schema) => {
-      if (have_uae_licence === 'yes') {
-        return schema.required('UAE license No is required');
-      }
-      return schema.nullable();
-    }),
+  // UAE_License_No: Yup.string()
+  //   .when('have_uae_licence', ([have_uae_licence], schema) => {
+  //     if (have_uae_licence === 'yes') {
+  //       schema.length(17, 'UAE license No must be exactly 17 characters');
+
+  //       return schema.required('UAE license No is required');
+  //     }
+  //     return schema.nullable();
+  //   }),
+  UAE_License_No: Yup.string().when('have_uae_licence', {
+    is: 'yes',
+    then: (schema) => 
+      schema
+        .length(17, 'UAE license No must be exactly 17 characters')
+        .required('UAE license No is required'),
+    otherwise: (schema) => schema.nullable()
+  }),
   UAE_Resident_Visa_No: Yup.string()
     .when('have_uae_licence', ([have_uae_licence], schema) => {
       if (have_uae_licence === 'yes') {
@@ -167,4 +191,42 @@ export const jobApplyLicenseSchema = Yup.object().shape({
   //   }
   //   return schema.nullable();
   // }),
+  ref1_name: Yup.string(),
+  ref1_email: Yup.string()
+    .email('Invalid email')
+    .test(
+      'is-valid-domain',
+      'Email domain must be one of gmail.com, yahoo.com, hotmail.com, outlook.com, or icloud.com',
+      (value) => {
+        if (value) {
+          const domain = value.split('@')[1];
+          return allowedDomains.includes(domain);
+        }
+        return false;
+      }
+    ),
+  ref1_phone: Yup.string()
+    .nullable()
+    .max(19, "Number maximum 15 digits"),
+  ref1_country: Yup.string(),
+  ref1_address: Yup.string(),
+  ref2_name: Yup.string(),
+  ref2_email: Yup.string()
+  .email('Invalid email')
+  .test(
+    'is-valid-domain',
+    'Email domain must be one of gmail.com, yahoo.com, hotmail.com, outlook.com, or icloud.com',
+    (value) => {
+      if (value) {
+        const domain = value.split('@')[1];
+        return allowedDomains.includes(domain);
+      }
+      return false;
+    }
+  ),
+  ref2_phone: Yup.string()
+    .nullable()
+    .max(19, "Number maximum 15 digits"),
+  ref2_country: Yup.string(),
+  ref2_address: Yup.string(),
 });
