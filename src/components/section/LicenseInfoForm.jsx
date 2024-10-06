@@ -128,10 +128,19 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
 
       const data = await updateApplicantLicenseInfo({ data: formData, id });
 
+      console.log(data);
+
       if (data?.data) {
         resetForm();
         handleNext();
-        navigate("/career");
+
+        if (data?.data?.data?.token) {
+          navigate(
+            `/applicant-email-verification?token=${data?.data?.data?.token}`
+          );
+        } else {
+          navigate(`/`);
+        }
       }
     } catch (error) {
       console.log(error);

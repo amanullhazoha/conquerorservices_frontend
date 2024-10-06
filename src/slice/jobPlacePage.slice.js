@@ -6,7 +6,7 @@ export const jobApplicationApi = createApi({
     baseUrl: `${process.env.REACT_APP_BACKEND_BASE_URL}/api/v1`,
     credentials: "include",
   }),
-  tagTypes: ["job-application"],
+  tagTypes: ["job-application", "change-mail"],
   endpoints: (builder) => ({
     getApplicationByID: builder.query({
       query: (id) => ({
@@ -14,13 +14,44 @@ export const jobApplicationApi = createApi({
       }),
       providesTags: ["job-application"],
     }),
+    checkApplicantToken: builder.query({
+      query: (id) => ({
+        url: `/public/check-applicant-token/${id}`,
+      }),
+      providesTags: ["job-application", "change-mail"],
+    }),
+    sendVerificationOtp: builder.mutation({
+      query: (data) => ({
+        url: "/public/identity-by-email",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["change-mail"],
+    }),
+    sendVerificationOtpUsingPassport: builder.mutation({
+      query: (data) => ({
+        url: "/public/identity-by-passport",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["change-mail"],
+    }),
+    otpVerification: builder.mutation({
+      query: (data) => ({
+        url: "/public/applicant-verify-by-otp",
+        method: "POST",
+        body: data,
+      }),
+      // invalidatesTags: ["change-mail"],
+    }),
     createApplicantBasicInfo: builder.mutation({
       query: (data) => ({
         url: "/public/career/jobs/apply/basic",
         method: "POST",
         body: data,
         headers: {
-          "Content-Type": data instanceof FormData ? undefined : "application/json",
+          "Content-Type":
+            data instanceof FormData ? undefined : "application/json",
         },
       }),
       invalidatesTags: ["job-application"],
@@ -31,7 +62,8 @@ export const jobApplicationApi = createApi({
         method: "PUT",
         body: data,
         headers: {
-          "Content-Type": data instanceof FormData ? undefined : "application/json",
+          "Content-Type":
+            data instanceof FormData ? undefined : "application/json",
         },
       }),
       invalidatesTags: ["job-application"],
@@ -42,7 +74,8 @@ export const jobApplicationApi = createApi({
         method: "PUT",
         body: data,
         headers: {
-          "Content-Type": data instanceof FormData ? undefined : "application/json",
+          "Content-Type":
+            data instanceof FormData ? undefined : "application/json",
         },
       }),
       invalidatesTags: ["job-application"],
@@ -53,18 +86,23 @@ export const jobApplicationApi = createApi({
         method: "PUT",
         body: data,
         headers: {
-          "Content-Type": data instanceof FormData ? undefined : "application/json",
+          "Content-Type":
+            data instanceof FormData ? undefined : "application/json",
         },
       }),
       invalidatesTags: ["job-application"],
-    })
+    }),
   }),
 });
 
 export const {
   useGetApplicationByIDQuery,
+  useOtpVerificationMutation,
+  useCheckApplicantTokenQuery,
+  useSendVerificationOtpMutation,
   useCreateApplicantBasicInfoMutation,
   useUpdateApplicantBasicInfoMutation,
   useUpdateApplicantLicenseInfoMutation,
   useUpdateApplicantNIDorCNICinfoMutation,
+  useSendVerificationOtpUsingPassportMutation,
 } = jobApplicationApi;
