@@ -54,9 +54,7 @@ const EmailVerification = () => {
       });
 
       if (data?.data) {
-        if (data?.data?.data?.token) {
-          navigate(`/`);
-        }
+        navigate(`/applicant-verified?success=${searchParams.get("token")}`);
       }
 
       return data;
@@ -67,12 +65,9 @@ const EmailVerification = () => {
     }
   };
 
-  console.log(data, isError, error);
-
   return (
     <PublicLayout>
       <div className="flex gap-3 flex-col justify-center items-center min-h-[81.5vh]">
-        {openModal === "success" && <SuccessModal />}
         {openModal === "change-email" && (
           <ChangeEmailModal
             handleModal={setOpenModal}

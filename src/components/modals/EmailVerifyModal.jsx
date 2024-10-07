@@ -50,11 +50,11 @@ const EmailVerifyModal = ({
     const response = await handleOtpSubmit({ otp_code: otpNumber });
 
     if (response?.data?.data) {
-      handleModal("success");
+      // handleModal("success");
     }
 
-    console.log(response);
-    console.log("PIN entered:", pin.join(""));
+    // console.log(response);
+    // console.log("PIN entered:", pin.join(""));
   };
 
   useEffect(() => {

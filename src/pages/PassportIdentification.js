@@ -84,9 +84,7 @@ const PassportIdentification = () => {
       });
 
       if (data?.data) {
-        if (data?.data?.data?.token) {
-          navigate(`/`);
-        }
+        navigate(`/applicant-verified?success=${searchParams.get("token")}`);
       }
 
       return data;
