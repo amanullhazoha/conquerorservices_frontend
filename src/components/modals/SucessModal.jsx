@@ -4,9 +4,22 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { useApplicantVerifySuccessfullyQuery } from "../../slice/jobPlacePage.slice";
 
 const SuccessModal = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { data, isLoading, isError, error } =
     useApplicantVerifySuccessfullyQuery(searchParams.get("success"));
+
+  useEffect(() => {
+    let interval;
+
+    if (!isError) {
+      interval = setInterval(() => {
+        navigate("/");
+      }, 30000);
+    }
+
+    return () => clearInterval(interval);
+  }, [isError]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
