@@ -1,4 +1,4 @@
-// import { ErrorMessage } from "formik";
+import { ErrorMessage } from "formik";
 import { useState, useRef, useEffect } from "react";
 import DropdownArrow from "../../assets/icons/DropdownArrow";
 
@@ -55,11 +55,11 @@ const ModalDateField = ({
       }
     }
   } else {
-    for (let i = 0; i <= 50; i++) {
+    for (let i = 0; i <= 20; i++) {
       if (startYear) {
-        years.push(new Date().getFullYear() - startYear - i);
+        years.push(new Date().getFullYear() - startYear + i);
       } else {
-        years.push(new Date().getFullYear() - i);
+        years.push(new Date().getFullYear() + i);
       }
     }
   }
@@ -288,11 +288,11 @@ const ModalDateField = ({
         </div>
       </div>
 
-      {/* <ErrorMessage
+      <ErrorMessage
         name={name}
         component="div"
         className="text-red-500 text-xs mt-1"
-      /> */}
+      />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import EmailVerifyModal from "../components/modals/EmailVerifyModal";
 import ChangeEmailModal from "../components/modals/ChangeEmailModal";
 import IdentityVerificationModal from "../components/modals/IdentityVerificationModal";
 import {
+  useOtpVerificationMutation,
   useCheckApplicantTokenQuery,
   useSendVerificationOtpMutation,
   useSendVerificationOtpUsingPassportMutation,
@@ -20,12 +21,20 @@ const PassportIdentification = () => {
   );
   const [
     resendOtpCode,
-    { isLoading: isResendLoading, isError: isResendError },
+    { isLoading: isResendLoading, isError: isResendError, error: resendError },
   ] = useSendVerificationOtpMutation();
   const [
     checkPassport,
-    { isLoading: isPassportLoading, isError: isPassportError },
+    {
+      isLoading: isPassportLoading,
+      isError: isPassportError,
+      error: passportError,
+    },
   ] = useSendVerificationOtpUsingPassportMutation();
+  const [
+    otpVerification,
+    { isLoading: isOtpLoading, isError: isOtpError, error: otpError },
+  ] = useOtpVerificationMutation();
 
   const handleResendOtp = async ({ email }) => {
     try {
@@ -67,14 +76,36 @@ const PassportIdentification = () => {
     }
   };
 
+  const handleOtpVerification = async ({ otp_code }) => {
+    try {
+      const data = await otpVerification({
+        otp_code,
+        token: searchParams.get("token"),
+      });
+
+      if (data?.data) {
+        if (data?.data?.data?.token) {
+          navigate(`/`);
+        }
+      }
+
+      return data;
+    } catch (error) {
+      console.log(error);
+
+      return error;
+    }
+  };
+
   return (
     <PublicLayout>
       <div className="flex gap-3 flex-col justify-center items-center min-h-[81.5vh]">
-        {openModal === "email-verify" && <SuccessModal />}
+        {openModal === "success" && <SuccessModal />}
         {openModal === "identity-verification" && (
           <IdentityVerificationModal
-            handlePassport={() => console.log("")}
+            error={passportError?.data}
             handleModal={setOpenModal}
+            handlePassport={handleCheckPassport}
           />
         )}
         {openModal === "email-verify" && (
@@ -82,6 +113,7 @@ const PassportIdentification = () => {
             data={data?.data}
             error={error?.data}
             handleResendOtp={handleResendOtp}
+            handleOtpSubmit={handleOtpVerification}
             handleModal={(value) => {
               setOpenModal(value);
               navigate(`/applicant-email-verification`);
@@ -90,6 +122,7 @@ const PassportIdentification = () => {
         )}
         {openModal === "change-email" && (
           <ChangeEmailModal
+            error={resendError?.data}
             handleModal={setOpenModal}
             handleChangeEmail={handleResendOtp}
           />

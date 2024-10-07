@@ -6,6 +6,7 @@ import EmailVerifyModal from "../components/modals/EmailVerifyModal";
 import ChangeEmailModal from "../components/modals/ChangeEmailModal";
 import IdentityVerificationModal from "../components/modals/IdentityVerificationModal";
 import {
+  useOtpVerificationMutation,
   useCheckApplicantTokenQuery,
   useSendVerificationOtpMutation,
 } from "../slice/jobPlacePage.slice";
@@ -21,6 +22,10 @@ const EmailVerification = () => {
     resendOtpCode,
     { isLoading: isResendLoading, isError: isResendError },
   ] = useSendVerificationOtpMutation();
+  const [
+    otpVerification,
+    { isLoading: isOtpLoading, isError: isOtpError, error: otpError },
+  ] = useOtpVerificationMutation();
 
   const handleResendOtp = async ({ email }) => {
     try {
@@ -31,6 +36,27 @@ const EmailVerification = () => {
           navigate(
             `/applicant-email-verification?token=${data?.data?.data?.token}`
           );
+        }
+      }
+
+      return data;
+    } catch (error) {
+      console.log(error);
+
+      return error;
+    }
+  };
+
+  const handleOtpVerification = async ({ otp_code }) => {
+    try {
+      const data = await otpVerification({
+        otp_code,
+        token: searchParams.get("token"),
+      });
+
+      if (data?.data) {
+        if (data?.data?.data?.token) {
+          navigate(`/`);
         }
       }
 
@@ -58,6 +84,7 @@ const EmailVerification = () => {
           <EmailVerifyModal
             data={data?.data}
             error={error?.data}
+            handleOtpSubmit={handleOtpVerification}
             handleResendOtp={handleResendOtp}
             handleModal={(value) => {
               setOpenModal(value);

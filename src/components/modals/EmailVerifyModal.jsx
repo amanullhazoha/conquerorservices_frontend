@@ -1,16 +1,59 @@
 import { useState, useEffect } from "react";
 
-const EmailVerifyModal = ({ handleModal, handleResendOtp, error, data }) => {
+const EmailVerifyModal = ({
+  data,
+  error,
+  handleModal,
+  handleResendOtp,
+  handleOtpSubmit,
+}) => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [pin, setPin] = useState(["", "", "", "", "", ""]);
 
-  const handlePinChange = (value, index) => {
-    const newPin = [...pin];
-    newPin[index] = value;
-    setPin(newPin);
+  const handlePaste = (e) => {
+    const pastedValue = e.clipboardData.getData("text");
+
+    if (/^[0-9]{6}$/.test(pastedValue)) {
+      const newPin = pastedValue.split("");
+      setPin(newPin);
+
+      document.getElementById(`pin-${pin.length - 1}`).focus();
+    }
   };
 
-  const handleSubmit = () => {
+  const handlePinChange = (value, index) => {
+    if (/^[0-9]$/.test(value)) {
+      const newPin = [...pin];
+      newPin[index] = value;
+      setPin(newPin);
+
+      if (index < pin.length - 1) {
+        document.getElementById(`pin-${index + 1}`).focus();
+      }
+    } else if (value === "") {
+      const newPin = [...pin];
+
+      newPin[index] = "";
+
+      setPin(newPin);
+
+      if (index > 0) {
+        document.getElementById(`pin-${index - 1}`).focus();
+      }
+    }
+  };
+
+  const handleSubmit = async () => {
+    const otpString = pin.join("");
+    const otpNumber = Number(otpString);
+
+    const response = await handleOtpSubmit({ otp_code: otpNumber });
+
+    if (response?.data?.data) {
+      handleModal("success");
+    }
+
+    console.log(response);
     console.log("PIN entered:", pin.join(""));
   };
 
@@ -137,6 +180,8 @@ const EmailVerifyModal = ({ handleModal, handleResendOtp, error, data }) => {
                 type="text"
                 maxLength="1"
                 value={digit}
+                id={`pin-${index}`}
+                onPaste={index === 0 ? handlePaste : null}
                 onChange={(e) => handlePinChange(e.target.value, index)}
                 className="w-10 md:w-[62px] h-10 md:h-12 text-center border rounded-lg focus:outline-none focus:border-[#1B345E] bg-[#F9FAFB]"
               />
@@ -162,8 +207,13 @@ const EmailVerifyModal = ({ handleModal, handleResendOtp, error, data }) => {
           </div>
 
           <button
-            className="w-full bg-[#1B345E] text-white py-2 rounded-full hover:bg-[#1B345E] transition duration-200 mb-4 flex justify-center items-center gap-1.5"
             onClick={handleSubmit}
+            disabled={!pin.every((digit) => digit !== "")}
+            className={`w-full bg-[#1B345E] text-white py-2 rounded-full hover:bg-[#1B345E] transition duration-200 mb-4 flex justify-center items-center gap-1.5 ${
+              pin.every((digit) => digit !== "") || timeLeft > 0
+                ? ""
+                : "opacity-50 cursor-not-allowed"
+            }`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

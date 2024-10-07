@@ -210,3 +210,27 @@ export const jobApplyLicenseSchema = Yup.object().shape({
   ref2_country: Yup.string(),
   ref2_address: Yup.string(),
 });
+
+export const applicantIdentityByPassportSchema = Yup.object().shape({
+  passportno: Yup.string()
+    .max(10, "Passport number max 10 digits.")
+    .required("Passport number is required"),
+  date_of_expiry: Yup.string().required("Date of expiry is required"),
+});
+
+export const applicantIdentityByEmailSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email")
+    .test(
+      "is-valid-domain",
+      "Email domain must be one of gmail.com, yahoo.com, hotmail.com, outlook.com, or icloud.com",
+      (value) => {
+        if (value) {
+          const domain = value.split("@")[1];
+          return allowedDomains.includes(domain);
+        }
+        return false;
+      }
+    )
+    .required("Email is required"),
+});
