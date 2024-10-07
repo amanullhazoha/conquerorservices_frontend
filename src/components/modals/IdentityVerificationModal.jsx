@@ -9,8 +9,6 @@ const IdentityVerificationModal = ({ handleModal, error, handlePassport }) => {
     if (response?.data?.data) {
       handleModal("email-verify");
     }
-
-    console.log(response);
   };
 
   return (

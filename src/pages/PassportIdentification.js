@@ -43,8 +43,10 @@ const PassportIdentification = () => {
       if (data?.data) {
         if (data?.data?.data?.token) {
           navigate(
-            `/applicant-email-verification?token=${data?.data?.data?.token}`
+            `/applicant-identify-by-passport?token=${data?.data?.data?.token}`
           );
+
+          setOpenModal("email-verify");
         }
       }
 
@@ -63,8 +65,10 @@ const PassportIdentification = () => {
       if (data?.data) {
         if (data?.data?.data?.token) {
           navigate(
-            `/applicant-email-verification?token=${data?.data?.data?.token}`
+            `/applicant-identify-by-passport?token=${data?.data?.data?.token}`
           );
+
+          setOpenModal("email-verify");
         }
       }
 
@@ -97,8 +101,7 @@ const PassportIdentification = () => {
 
   return (
     <PublicLayout>
-      <div className="flex gap-3 flex-col justify-center items-center min-h-[81.5vh]">
-        {openModal === "success" && <SuccessModal />}
+      <div className="flex gap-3 flex-col justify-center items-center min-h-[79.5vh]">
         {openModal === "identity-verification" && (
           <IdentityVerificationModal
             error={passportError?.data}
@@ -106,7 +109,7 @@ const PassportIdentification = () => {
             handlePassport={handleCheckPassport}
           />
         )}
-        {openModal === "email-verify" && (
+        {openModal === "email-verify" && searchParams.get("token") && (
           <EmailVerifyModal
             data={data?.data}
             error={error?.data}
@@ -114,7 +117,7 @@ const PassportIdentification = () => {
             handleOtpSubmit={handleOtpVerification}
             handleModal={(value) => {
               setOpenModal(value);
-              navigate(`/applicant-email-verification`);
+              navigate(`/applicant-identify-by-passport`);
             }}
           />
         )}

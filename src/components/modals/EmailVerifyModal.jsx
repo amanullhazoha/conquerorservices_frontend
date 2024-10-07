@@ -47,14 +47,7 @@ const EmailVerifyModal = ({
     const otpString = pin.join("");
     const otpNumber = Number(otpString);
 
-    const response = await handleOtpSubmit({ otp_code: otpNumber });
-
-    if (response?.data?.data) {
-      // handleModal("success");
-    }
-
-    // console.log(response);
-    // console.log("PIN entered:", pin.join(""));
+    await handleOtpSubmit({ otp_code: otpNumber });
   };
 
   useEffect(() => {
@@ -208,9 +201,9 @@ const EmailVerifyModal = ({
 
           <button
             onClick={handleSubmit}
-            disabled={!pin.every((digit) => digit !== "")}
+            disabled={!pin.every((digit) => digit !== "") || timeLeft < 1}
             className={`w-full bg-[#1B345E] text-white py-2 rounded-full hover:bg-[#1B345E] transition duration-200 mb-4 flex justify-center items-center gap-1.5 ${
-              pin.every((digit) => digit !== "") || timeLeft > 0
+              pin.every((digit) => digit !== "") && timeLeft > 0
                 ? ""
                 : "opacity-50 cursor-not-allowed"
             }`}

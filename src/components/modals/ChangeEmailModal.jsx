@@ -1,18 +1,13 @@
-import { useState } from "react";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import { applicantIdentityByEmailSchema } from "../../schema/jobPlaceSchema";
 
 const ChangeEmailModal = ({ handleChangeEmail, handleModal, error }) => {
-  const [newEmail, setNewEmail] = useState("");
-
   const handleSubmit = async (values) => {
     const response = await handleChangeEmail(values);
 
     if (response?.data?.data) {
       handleModal("email-verify");
     }
-
-    console.log(response);
   };
 
   return (

@@ -12,8 +12,8 @@ import {
 
 const EmailVerification = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [openModal, setOpenModal] = useState("email-verify");
-  const [searchParams, setSearchParams] = useSearchParams();
   const { data, isLoading, isError, error } = useCheckApplicantTokenQuery(
     searchParams.get("token")
   );
@@ -67,7 +67,7 @@ const EmailVerification = () => {
 
   return (
     <PublicLayout>
-      <div className="flex gap-3 flex-col justify-center items-center min-h-[81.5vh]">
+      <div className="flex gap-3 flex-col justify-center items-center min-h-[79.5vh]">
         {openModal === "change-email" && (
           <ChangeEmailModal
             handleModal={setOpenModal}
@@ -86,8 +86,6 @@ const EmailVerification = () => {
             }}
           />
         )}
-
-        {/* <IdentityVerificationModal /> */}
       </div>
     </PublicLayout>
   );

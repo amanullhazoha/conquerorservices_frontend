@@ -22,7 +22,7 @@ export const jobApplicationApi = createApi({
     }),
     applicantVerifySuccessfully: builder.query({
       query: (token) => ({
-        url: `/api/v1/public/applicant-identify-successfully/${token}`,
+        url: `/public/applicant-identify-successfully/${token}`,
       }),
       providesTags: ["otp-verified"],
     }),

@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import success from "../../assets/images/successfully.png";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { useApplicantVerifySuccessfullyQuery } from "../../slice/jobPlacePage.slice";
 
 const SuccessModal = () => {
@@ -16,10 +16,14 @@ const SuccessModal = () => {
       interval = setInterval(() => {
         navigate("/");
       }, 30000);
+    } else {
+      navigate("/applicant-identify-by-passport");
     }
 
     return () => clearInterval(interval);
   }, [isError]);
+
+  if (isError) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -61,20 +65,25 @@ const SuccessModal = () => {
 
             <div className="text-left text-[#046C4E] text-sm font-normal">
               <p>
-                Name: <span className="font-medium">Abu Taher Molla</span>
+                Name: <span className="font-medium">{data?.data?.name}</span>
               </p>
               <p>
-                Submission ID: <span className="font-medium">455221</span> |
-                Passport Number: <span className="font-medium">555545555</span>
+                Submission ID:{" "}
+                <span className="font-medium">{data?.data?.submissionid}</span>{" "}
+                | Passport Number:{" "}
+                <span className="font-medium">{data?.data?.passportno}</span>
                 .Please check your email to download the PDF and track your
                 status.
               </p>
             </div>
           </div>
 
-          <button className="w-full bg-[#1B345E] text-white py-2 rounded-full hover:bg-[#1B345E] transition duration-200 mb-4 flex justify-center items-center gap-1.5">
+          <Link
+            to="/"
+            className="w-full bg-[#1B345E] text-white py-2 rounded-full hover:bg-[#1B345E] transition duration-200 mb-4 flex justify-center items-center gap-1.5"
+          >
             Back to home page
-          </button>
+          </Link>
         </div>
       </div>
     </div>

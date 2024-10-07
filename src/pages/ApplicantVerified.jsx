@@ -7,7 +7,7 @@ const ApplicantVerified = () => {
 
   return (
     <PublicLayout>
-      <div className="flex gap-3 flex-col justify-center items-center min-h-[81.5vh]">
+      <div className="flex gap-3 flex-col justify-center items-center min-h-[79.5vh]">
         {searchParams.get("success") && <SuccessModal />}
       </div>
     </PublicLayout>
