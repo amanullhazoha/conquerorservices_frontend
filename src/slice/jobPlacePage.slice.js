@@ -6,7 +6,7 @@ export const jobApplicationApi = createApi({
     baseUrl: `${process.env.REACT_APP_BACKEND_BASE_URL}/api/v1`,
     credentials: "include",
   }),
-  tagTypes: ["job-application", "change-mail"],
+  tagTypes: ["job-application", "change-mail", "otp-verified"],
   endpoints: (builder) => ({
     getApplicationByID: builder.query({
       query: (id) => ({
@@ -15,10 +15,16 @@ export const jobApplicationApi = createApi({
       providesTags: ["job-application"],
     }),
     checkApplicantToken: builder.query({
-      query: (id) => ({
-        url: `/public/check-applicant-token/${id}`,
+      query: (token) => ({
+        url: `/public/check-applicant-token/${token}`,
       }),
       providesTags: ["job-application", "change-mail"],
+    }),
+    applicantVerifySuccessfully: builder.query({
+      query: (token) => ({
+        url: `/api/v1/public/applicant-identify-successfully/${token}`,
+      }),
+      providesTags: ["otp-verified"],
     }),
     sendVerificationOtp: builder.mutation({
       query: (data) => ({
@@ -42,7 +48,7 @@ export const jobApplicationApi = createApi({
         method: "POST",
         body: data,
       }),
-      // invalidatesTags: ["change-mail"],
+      invalidatesTags: ["otp-verified"],
     }),
     createApplicantBasicInfo: builder.mutation({
       query: (data) => ({
@@ -102,6 +108,7 @@ export const {
   useSendVerificationOtpMutation,
   useCreateApplicantBasicInfoMutation,
   useUpdateApplicantBasicInfoMutation,
+  useApplicantVerifySuccessfullyQuery,
   useUpdateApplicantLicenseInfoMutation,
   useUpdateApplicantNIDorCNICinfoMutation,
   useSendVerificationOtpUsingPassportMutation,

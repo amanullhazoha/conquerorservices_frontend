@@ -1,30 +1,12 @@
 import { useState, useEffect } from "react";
 import success from "../../assets/images/successfully.png";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { useApplicantVerifySuccessfullyQuery } from "../../slice/jobPlacePage.slice";
 
 const SuccessModal = () => {
-  const [pin, setPin] = useState(["", "", "", "", "", ""]);
-  const [timeLeft, setTimeLeft] = useState(300);
-
-  const handlePinChange = (value, index) => {
-    const newPin = [...pin];
-    newPin[index] = value;
-    setPin(newPin);
-  };
-
-  const handleSubmit = () => {
-    // Handle the verification logic here
-    console.log("PIN entered:", pin.join(""));
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (timeLeft > 0) {
-        setTimeLeft((prev) => prev - 1);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timeLeft]);
+  const [searchParams] = useSearchParams();
+  const { data, isLoading, isError, error } =
+    useApplicantVerifySuccessfullyQuery(searchParams.get("success"));
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -77,10 +59,7 @@ const SuccessModal = () => {
             </div>
           </div>
 
-          <button
-            className="w-full bg-[#1B345E] text-white py-2 rounded-full hover:bg-[#1B345E] transition duration-200 mb-4 flex justify-center items-center gap-1.5"
-            onClick={handleSubmit}
-          >
+          <button className="w-full bg-[#1B345E] text-white py-2 rounded-full hover:bg-[#1B345E] transition duration-200 mb-4 flex justify-center items-center gap-1.5">
             Back to home page
           </button>
         </div>

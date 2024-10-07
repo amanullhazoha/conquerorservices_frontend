@@ -4,7 +4,6 @@ import PublicLayout from "../components/layouts/PublicLayout";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import EmailVerifyModal from "../components/modals/EmailVerifyModal";
 import ChangeEmailModal from "../components/modals/ChangeEmailModal";
-import IdentityVerificationModal from "../components/modals/IdentityVerificationModal";
 import {
   useOtpVerificationMutation,
   useCheckApplicantTokenQuery,
