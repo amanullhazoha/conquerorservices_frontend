@@ -101,7 +101,7 @@ const PassportIdentification = () => {
 
   return (
     <PublicLayout>
-      <div className="flex gap-3 flex-col justify-center items-center min-h-[79.5vh]">
+      <div className="flex gap-3 flex-col justify-center items-center min-h-[84vh]">
         {openModal === "identity-verification" && (
           <IdentityVerificationModal
             error={passportError?.data}
@@ -112,7 +112,7 @@ const PassportIdentification = () => {
         {openModal === "email-verify" && searchParams.get("token") && (
           <EmailVerifyModal
             data={data?.data}
-            error={error?.data}
+            error={error?.data || otpError?.data}
             handleResendOtp={handleResendOtp}
             handleOtpSubmit={handleOtpVerification}
             handleModal={(value) => {
@@ -121,6 +121,7 @@ const PassportIdentification = () => {
             }}
           />
         )}
+
         {openModal === "change-email" && (
           <ChangeEmailModal
             error={resendError?.data}

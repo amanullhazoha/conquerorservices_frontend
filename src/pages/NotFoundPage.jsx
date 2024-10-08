@@ -4,7 +4,7 @@ import PublicLayout from "../components/layouts/PublicLayout";
 const NotFound = () => {
   return (
     <PublicLayout>
-      <div className="flex gap-3 flex-col justify-center items-center min-h-[79.5vh]">
+      <div className="flex gap-3 flex-col justify-center items-center min-h-[84vh]">
         <h1 className="text-2xl text-black font-medium">
           404 - Page Not Found
         </h1>

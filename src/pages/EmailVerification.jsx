@@ -67,7 +67,7 @@ const EmailVerification = () => {
 
   return (
     <PublicLayout>
-      <div className="flex gap-3 flex-col justify-center items-center min-h-[79.5vh]">
+      <div className="flex gap-3 flex-col justify-center items-center min-h-[84vh]">
         {openModal === "change-email" && (
           <ChangeEmailModal
             handleModal={setOpenModal}
