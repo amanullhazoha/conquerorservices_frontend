@@ -44,8 +44,10 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
   let count = 0;
   const [initialValues, setInitialValues] = useState(INITIALVALUES);
 
-  const [updateApplicantNIDorCnicInfo, { isLoading, isError }] =
-    useUpdateApplicantNIDorCNICinfoMutation();
+  const [
+    updateApplicantNIDorCnicInfo,
+    { isLoading, isError, error: updateError },
+  ] = useUpdateApplicantNIDorCNICinfoMutation();
 
   const handleSetLocalStorageValue = useCallback(
     (values) => {
@@ -272,7 +274,16 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                           value = value.slice(0, 13) + "-" + value.slice(14);
                         }
 
-                        setFieldValue("nidorcnicnumber", value);
+                        if (
+                          data?.nationality === "Pakistan" &&
+                          value?.length <= 15
+                        ) {
+                          return setFieldValue("nidorcnicnumber", value);
+                        }
+
+                        if (data?.nationality !== "Pakistan") {
+                          setFieldValue("nidorcnicnumber", value);
+                        }
                       }}
                       value={values?.nidorcnicnumber}
                       placeholder="e.g 789-908-999"
@@ -569,6 +580,12 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
               </div>
 
               <div className="pt-5">
+                {updateError && (
+                  <div className="text-red-500 mt-1 mb-3 text-right text-base">
+                    {updateError?.data?.message}
+                  </div>
+                )}
+
                 <JobPlaceBtn handlePrevious={handlePrevious} />
               </div>
             </Form>

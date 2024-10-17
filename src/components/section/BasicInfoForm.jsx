@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import DragAndDrop from "../inputs/DragAndDrop";
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
+import { useCallback, useEffect, useState } from "react";
 import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
 import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
@@ -37,8 +37,9 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
   let count = 0;
   const [wp_code, setWpCode] = useState(null);
   const [initialValues, setInitialValues] = useState(INITIALVALUES);
-  const [updateApplicantBasicInfo] = useUpdateApplicantBasicInfoMutation();
-  const [createApplicantBasicInfo, { isLoading, isError }] =
+  const [updateApplicantBasicInfo, { error: updateError }] =
+    useUpdateApplicantBasicInfoMutation();
+  const [createApplicantBasicInfo, { isLoading, isError, error: createError }] =
     useCreateApplicantBasicInfoMutation();
 
   const handleSetLocalStorageValue = useCallback(
@@ -444,6 +445,15 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
               </div>
 
               <div className="pt-5">
+                {(updateError || createError) && (
+                  <div className="text-red-500 mt-1 mb-3 text-right text-base">
+                    {console.log(updateError)}
+                    {updateError
+                      ? updateError?.data?.message
+                      : createError?.message}
+                  </div>
+                )}
+
                 <JobPlaceBtn previous={false} handleNext={handleNext} />
               </div>
             </Form>

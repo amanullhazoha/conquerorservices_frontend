@@ -14,6 +14,7 @@ import { countryCode } from "../../assets/staticData/countryInfo";
 import { jobApplyLicenseSchema } from "../../schema/jobPlaceSchema";
 import JobPlaceNumberInputField from "../inputs/JobPlaceNumberInputField";
 import { useUpdateApplicantLicenseInfoMutation } from "../../slice/jobPlacePage.slice";
+import JobPlaceCountryInput from "../inputs/JobPlaceCountryInput";
 
 const INITIALVALUES = {
   is_agree: false,
@@ -49,8 +50,10 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
   const [ref2Code, setRef2Code] = useState(null);
   const [initialValues, setInitialValues] = useState(INITIALVALUES);
 
-  const [updateApplicantLicenseInfo, { isLoading, isError }] =
-    useUpdateApplicantLicenseInfoMutation();
+  const [
+    updateApplicantLicenseInfo,
+    { isLoading, isError, error: updateError },
+  ] = useUpdateApplicantLicenseInfoMutation();
 
   const handleSetLocalStorageValue = useCallback(
     (values) => {
@@ -127,8 +130,6 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
       });
 
       const data = await updateApplicantLicenseInfo({ data: formData, id });
-
-      console.log(data);
 
       if (data?.data) {
         resetForm();
@@ -479,13 +480,15 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
                           }
                         />
 
-                        <JobPlaceInputField
+                        <JobPlaceCountryInput
                           errors={errors}
-                          touched={touched}
-                          name="ref1_country"
                           label="Country"
                           required={false}
+                          touched={touched}
+                          name="ref1_country"
+                          value={values?.ref1_country}
                           placeholder="Enter country"
+                          handleSelect={setFieldValue}
                         />
 
                         <div className="col-span-1 md:col-span-2">
@@ -552,23 +555,25 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
                           }
                         />
 
-                        <JobPlaceInputField
+                        <JobPlaceCountryInput
                           errors={errors}
-                          touched={touched}
-                          name="ref2_country"
                           label="Country"
                           required={false}
+                          touched={touched}
+                          name="ref2_country"
+                          value={values?.ref2_country}
                           placeholder="Enter country"
+                          handleSelect={setFieldValue}
                         />
 
                         <div className="col-span-1 md:col-span-2">
                           <JobPlaceInputField
+                            label="Address"
                             errors={errors}
                             touched={touched}
                             required={false}
                             name="ref2_address"
                             placeholder="Enter address"
-                            label="Address"
                           />
                         </div>
                       </div>
@@ -622,6 +627,12 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
               />
 
               <div className="pt-5">
+                {updateError && (
+                  <div className="text-red-500 mt-1 mb-3 text-right text-base">
+                    {updateError?.data?.message}
+                  </div>
+                )}
+
                 <JobPlaceBtn submit={true} handlePrevious={handlePrevious} />
               </div>
             </Form>

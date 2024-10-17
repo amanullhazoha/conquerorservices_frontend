@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+
 const allowedDomains = [
   "gmail.com",
   "yahoo.com",
@@ -6,6 +7,38 @@ const allowedDomains = [
   "outlook.com",
   "icloud.com",
 ];
+
+Yup.addMethod(Yup.string, "checkEmailExists", function (message) {
+  return this.test("checkEmailExists", message, async function (value) {
+    if (value) {
+      const domain = value.split("@")[1];
+
+      if (allowedDomains.includes(domain)) {
+        try {
+          const response = await fetch(
+            `${process.env.REACT_APP_BACKEND_BASE_URL}/api/v1/public/career/jobs/mail-check?email=${value}`
+          );
+
+          if (response.status === 200) return true;
+
+          const data = await response?.json();
+
+          return this.createError({
+            path: this.path,
+            message: data?.message,
+          });
+        } catch (error) {
+          return this.createError({
+            path: this.path,
+            message: "Email Can't check server issue.",
+          });
+        }
+      }
+    }
+
+    return true;
+  });
+});
 
 export const jobApplyBasicSchema = Yup.object().shape({
   first_name: Yup.string().required("First name is required"),
@@ -24,12 +57,15 @@ export const jobApplyBasicSchema = Yup.object().shape({
   nationality: Yup.string().required("Nationality is required"),
   email: Yup.string()
     .email("Invalid email")
+    .checkEmailExists("Email already exists")
     .test(
       "is-valid-domain",
       "Email domain must be one of gmail.com, yahoo.com, hotmail.com, outlook.com, or icloud.com",
-      (value) => {
+
+      async (value) => {
         if (value) {
           const domain = value.split("@")[1];
+
           return allowedDomains.includes(domain);
         }
         return false;
@@ -200,12 +236,40 @@ export const jobApplyLicenseSchema = Yup.object().shape({
   //   return schema.nullable();
   // }),
   ref1_name: Yup.string(),
-  ref1_email: Yup.string().nullable().email("Invalid email"),
+  ref1_email: Yup.string()
+    .nullable()
+    .test(
+      "is-valid-domain",
+      "Email domain must be one of gmail.com, yahoo.com, hotmail.com, outlook.com, or icloud.com",
+      (value) => {
+        if (value) {
+          const domain = value.split("@")[1];
+          return allowedDomains.includes(domain);
+        } else {
+          return true;
+        }
+      }
+    )
+    .email("Invalid email"),
   ref1_phone: Yup.string().nullable().max(19, "Number maximum 15 digits"),
   ref1_country: Yup.string(),
   ref1_address: Yup.string(),
   ref2_name: Yup.string(),
-  ref2_email: Yup.string().nullable().email("Invalid email"),
+  ref2_email: Yup.string()
+    .nullable()
+    .test(
+      "is-valid-domain",
+      "Email domain must be one of gmail.com, yahoo.com, hotmail.com, outlook.com, or icloud.com",
+      (value) => {
+        if (value) {
+          const domain = value.split("@")[1];
+          return allowedDomains.includes(domain);
+        } else {
+          return true;
+        }
+      }
+    )
+    .email("Invalid email"),
   ref2_phone: Yup.string().nullable().max(19, "Number maximum 15 digits"),
   ref2_country: Yup.string(),
   ref2_address: Yup.string(),
