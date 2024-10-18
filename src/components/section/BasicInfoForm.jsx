@@ -160,7 +160,7 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
       <Formik
         enableReinitialize={true}
         initialValues={initialValues}
-        validationSchema={jobApplyBasicSchema}
+        validationSchema={jobApplyBasicSchema(id)}
         onSubmit={handleSubmit}
       >
         {({ handleSubmit, values, touched, errors, setFieldValue }) => {

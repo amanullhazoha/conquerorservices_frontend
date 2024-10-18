@@ -42,6 +42,14 @@ export const jobApplicationApi = createApi({
       }),
       invalidatesTags: ["change-mail"],
     }),
+    changeApplicantEmail: builder.mutation({
+      query: (data) => ({
+        url: "/public/change-email",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["change-mail"],
+    }),
     otpVerification: builder.mutation({
       query: (data) => ({
         url: "/public/applicant-verify-by-otp",
@@ -106,6 +114,7 @@ export const {
   useOtpVerificationMutation,
   useCheckApplicantTokenQuery,
   useSendVerificationOtpMutation,
+  useChangeApplicantEmailMutation,
   useCreateApplicantBasicInfoMutation,
   useUpdateApplicantBasicInfoMutation,
   useApplicantVerifySuccessfullyQuery,

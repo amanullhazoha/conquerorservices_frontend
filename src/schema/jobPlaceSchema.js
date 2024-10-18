@@ -8,7 +8,7 @@ const allowedDomains = [
   "icloud.com",
 ];
 
-Yup.addMethod(Yup.string, "checkEmailExists", function (message) {
+Yup.addMethod(Yup.string, "checkEmailExists", function (message, id) {
   return this.test("checkEmailExists", message, async function (value) {
     if (value) {
       const domain = value.split("@")[1];
@@ -16,7 +16,7 @@ Yup.addMethod(Yup.string, "checkEmailExists", function (message) {
       if (allowedDomains.includes(domain)) {
         try {
           const response = await fetch(
-            `${process.env.REACT_APP_BACKEND_BASE_URL}/api/v1/public/career/jobs/mail-check?email=${value}`
+            `${process.env.REACT_APP_BACKEND_BASE_URL}/api/v1/public/career/jobs/mail-check?email=${value}&id=${id}`
           );
 
           if (response.status === 200) return true;
@@ -40,71 +40,72 @@ Yup.addMethod(Yup.string, "checkEmailExists", function (message) {
   });
 });
 
-export const jobApplyBasicSchema = Yup.object().shape({
-  first_name: Yup.string().required("First name is required"),
-  last_name: Yup.string().required("Last name is required"),
-  mother_name: Yup.string().required("Mother name is required"),
-  gender: Yup.string().required("Gender is required"),
-  date_of_birth: Yup.string()
-    .required("Date of birth is required")
-    .matches(
-      /^\d{4}-\d{2}-\d{2}$/,
-      "Date of birth must be in the format YYYY-MM-DD"
-    )
-    .test("isValidDate", "Date of birth must be a valid date", (value) => {
-      return !isNaN(Date.parse(value));
-    }),
-  nationality: Yup.string().required("Nationality is required"),
-  email: Yup.string()
-    .email("Invalid email")
-    .checkEmailExists("Email already exists")
-    .test(
-      "is-valid-domain",
-      "Email domain must be one of gmail.com, yahoo.com, hotmail.com, outlook.com, or icloud.com",
+export const jobApplyBasicSchema = (id) =>
+  Yup.object().shape({
+    first_name: Yup.string().required("First name is required"),
+    last_name: Yup.string().required("Last name is required"),
+    mother_name: Yup.string().required("Mother name is required"),
+    gender: Yup.string().required("Gender is required"),
+    date_of_birth: Yup.string()
+      .required("Date of birth is required")
+      .matches(
+        /^\d{4}-\d{2}-\d{2}$/,
+        "Date of birth must be in the format YYYY-MM-DD"
+      )
+      .test("isValidDate", "Date of birth must be a valid date", (value) => {
+        return !isNaN(Date.parse(value));
+      }),
+    nationality: Yup.string().required("Nationality is required"),
+    email: Yup.string()
+      .email("Invalid email")
+      .checkEmailExists("Email already exists", id)
+      .test(
+        "is-valid-domain",
+        "Email domain must be one of gmail.com, yahoo.com, hotmail.com, outlook.com, or icloud.com",
 
-      async (value) => {
-        if (value) {
-          const domain = value.split("@")[1];
+        async (value) => {
+          if (value) {
+            const domain = value.split("@")[1];
 
-          return allowedDomains.includes(domain);
+            return allowedDomains.includes(domain);
+          }
+          return false;
         }
-        return false;
+      )
+      .required("Email is required"),
+    contact_number: Yup.string()
+      .required("Contact number is required")
+      .when("nationality", ([nationality], schema) => {
+        switch (nationality) {
+          case "Nepal":
+            return schema.length(14, "Contact number must be 10 digits");
+          case "Pakistan":
+            return schema.length(13, "Contact number must be 10 digits");
+          case "India":
+            return schema.length(13, "Contact number must be 10 digits");
+          case "Philippine":
+            return schema.length(13, "Contact number must be 10 digits");
+          case "Bangladesh":
+            return schema.length(14, "Contact number must be 10 digits");
+          case "Sri Lanka":
+            return schema.length(12, "Contact number must be 9 digits");
+          default:
+            return schema;
+        }
+      }),
+    whatsapp_number: Yup.string()
+      .min(9, "Number minimum 8 digits")
+      .max(19, "Number maximum 15 digits")
+      .required("Whatsapp number is required"),
+    position_id: Yup.string().required("Position ID is required"),
+    hiring_position: Yup.string().when("position_id", (position_id, schema) => {
+      if (position_id === "52" || position_id === 52) {
+        return schema.required("Hiring position is required");
       }
-    )
-    .required("Email is required"),
-  contact_number: Yup.string()
-    .required("Contact number is required")
-    .when("nationality", ([nationality], schema) => {
-      switch (nationality) {
-        case "Nepal":
-          return schema.length(14, "Contact number must be 10 digits");
-        case "Pakistan":
-          return schema.length(13, "Contact number must be 10 digits");
-        case "India":
-          return schema.length(13, "Contact number must be 10 digits");
-        case "Philippine":
-          return schema.length(13, "Contact number must be 10 digits");
-        case "Bangladesh":
-          return schema.length(14, "Contact number must be 10 digits");
-        case "Sri Lanka":
-          return schema.length(12, "Contact number must be 9 digits");
-        default:
-          return schema;
-      }
+      return schema.nullable();
     }),
-  whatsapp_number: Yup.string()
-    .min(9, "Number minimum 8 digits")
-    .max(19, "Number maximum 15 digits")
-    .required("Whatsapp number is required"),
-  position_id: Yup.string().required("Position ID is required"),
-  hiring_position: Yup.string().when("position_id", (position_id, schema) => {
-    if (position_id === "52" || position_id === 52) {
-      return schema.required("Hiring position is required");
-    }
-    return schema.nullable();
-  }),
-  applicant_image: Yup.mixed().required("Applicant image is required"),
-});
+    applicant_image: Yup.mixed().required("Applicant image is required"),
+  });
 
 export const jobApplyNidOrCnicSchema = Yup.object().shape({
   zip: Yup.string().required("Zip is required"),

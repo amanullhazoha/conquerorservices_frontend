@@ -9,6 +9,7 @@ import {
   useOtpVerificationMutation,
   useCheckApplicantTokenQuery,
   useSendVerificationOtpMutation,
+  useChangeApplicantEmailMutation,
   useSendVerificationOtpUsingPassportMutation,
 } from "../slice/jobPlacePage.slice";
 
@@ -35,10 +36,37 @@ const PassportIdentification = () => {
     otpVerification,
     { isLoading: isOtpLoading, isError: isOtpError, error: otpError },
   ] = useOtpVerificationMutation();
+  const [changeApplicantEmail, { error: changeEmailError }] =
+    useChangeApplicantEmailMutation();
 
   const handleResendOtp = async ({ email }) => {
     try {
       const data = await resendOtpCode({ email });
+
+      if (data?.data) {
+        if (data?.data?.data?.token) {
+          navigate(
+            `/applicant-identify-by-passport?token=${data?.data?.data?.token}`
+          );
+
+          setOpenModal("email-verify");
+        }
+      }
+
+      return data;
+    } catch (error) {
+      console.log(error);
+
+      return error;
+    }
+  };
+
+  const handleChangeEmail = async ({ email }) => {
+    try {
+      const data = await changeApplicantEmail({
+        email,
+        token: searchParams.get("token"),
+      });
 
       if (data?.data) {
         if (data?.data?.data?.token) {
@@ -117,16 +145,16 @@ const PassportIdentification = () => {
             handleOtpSubmit={handleOtpVerification}
             handleModal={(value) => {
               setOpenModal(value);
-              navigate(`/applicant-identify-by-passport`);
+              // navigate(`/applicant-identify-by-passport`);
             }}
           />
         )}
 
         {openModal === "change-email" && (
           <ChangeEmailModal
-            error={resendError?.data}
             handleModal={setOpenModal}
-            handleChangeEmail={handleResendOtp}
+            error={changeEmailError?.data}
+            handleChangeEmail={handleChangeEmail}
           />
         )}
       </div>

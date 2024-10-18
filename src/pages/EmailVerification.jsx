@@ -1,5 +1,4 @@
 import { useState } from "react";
-import SuccessModal from "../components/modals/SucessModal";
 import PublicLayout from "../components/layouts/PublicLayout";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import EmailVerifyModal from "../components/modals/EmailVerifyModal";
@@ -8,6 +7,7 @@ import {
   useOtpVerificationMutation,
   useCheckApplicantTokenQuery,
   useSendVerificationOtpMutation,
+  useChangeApplicantEmailMutation,
 } from "../slice/jobPlacePage.slice";
 
 const EmailVerification = () => {
@@ -25,6 +25,33 @@ const EmailVerification = () => {
     otpVerification,
     { isLoading: isOtpLoading, isError: isOtpError, error: otpError },
   ] = useOtpVerificationMutation();
+  const [changeApplicantEmail, { error: changeEmailError }] =
+    useChangeApplicantEmailMutation();
+
+  const handleChangeEmail = async ({ email }) => {
+    try {
+      const data = await changeApplicantEmail({
+        email,
+        token: searchParams.get("token"),
+      });
+
+      if (data?.data) {
+        if (data?.data?.data?.token) {
+          navigate(
+            `/applicant-identify-by-passport?token=${data?.data?.data?.token}`
+          );
+
+          setOpenModal("email-verify");
+        }
+      }
+
+      return data;
+    } catch (error) {
+      console.log(error);
+
+      return error;
+    }
+  };
 
   const handleResendOtp = async ({ email }) => {
     try {
@@ -71,6 +98,7 @@ const EmailVerification = () => {
         {openModal === "change-email" && (
           <ChangeEmailModal
             handleModal={setOpenModal}
+            error={changeEmailError?.data}
             handleChangeEmail={handleResendOtp}
           />
         )}
@@ -82,7 +110,7 @@ const EmailVerification = () => {
             handleResendOtp={handleResendOtp}
             handleModal={(value) => {
               setOpenModal(value);
-              navigate(`/applicant-email-verification`);
+              // navigate(`/applicant-email-verification`);
             }}
           />
         )}

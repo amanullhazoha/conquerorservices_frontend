@@ -140,7 +140,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
             `/applicant-email-verification?token=${data?.data?.data?.token}`
           );
         } else {
-          navigate(`/`);
+          navigate(`/applicant-identify-by-passport`);
         }
       }
     } catch (error) {
