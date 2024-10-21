@@ -86,9 +86,9 @@ const PassportIdentification = () => {
     }
   };
 
-  const handleCheckPassport = async ({ passportno, date_of_expiry }) => {
+  const handleCheckPassport = async ({ passportno, date_of_birth }) => {
     try {
-      const data = await checkPassport({ passportno, date_of_expiry });
+      const data = await checkPassport({ passportno, date_of_birth });
 
       if (data?.data) {
         if (data?.data?.data?.token) {
