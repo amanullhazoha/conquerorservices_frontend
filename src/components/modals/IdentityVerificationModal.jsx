@@ -68,7 +68,7 @@ const IdentityVerificationModal = ({ handleModal, error, handlePassport }) => {
           <Formik
             onSubmit={handleSubmit}
             validationSchema={applicantIdentityByPassportSchema}
-            initialValues={{ passportno: "", date_of_expiry: "" }}
+            initialValues={{ passportno: "", date_of_birth: "" }}
           >
             {({ handleSubmit, values, errors, setFieldValue, touched }) => (
               <Form onSubmit={handleSubmit}>
@@ -100,16 +100,15 @@ const IdentityVerificationModal = ({ handleModal, error, handlePassport }) => {
 
                 <div className="mb-5">
                   <ModalDateField
-                    startYear={2}
-                    pervDate={false}
+                    startYear={19}
                     errors={errors}
                     required={false}
                     touched={touched}
-                    name="date_of_expiry"
-                    label="Date of Expiry"
-                    value={values?.date_of_expiry}
+                    name="date_of_birth"
+                    label="Date of Birth "
+                    value={values?.date_of_birth}
                     handleSelect={(value) =>
-                      setFieldValue("date_of_expiry", value)
+                      setFieldValue("date_of_birth", value)
                     }
                   />
                 </div>

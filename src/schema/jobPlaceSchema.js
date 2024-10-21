@@ -57,8 +57,11 @@ export const jobApplyBasicSchema = (id) =>
       }),
     nationality: Yup.string().required("Nationality is required"),
     email: Yup.string()
-      .email("Invalid email")
-      .checkEmailExists("Email already exists", id)
+      .email("This is not a valid email")
+      .checkEmailExists(
+        "This email already exist. Please verify your email",
+        id
+      )
       .test(
         "is-valid-domain",
         "Email domain must be one of gmail.com, yahoo.com, hotmail.com, outlook.com, or icloud.com",
@@ -251,7 +254,7 @@ export const jobApplyLicenseSchema = Yup.object().shape({
         }
       }
     )
-    .email("Invalid email"),
+    .email("This is not a valid email"),
   ref1_phone: Yup.string().nullable().max(19, "Number maximum 15 digits"),
   ref1_country: Yup.string(),
   ref1_address: Yup.string(),
@@ -270,7 +273,7 @@ export const jobApplyLicenseSchema = Yup.object().shape({
         }
       }
     )
-    .email("Invalid email"),
+    .email("This is not a valid email"),
   ref2_phone: Yup.string().nullable().max(19, "Number maximum 15 digits"),
   ref2_country: Yup.string(),
   ref2_address: Yup.string(),
@@ -280,7 +283,7 @@ export const applicantIdentityByPassportSchema = Yup.object().shape({
   passportno: Yup.string()
     .max(10, "Passport number max 10 digits.")
     .required("Passport number is required"),
-  date_of_expiry: Yup.string().required("Date of expiry is required"),
+  date_of_birth: Yup.string().required("Date of birth is required"),
 });
 
 export const applicantIdentityByEmailSchema = Yup.object().shape({
