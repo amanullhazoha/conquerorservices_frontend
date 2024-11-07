@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import { parse, differenceInYears } from "date-fns";
 
 const allowedDomains = [
   "gmail.com",
@@ -54,6 +55,11 @@ export const jobApplyBasicSchema = (id) =>
       )
       .test("isValidDate", "Date of birth must be a valid date", (value) => {
         return !isNaN(Date.parse(value));
+      })
+      .test("ageLessThan49", "Age must be less than or equal 49", (value) => {
+        const dateOfBirth = parse(value, "yyyy-MM-dd", new Date());
+
+        return differenceInYears(new Date(), dateOfBirth) <= 49;
       }),
     nationality: Yup.string().required("Nationality is required"),
     email: Yup.string()
