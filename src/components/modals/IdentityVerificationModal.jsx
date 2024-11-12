@@ -100,7 +100,7 @@ const IdentityVerificationModal = ({ handleModal, error, handlePassport }) => {
 
                 <div className="mb-5">
                   <ModalDateField
-                    startYear={19}
+                    startYear={18}
                     errors={errors}
                     required={false}
                     touched={touched}

@@ -266,7 +266,7 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
                 <div className="col-span-2">
                   <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                     <JobPlaceDateField
-                      startYear={19}
+                      startYear={18}
                       errors={errors}
                       touched={touched}
                       name="date_of_birth"

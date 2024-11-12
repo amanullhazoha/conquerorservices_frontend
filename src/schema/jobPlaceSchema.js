@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { parse, differenceInYears } from "date-fns";
+import { parse, differenceInYears, differenceInMonths } from "date-fns";
 
 const allowedDomains = [
   "gmail.com",
@@ -56,6 +56,29 @@ export const jobApplyBasicSchema = (id) =>
       .test("isValidDate", "Date of birth must be a valid date", (value) => {
         return !isNaN(Date.parse(value));
       })
+      .test(
+        "ageGreaterThan18y1m",
+        "Age must be at least 18 years and 1 month",
+        (value) => {
+          const dateOfBirth = parse(value, "yyyy-MM-dd", new Date());
+          const currentDate = new Date();
+
+          // Check if the age is at least 18 years
+          const yearsDifference = differenceInYears(currentDate, dateOfBirth);
+          if (yearsDifference < 18) return false;
+
+          // If exactly 18 years, check if at least 1 month has passed
+          if (yearsDifference === 18) {
+            const monthsDifference = differenceInMonths(
+              currentDate,
+              dateOfBirth
+            );
+            return monthsDifference >= 217; // 18 * 12 + 1 month = 217
+          }
+
+          return true;
+        }
+      )
       .test("ageLessThan49", "Age must be less than or equal 49", (value) => {
         const dateOfBirth = parse(value, "yyyy-MM-dd", new Date());
 
