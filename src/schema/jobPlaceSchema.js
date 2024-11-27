@@ -122,7 +122,9 @@ export const jobApplyBasicSchema = (id) =>
           case "Sri Lanka":
             return schema.length(12, "Contact number must be 9 digits");
           default:
-            return schema;
+            return schema
+              .min(9, "Number minimum 8 digits")
+              .max(19, "Number maximum 15 digits");
         }
       }),
     whatsapp_number: Yup.string()
@@ -136,7 +138,21 @@ export const jobApplyBasicSchema = (id) =>
       }
       return schema.nullable();
     }),
-    applicant_image: Yup.mixed().required("Applicant image is required"),
+    applicant_image: Yup.mixed()
+      .required("Applicant image is required")
+      .test(
+        "fileType",
+        "Only images of type jpg, png, or webp are allowed",
+        (value) => {
+          if (!value) return false;
+
+          if (typeof value === "string") return true;
+
+          const supportedFormats = ["image/jpeg", "image/png", "image/webp"];
+
+          return value && supportedFormats.includes(value?.[0]?.type);
+        }
+      ),
   });
 
 export const jobApplyNidOrCnicSchema = Yup.object().shape({
@@ -174,11 +190,67 @@ export const jobApplyNidOrCnicSchema = Yup.object().shape({
   }),
   date_of_expiry: Yup.string().required("Date of expiry is required"),
   nidorcnicnumber: Yup.string().required("NID/CNIC number is required"),
-  applicant_resume: Yup.mixed(),
   reference: Yup.string(),
-  applicant_passport: Yup.mixed().required("Applicant passport is required"),
-  nid_cnic_back: Yup.mixed().required("NID/CNIC back is required"),
-  nid_cnic_front: Yup.mixed().required("NID/CNIC front is required"),
+  applicant_resume: Yup.mixed()
+    .nullable()
+    .test(
+      "fileType",
+      "Only images of type jpg, png, or webp are allowed",
+      (value) => {
+        if (!value) return true;
+
+        if (typeof value === "string") return true;
+
+        const supportedFormats = ["image/jpeg", "image/png", "image/webp"];
+
+        return value && supportedFormats.includes(value?.[0]?.type);
+      }
+    ),
+  applicant_passport: Yup.mixed()
+    .required("Applicant passport is required")
+    .test(
+      "fileType",
+      "Only images of type jpg, png, or webp are allowed",
+      (value) => {
+        if (!value) return false;
+
+        if (typeof value === "string") return true;
+
+        const supportedFormats = ["image/jpeg", "image/png", "image/webp"];
+
+        return value && supportedFormats.includes(value?.[0]?.type);
+      }
+    ),
+  nid_cnic_back: Yup.mixed()
+    .required("NID/CNIC back is required")
+    .test(
+      "fileType",
+      "Only images of type jpg, png, or webp are allowed",
+      (value) => {
+        if (!value) return false;
+
+        if (typeof value === "string") return true;
+
+        const supportedFormats = ["image/jpeg", "image/png", "image/webp"];
+
+        return value && supportedFormats.includes(value?.[0]?.type);
+      }
+    ),
+  nid_cnic_front: Yup.mixed()
+    .required("NID/CNIC front is required")
+    .test(
+      "fileType",
+      "Only images of type jpg, png, or webp are allowed",
+      (value) => {
+        if (!value) return false;
+
+        if (typeof value === "string") return true;
+
+        const supportedFormats = ["image/jpeg", "image/png", "image/webp"];
+
+        return value && supportedFormats.includes(value?.[0]?.type);
+      }
+    ),
 });
 
 export const jobApplyLicenseSchema = Yup.object().shape({
@@ -186,14 +258,42 @@ export const jobApplyLicenseSchema = Yup.object().shape({
     .required("Agreement is required")
     .isTrue("You must agree to the terms"),
   submissionid: Yup.string(),
-  UAE_DL_Front: Yup.string(),
+  UAE_DL_Front: Yup.mixed()
+    .nullable()
+    .test(
+      "fileType",
+      "Only images of type jpg, png, or webp are allowed",
+      (value) => {
+        if (!value) return true;
+
+        if (typeof value === "string") return true;
+
+        const supportedFormats = ["image/jpeg", "image/png", "image/webp"];
+
+        return value && supportedFormats.includes(value?.[0]?.type);
+      }
+    ),
   // .when('position_id', ([position_id], schema) => {
   //   if (position_id === '50' || position_id === 50) {
   //     return schema.required('UAE license front is required');
   //   }
   //   return schema.nullable();
   // }),
-  UAE_DL_Back: Yup.string(),
+  UAE_DL_Back: Yup.mixed()
+    .nullable()
+    .test(
+      "fileType",
+      "Only images of type jpg, png, or webp are allowed",
+      (value) => {
+        if (!value) return true;
+
+        if (typeof value === "string") return true;
+
+        const supportedFormats = ["image/jpeg", "image/png", "image/webp"];
+
+        return value && supportedFormats.includes(value?.[0]?.type);
+      }
+    ),
   // .when('position_id', ([position_id], schema) => {
   //   if (position_id === '50' || position_id === 50) {
   //     return schema.required('UAE license back is required');
@@ -254,14 +354,42 @@ export const jobApplyLicenseSchema = Yup.object().shape({
   //   }
   //   return schema.nullable();
   // }),
-  appli_dri_lisence_frontpart: Yup.string(),
+  appli_dri_lisence_frontpart: Yup.mixed()
+    .nullable()
+    .test(
+      "fileType",
+      "Only images of type jpg, png, or webp are allowed",
+      (value) => {
+        if (!value) return true;
+
+        if (typeof value === "string") return true;
+
+        const supportedFormats = ["image/jpeg", "image/png", "image/webp"];
+
+        return value && supportedFormats.includes(value?.[0]?.type);
+      }
+    ),
   // .when('position_id', ([position_id], schema) => {
   //   if (position_id === '50' || position_id === 50) {
   //     return schema.required('License front part is required');
   //   }
   //   return schema.nullable();
   // }),
-  appli_dri_lisence_backpart: Yup.string(),
+  appli_dri_lisence_backpart: Yup.mixed()
+    .nullable()
+    .test(
+      "fileType",
+      "Only images of type jpg, png, or webp are allowed",
+      (value) => {
+        if (!value) return true;
+
+        if (typeof value === "string") return true;
+
+        const supportedFormats = ["image/jpeg", "image/png", "image/webp"];
+
+        return value && supportedFormats.includes(value?.[0]?.type);
+      }
+    ),
   // .when('position_id', ([position_id], schema) => {
   //   if (position_id === '50' || position_id === 50) {
   //     return schema.required('License back part is required');

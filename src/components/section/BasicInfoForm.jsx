@@ -1,4 +1,4 @@
-import { ErrorMessage, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import DragAndDrop from "../inputs/DragAndDrop";
 import JobPlaceBtn from "../buttons/JobPlaceBtn";
 import { useCallback, useEffect, useState } from "react";
@@ -10,8 +10,10 @@ import JobPlaceNumberInputField from "../inputs/JobPlaceNumberInputField";
 import JobPlaceSelectInputField from "../inputs/JobPlaceSelectInputField";
 import {
   countries,
+  allCountry,
   countryCode,
   hiringPositions,
+  hiringPositionSuggest,
 } from "../../assets/staticData/countryInfo";
 import {
   useCreateApplicantBasicInfoMutation,
@@ -291,10 +293,14 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
                       errors={errors}
                       touched={touched}
                       keyValue="name"
+                      // items={allCountry}
                       items={countries}
                       name="nationality"
+                      // searchField={true}
                       label="Nationality"
                       value={values.nationality}
+                      // suggestedItems={countries}
+                      suggestionPlaceholder="Search for a nationality"
                       placeholder="Select Nationality"
                       handleSelect={(item) =>
                         setFieldValue("nationality", item.name)
@@ -405,10 +411,13 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
                         errors={errors}
                         touched={touched}
                         keyValue="name"
+                        searchField={true}
                         name="hiring_position"
                         label="Hiring position"
                         placeholder="Select position"
                         items={hiringPositions}
+                        suggestedItems={hiringPositionSuggest}
+                        suggestionPlaceholder="Search more positions"
                         handleSelect={(item) =>
                           setFieldValue("hiring_position", item.name)
                         }
