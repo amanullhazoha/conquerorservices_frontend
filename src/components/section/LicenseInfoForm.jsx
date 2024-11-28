@@ -60,7 +60,7 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
       count = count + 1;
 
       if (count > 2) {
-        localStorage.setItem("applicantLicenseInfo", JSON.stringify(values));
+        sessionStorage.setItem("applicantLicenseInfo", JSON.stringify(values));
       }
     },
     [initialValues]
@@ -149,9 +149,9 @@ const LicenseInfoForm = ({ id, data, handleNext, handlePrevious }) => {
   };
 
   useEffect(() => {
-    localStorage.removeItem("applicantNidCnicInfo");
+    sessionStorage.removeItem("applicantNidCnicInfo");
 
-    const storedValues = localStorage.getItem("applicantLicenseInfo");
+    const storedValues = sessionStorage.getItem("applicantLicenseInfo");
 
     if (storedValues) {
       const parseValues = JSON.parse(storedValues);

@@ -54,7 +54,7 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
       count = count + 1;
 
       if (count > 3) {
-        localStorage.setItem("applicantNidCnicInfo", JSON.stringify(values));
+        sessionStorage.setItem("applicantNidCnicInfo", JSON.stringify(values));
       }
     },
     [initialValues]
@@ -113,9 +113,9 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
   };
 
   useEffect(() => {
-    localStorage.removeItem("applicantBasicInfo");
+    sessionStorage.removeItem("applicantBasicInfo");
 
-    const storedValues = localStorage.getItem("applicantNidCnicInfo");
+    const storedValues = sessionStorage.getItem("applicantNidCnicInfo");
 
     if (storedValues) {
       const parseValues = JSON.parse(storedValues);

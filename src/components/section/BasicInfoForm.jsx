@@ -49,7 +49,7 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
       count = count + 1;
 
       if (count > 4) {
-        localStorage.setItem("applicantBasicInfo", JSON.stringify(values));
+        sessionStorage.setItem("applicantBasicInfo", JSON.stringify(values));
       }
     },
     [initialValues]
@@ -79,7 +79,7 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
 
         if (data?.data) {
           resetForm();
-          localStorage.removeItem("applicantBasicInfo");
+          sessionStorage.removeItem("applicantBasicInfo");
           handleNext(data?.data?.id);
         }
       } else {
@@ -100,7 +100,7 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
 
         if (data?.data) {
           resetForm();
-          localStorage.removeItem("applicantBasicInfo");
+          sessionStorage.removeItem("applicantBasicInfo");
           handleNext(data?.data?.id);
         }
       }
@@ -110,13 +110,13 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
   };
 
   useEffect(() => {
-    localStorage.removeItem("applicantLicenseInfo");
+    sessionStorage.removeItem("applicantLicenseInfo");
 
     if (data?.position_id) {
       setPosition(data?.position_id);
     }
 
-    const storedValues = localStorage.getItem("applicantBasicInfo");
+    const storedValues = sessionStorage.getItem("applicantBasicInfo");
 
     if (storedValues) {
       const parseValues = JSON.parse(storedValues);
