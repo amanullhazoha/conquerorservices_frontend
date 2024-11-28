@@ -456,10 +456,9 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
               <div className="pt-5">
                 {(updateError || createError) && (
                   <div className="text-red-500 mt-1 mb-3 text-right text-base">
-                    {console.log(updateError)}
                     {updateError
                       ? updateError?.data?.message
-                      : createError?.message}
+                      : createError?.data?.message}
                   </div>
                 )}
 

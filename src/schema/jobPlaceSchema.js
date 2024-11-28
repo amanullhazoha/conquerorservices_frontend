@@ -31,9 +31,37 @@ Yup.addMethod(Yup.string, "checkEmailExists", function (message, id) {
         } catch (error) {
           return this.createError({
             path: this.path,
-            message: "Email Can't check server issue.",
+            message: "Email can't check server issue.",
           });
         }
+      }
+    }
+
+    return true;
+  });
+});
+
+Yup.addMethod(Yup.string, "checkRefCodeExist", function (message, id) {
+  return this.test("checkRefCodeExist", message, async function (value) {
+    if (value) {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_BASE_URL}/api/v1/public/user/refer-code?code=${value}`
+        );
+
+        if (response.status === 200) return true;
+
+        const data = await response?.json();
+
+        return this.createError({
+          path: this.path,
+          message: data?.message,
+        });
+      } catch (error) {
+        return this.createError({
+          path: this.path,
+          message: "Refer code can't check server issue.",
+        });
       }
     }
 
@@ -190,7 +218,7 @@ export const jobApplyNidOrCnicSchema = Yup.object().shape({
   }),
   date_of_expiry: Yup.string().required("Date of expiry is required"),
   nidorcnicnumber: Yup.string().required("NID/CNIC number is required"),
-  reference: Yup.string(),
+  reference: Yup.string().checkRefCodeExist("This refer code is not exist"),
   applicant_resume: Yup.mixed()
     .nullable()
     .test(
