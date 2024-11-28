@@ -6,8 +6,8 @@ import JobPlaceInputNID from "../inputs/JobPlaceInputNID";
 import JobPlaceDateField from "../inputs/JobPlaceDateFiled";
 import JobPlaceInputField from "../inputs/JobPlaceInputField";
 import JobPlaceRadioInput from "../inputs/JobPlaceRadioInput";
-import { religion } from "../../assets/staticData/countryInfo";
 import { jobApplyNidOrCnicSchema } from "../../schema/jobPlaceSchema";
+import { religion, countries } from "../../assets/staticData/countryInfo";
 import JobPlaceSelectInputField from "../inputs/JobPlaceSelectInputField";
 import { useUpdateApplicantNIDorCNICinfoMutation } from "../../slice/jobPlacePage.slice";
 import {
@@ -434,31 +434,58 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
                       />
                     </div>
 
-                    <JobPlaceSelectInputField
-                      errors={errors}
-                      name="province"
-                      keyValue="name"
-                      touched={touched}
-                      value={values.province}
-                      placeholder="Select"
-                      label="State / Province"
-                      items={getStatesByCountry(data?.nationality)}
-                      handleSelect={(item) =>
-                        setFieldValue("province", item.name)
-                      }
-                    />
+                    {countries.some(
+                      (country) =>
+                        country.name?.toLowerCase() ===
+                        data?.nationality?.toLowerCase()
+                    ) ? (
+                      <>
+                        <JobPlaceSelectInputField
+                          errors={errors}
+                          name="province"
+                          keyValue="name"
+                          touched={touched}
+                          value={values.province}
+                          placeholder="Select"
+                          label="State / Province"
+                          items={getStatesByCountry(data?.nationality)}
+                          handleSelect={(item) =>
+                            setFieldValue("province", item.name)
+                          }
+                        />
+                        <JobPlaceSelectInputField
+                          errors={errors}
+                          name="city"
+                          keyValue="name"
+                          touched={touched}
+                          value={values.city}
+                          placeholder="Select"
+                          label="City / District"
+                          items={getCitiesByState(values.province)}
+                          handleSelect={(item) =>
+                            setFieldValue("city", item.name)
+                          }
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <JobPlaceInputField
+                          errors={errors}
+                          name="province"
+                          touched={touched}
+                          label="State / Province"
+                          placeholder="Enter state / province"
+                        />
 
-                    <JobPlaceSelectInputField
-                      errors={errors}
-                      name="city"
-                      keyValue="name"
-                      touched={touched}
-                      value={values.city}
-                      placeholder="Select"
-                      label="City / District"
-                      items={getCitiesByState(values.province)}
-                      handleSelect={(item) => setFieldValue("city", item.name)}
-                    />
+                        <JobPlaceInputField
+                          name="city"
+                          errors={errors}
+                          touched={touched}
+                          label="City / District"
+                          placeholder="Enter city / district"
+                        />
+                      </>
+                    )}
 
                     <JobPlaceInputField
                       errors={errors}

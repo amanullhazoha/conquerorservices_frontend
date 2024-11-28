@@ -293,13 +293,13 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
                       errors={errors}
                       touched={touched}
                       keyValue="name"
-                      // items={allCountry}
-                      items={countries}
+                      items={allCountry}
+                      // items={countries}
                       name="nationality"
-                      // searchField={true}
+                      searchField={true}
                       label="Nationality"
                       value={values.nationality}
-                      // suggestedItems={countries}
+                      suggestedItems={countries}
                       suggestionPlaceholder="Search for a nationality"
                       placeholder="Select Nationality"
                       handleSelect={(item) =>
