@@ -22,9 +22,7 @@ const JobPlaceSelectInputField = ({
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [position, setPosition] = useState("bottom");
-  const [filterData, setFilterData] = useState(
-    suggestedItems ? suggestedItems : items
-  );
+  const [filterData, setFilterData] = useState([]);
 
   const handleFilter = (event) => {
     const value = event.target.value;
@@ -68,9 +66,9 @@ const JobPlaceSelectInputField = ({
 
   useEffect(() => {
     if (!inputValue) {
-      suggestedItems && setFilterData(suggestedItems);
+      suggestedItems ? setFilterData(suggestedItems) : setFilterData(items);
     }
-  }, [inputValue]);
+  }, [inputValue, suggestedItems, items]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
