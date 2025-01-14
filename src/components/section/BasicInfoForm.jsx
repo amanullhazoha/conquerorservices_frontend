@@ -330,7 +330,7 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
                     <JobPlaceNumberInputField
                       type="number"
                       errors={errors}
-                      keyValue="shortName"
+                      keyValue="name"
                       touched={touched}
                       name="contact_number"
                       label="Phone number"
