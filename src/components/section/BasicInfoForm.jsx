@@ -55,8 +55,6 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
     [initialValues]
   );
 
-  console.log(position_id);
-
   const handleSubmit = async (values, { resetForm }) => {
     try {
       const formData = new FormData();
