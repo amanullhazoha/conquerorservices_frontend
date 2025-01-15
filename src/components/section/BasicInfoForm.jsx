@@ -55,6 +55,8 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
     [initialValues]
   );
 
+  console.log(position_id);
+
   const handleSubmit = async (values, { resetForm }) => {
     try {
       const formData = new FormData();
@@ -123,6 +125,11 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
 
       setInitialValues({
         ...parseValues,
+        position_id: parseValues?.position_id
+          ? parseValues.position_id
+          : position_id
+          ? position_id
+          : "",
         applicant_image: data?.applicant_image ? data?.applicant_image : "",
       });
 
@@ -140,7 +147,11 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
         email: data?.email ? data?.email : "",
         contact_number: data?.contact_number ? data?.contact_number : "",
         whatsapp_number: data?.whatsapp_number ? data?.whatsapp_number : "",
-        position_id: position_id ? position_id : "",
+        position_id: data?.position_id
+          ? data?.position_id
+          : position_id
+          ? position_id
+          : "",
         applicant_image: data?.applicant_image ? data?.applicant_image : "",
         hiring_position: data?.hiring_position ? data?.hiring_position : "",
       });
@@ -395,12 +406,12 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
                         setFieldValue("position_id", item.id)
                       }
                       items={[
-                        { id: 50, name: "Rider" },
+                        // { id: 50, name: "Rider" },
                         { id: 52, name: "Freelancer" },
                       ]}
                       value={
                         [
-                          { id: 50, name: "Rider" },
+                          // { id: 50, name: "Rider" },
                           { id: 52, name: "Freelancer" },
                         ].find((item) => item.id == values.position_id)?.name
                       }
