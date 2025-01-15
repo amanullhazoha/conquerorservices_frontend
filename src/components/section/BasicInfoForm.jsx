@@ -120,7 +120,7 @@ const BasicInfoForm = ({ id, data, handleNext, setPosition, position_id }) => {
 
     const storedValues = sessionStorage.getItem("applicantBasicInfo");
 
-    if (storedValues) {
+    if (storedValues && !isLoading) {
       const parseValues = JSON.parse(storedValues);
 
       setInitialValues({

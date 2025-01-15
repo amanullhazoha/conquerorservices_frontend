@@ -3144,10 +3144,10 @@ export const hiringPositions = [
 ];
 
 export const hiringPositionSuggest = [
-  { id: 4, name: "Chocolate Packer" },
-  { id: 4, name: "Construction Helper" },
-  { id: 2, name: "General Worker" },
-  { id: 1, name: "Helper" },
-  { id: 4, name: "Laundry Boy" },
-  { id: 3, name: "Noon Walkers" },
+  { id: 1, name: "Choocolate Packer" },
+  { id: 2, name: "Construction Helper" },
+  { id: 3, name: "General Worker" },
+  { id: 4, name: "Helper" },
+  { id: 5, name: "Laundry Boy" },
+  { id: 6, name: "Noon Walkers" },
 ];

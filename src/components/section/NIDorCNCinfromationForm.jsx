@@ -122,6 +122,18 @@ const NIDorCNCinfromationForm = ({ id, data, handleNext, handlePrevious }) => {
 
       setInitialValues({
         ...parseValues,
+        zip: parseValues?.nationality !== data?.nationality ? "" : data?.zip,
+        policeStation:
+          parseValues?.nationality !== data?.nationality
+            ? ""
+            : data?.policeStation,
+        city: parseValues?.nationality !== data?.nationality ? "" : data?.city,
+        province:
+          parseValues?.nationality !== data?.nationality ? "" : data?.province,
+        homeaddrss:
+          parseValues?.nationality !== data?.nationality
+            ? ""
+            : data?.homeaddrss,
         nid_cnic_back: data?.nid_cnic_back ? data?.nid_cnic_back : "",
         nid_cnic_front: data?.nid_cnic_front ? data?.nid_cnic_front : "",
         applicant_resume: data?.applicant_resume ? data?.applicant_resume : "",

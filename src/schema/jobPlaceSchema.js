@@ -161,7 +161,7 @@ export const jobApplyBasicSchema = (id) =>
       .required("Whatsapp number is required"),
     position_id: Yup.string().required("Position ID is required"),
     hiring_position: Yup.string().when("position_id", (position_id, schema) => {
-      if (position_id === "52" || position_id === 52) {
+      if (position_id?.includes("52")) {
         return schema.required("Hiring position is required");
       }
       return schema.nullable();
