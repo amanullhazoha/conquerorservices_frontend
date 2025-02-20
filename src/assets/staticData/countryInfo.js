@@ -3045,6 +3045,7 @@ export const hiringPositions = [
   { id: 40, name: "Contracts & Purchases- Assistance" },
   { id: 41, name: "Customer Service Representative" },
   { id: 42, name: "Customer Services Assistant" },
+  { id: 109, name: "Coordinator Female" },
   { id: 43, name: "Data Entry Assistant" },
   { id: 44, name: "Data Entry Clerk" },
   { id: 45, name: "Deputy Customer Service" },
@@ -3108,6 +3109,7 @@ export const hiringPositions = [
   { id: 98, name: "Pharmacist Assistant" },
   { id: 99, name: "Planning Assistant" },
   { id: 100, name: "Plant Operator" },
+  { id: 108, name: "Sales & Marketing" },
 ];
 
 export const hiringPositionSuggest = [
